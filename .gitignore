@@ -1,3 +1,4 @@
 StoreFont/node_modules
 Backend/node_modules
 Backend/dist
+Backend/.env
