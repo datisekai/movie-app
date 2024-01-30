@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_Profile"
+        android:icon="@drawable/profile"
+        android:title="@string/profile"/>
+
+    <item
+        android:id="@+id/menu_watchFilm"
+        android:icon="@drawable/watch_film"
+        android:title="@string/watch_film"/>
+
+    <item
+        android:id="@+id/menu_Blog"
+        android:icon="@drawable/blog"
+        android:title="@string/blog"/>
+
+    <item
+        android:id="@+id/menu_History"
+        android:icon="@drawable/history"
+        android:title="@string/history"/>
+
+    <item
+        android:id="@+id/menu_Logout"
+        android:icon="@drawable/logout"
+        android:title="@string/logout" />
+
+</menu>
