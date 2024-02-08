@@ -1,18 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/bg1">
+
+
 
     <TextView
+        android:id="@+id/onboarding"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="53dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="95dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="490dp"
+        android:text="Onboarding"
+        android:textSize="32sp"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/axifoma"
+        android:lineHeight="53sp"
+        android:gravity="top" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/watch_every"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="86dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="550dp"
+        android:text="Watch evetything you want\nfor free"
+        android:fontFamily="@font/axifoma"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:gravity="center_horizontal|top" />
+
+    <View
+        android:id="@+id/rectangle_1"
+        android:layout_width="211dp"
+        android:layout_height="42dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="90dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="634dp"
+        android:background="@drawable/rectangle_1" />
+
+    <View
+        android:id="@+id/rectangle_2"
+        android:layout_width="198dp"
+        android:layout_height="39dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="96dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="640dp"
+        android:background="@drawable/rectangle_2"/>
+
+    <ImageView
+        android:layout_width="439dp"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="7dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="339dp"
+        android:src="@drawable/anime1"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
+        android:layout_width="439dp"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="7dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="220dp"
+        android:src="@drawable/anime2"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
+        android:layout_width="439dp"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="7dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="111dp"
+        android:src="@drawable/anime3"
+        android:scaleType="centerCrop"/>
+
+
+</RelativeLayout>
