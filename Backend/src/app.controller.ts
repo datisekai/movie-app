@@ -1,7 +1,8 @@
-import { Controller, Get, Render, Request, Res } from '@nestjs/common';
+import { Controller, Get, Post, Render, Request, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Response } from 'express';
 import { ApiOperation } from '@nestjs/swagger';
+import { join } from 'path';
 
 @Controller()
 export class AppController {
@@ -16,11 +17,12 @@ export class AppController {
   }
 
   @Get('docs/api')
-  @Render('doc-api')
+  // @Render('doc-api')
   @ApiOperation({
     summary: 'Docs API',
   })
   getDoc(@Res() res: Response) {
-    return {};
+    const filePath = join(__dirname, './src/', 'views', 'doc-api-test.html');
+    res.sendFile(filePath);
   }
 }
