@@ -1,12 +1,17 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
+  IsArray,
   IsBoolean,
   IsEmail,
   IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsStrongPassword,
 } from 'class-validator';
+import { PartialType } from '@nestjs/mapped-types';
+import { AppRoles } from 'src/app.role';
+import { EnumToString } from 'src/common/helpers';
 
 export class UserDto {
   @IsEmail()
@@ -20,15 +25,18 @@ export class UserDto {
   @ApiPropertyOptional()
   password: string;
 
-  @IsEnum(['free', 'premium'])
   @IsString()
+  @IsOptional()
   @ApiPropertyOptional()
-  plan: string;
+  fullname: string;
 
-  @IsEnum(['user', 'admin'])
-  @IsString()
+  @IsArray()
   @ApiPropertyOptional()
-  role: string;
+  @IsEnum(AppRoles, {
+    each: true,
+    message: `must be a valid role value, ${EnumToString(AppRoles)}`,
+  })
+  roles: string[];
 
   @IsBoolean()
   @ApiPropertyOptional()
@@ -49,15 +57,40 @@ export class CreateUserDto {
   @IsNotEmpty()
   password: string;
 
-  @IsEnum(['free', 'premium'])
   @IsString()
-  @ApiProperty()
   @IsNotEmpty()
-  plan: string;
+  fullname: string;
 
-  @IsEnum(['user', 'admin'])
+  @IsArray()
+  @ApiPropertyOptional()
+  @IsEnum(AppRoles, {
+    each: true,
+    message: `must be a valid role value, ${EnumToString(AppRoles)}`,
+  })
+  roles: string[];
+
+  @IsBoolean()
+  @ApiPropertyOptional()
+  is_active: boolean;
+}
+
+export class RegisterUserDto {
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  fullname: string;
+
+  @IsEmail()
   @IsString()
   @ApiProperty()
   @IsNotEmpty()
-  role: string;
+  email: string;
+
+  @IsString()
+  @ApiProperty()
+  @IsNotEmpty()
+  // @IsStrongPassword()
+  password: string;
 }
+
+export class EditUserDto extends PartialType(CreateUserDto) {}

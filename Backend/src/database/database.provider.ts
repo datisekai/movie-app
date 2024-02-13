@@ -4,6 +4,7 @@ export const databaseProviders = [
   {
     provide: 'DATA_SOURCE',
     useFactory: async () => {
+      console.log('---database provider---', process.env);
       const dataSource = new DataSource({
         type: 'mysql',
         host: process.env.DB_HOST,

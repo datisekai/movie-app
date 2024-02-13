@@ -5,7 +5,10 @@ import {
   Unique,
   CreateDateColumn,
   UpdateDateColumn,
+  BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
+import { hash } from 'bcryptjs';
 
 @Entity()
 @Unique(['email'])
@@ -19,22 +22,19 @@ export class User {
   @Column()
   fullname: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, select: false })
   fullname_search: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
-  @Column({ default: 'free' })
-  plan: string;
-
-  @Column({ default: 'user' })
-  role: string;
+  @Column({ type: 'simple-array' })
+  roles: string[];
 
   @Column({ default: true })
   is_active: boolean;
 
-  @Column({ default: false })
+  @Column({ default: false, select: false })
   is_deleted: boolean;
 
   @CreateDateColumn()
@@ -42,4 +42,13 @@ export class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword() {
+    if (!this.password) {
+      return;
+    }
+    this.password = await hash(this.password, 10);
+  }
 }

@@ -17,12 +17,11 @@ export class AppController {
   }
 
   @Get('docs/api')
-  // @Render('doc-api')
+  @Render('doc-api')
   @ApiOperation({
     summary: 'Docs API',
   })
   getDoc(@Res() res: Response) {
-    const filePath = join(__dirname, './src/', 'views', 'doc-api-test.html');
-    res.sendFile(filePath);
+    return {};
   }
 }
