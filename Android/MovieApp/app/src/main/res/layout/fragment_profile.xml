@@ -88,7 +88,7 @@
                     android:text="Mua Premium"
                     android:textSize="20dp"
                     android:textStyle="bold"
-                    android:background=""
+                    android:background="@drawable/round_back_premium"
                     />
             </LinearLayout>
 
