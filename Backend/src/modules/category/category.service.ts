@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './category.entity';
 import { removeVietnameseDiacritics } from 'src/common/helpers';
 import { CreateCategoryDto, EditCategoryDto } from './category.dto';
+import { convertToSlug } from 'src/common/helpers/convertToSlug';
 
 export interface CategoryFindOne {
   id?: number;
@@ -49,22 +50,23 @@ export class CategoryService {
   }
 
   async getOne(id: number, categoryEntity?: Category) {
-    const user = await this.categoryRepository
+    const category = await this.categoryRepository
       .findOne({ where: { id, is_deleted: false } })
       .then((u) =>
         !categoryEntity ? u : !!u && categoryEntity.id === u.id ? u : null,
       );
 
-    if (!user)
+    if (!category)
       throw new NotFoundException('Category does not exists or unauthorized');
 
-    return user;
+    return category;
   }
 
   async createOne(dto: CreateCategoryDto) {
     const newCategory = this.categoryRepository.create({
       ...dto,
       title_search: removeVietnameseDiacritics(dto.title),
+      slug: dto.slug ? convertToSlug(dto.slug) : convertToSlug(dto.title),
     });
     const category = await this.categoryRepository.save(newCategory);
 
@@ -75,6 +77,7 @@ export class CategoryService {
     const category = await this.getOne(id, categoryEntity);
     category.description = dto.description || category.description;
     category.thumbnail = dto.thumbnail || category.thumbnail;
+    category.slug = dto.slug ? convertToSlug(dto.slug) : category.slug;
     if (dto.title) {
       category.title = dto.title;
       category.title_search = removeVietnameseDiacritics(
@@ -98,7 +101,7 @@ export class CategoryService {
   async findOne(data: CategoryFindOne) {
     return await this.categoryRepository
       .createQueryBuilder('category')
-      .where(data)
+      .where({ ...data, is_deleted: false })
       .getOne();
   }
 }

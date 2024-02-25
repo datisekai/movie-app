@@ -10,6 +10,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { join } from 'path';
 import { CategoryModule } from './modules/category/category.module';
+import { FilmModule } from './modules/film/film.module';
+import { EpisodeModule } from './modules/episode/episode.module';
 
 @Module({
   imports: [
@@ -24,11 +26,14 @@ import { CategoryModule } from './modules/category/category.module';
       database: process.env.DB_NAME,
       entities: [join(__dirname, '**', '*.entity.{ts,js}')],
       synchronize: true,
+      autoLoadEntities: true,
     }),
     AccessControlModule.forRoles(roles),
     AuthModule,
     UserModule,
     CategoryModule,
+    FilmModule,
+    EpisodeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

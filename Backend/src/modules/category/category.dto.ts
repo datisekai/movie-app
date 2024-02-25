@@ -10,6 +10,11 @@ export class CategoryDto {
   @IsString()
   @ApiPropertyOptional()
   @IsOptional()
+  slug: string;
+
+  @IsString()
+  @ApiPropertyOptional()
+  @IsOptional()
   description: string;
 
   @IsString()
@@ -23,10 +28,5 @@ export class CategoryDto {
   is_active: boolean;
 }
 
-export class CreateCategoryDto extends PartialType(CategoryDto) {}
-export class EditCategoryDto extends PartialType(CategoryDto) {
-  @IsOptional()
-  @ApiPropertyOptional()
-  @IsString()
-  title: string;
-}
+export class CreateCategoryDto extends CategoryDto {}
+export class EditCategoryDto extends PartialType(CategoryDto) {}

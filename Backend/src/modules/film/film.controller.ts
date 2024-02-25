@@ -12,66 +12,67 @@ import { Auth, User } from 'src/common/decorators';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RolesBuilder, InjectRolesBuilder } from 'nest-access-control';
 import { AppResource, AppRoles } from 'src/app.role';
-import { CategoryService } from './category.service';
-import { CreateCategoryDto, EditCategoryDto } from './category.dto';
 import { User as UserEntity } from '../user/user.entity';
+import { FilmService } from './film.service';
+import { CreateFilmDto } from './film.dto';
+import { Film } from './film.entity';
 
-@ApiTags(AppResource.CATEGORY)
-@Controller('api.category')
-export class CategoryController {
+@ApiTags(AppResource.FILM)
+@Controller('api.film')
+export class FilmController {
   constructor(
-    private readonly categoryService: CategoryService,
+    private readonly filmService: FilmService,
     @InjectRolesBuilder()
     private readonly rolesBuilder: RolesBuilder,
   ) {}
 
   @Get()
   @ApiOperation({
-    summary: 'Get List Category',
+    summary: 'Get List Film',
     description: 'Query with title, is_active',
   })
   async getMany(@Query() query) {
-    return await this.categoryService.getMany(query);
+    return await this.filmService.getMany(query);
   }
 
   @Get(':id')
   @ApiOperation({
-    summary: 'Get Category By ID',
+    summary: 'Get Film By ID',
   })
   async getOne(@Param('id') id: number) {
-    const data = await this.categoryService.getOne(id);
+    const data = await this.filmService.getOne(id);
     return { data };
   }
 
   @Auth({
     possession: 'any',
     action: 'create',
-    resource: AppResource.CATEGORY,
+    resource: AppResource.FILM,
   })
   @Post()
   @ApiOperation({
-    summary: 'Create Category',
+    summary: 'Create Film',
   })
-  async createOne(@Body() dto: CreateCategoryDto) {
-    const data = await this.categoryService.createOne(dto);
-    return { message: 'Category created', data };
+  async createOne(@Body() dto: CreateFilmDto) {
+    const data = await this.filmService.createOne(dto);
+    return { message: 'Film created', data };
   }
 
   @Auth({
     possession: 'own',
     action: 'update',
-    resource: AppResource.CATEGORY,
+    resource: AppResource.FILM,
   })
   @ApiOperation({
-    summary: 'Edit Category',
+    summary: 'Edit Film',
   })
   @Put(':id')
   async editOne(
     @Param('id') id: number,
-    @Body() dto: EditCategoryDto,
+    @Body() dto: Film,
     @User() user: UserEntity,
   ) {
-    const data = await this.categoryService.editOne(id, dto);
+    const data = await this.filmService.editOne(id, dto);
 
     return { message: 'Film edited', data };
   }
@@ -79,16 +80,16 @@ export class CategoryController {
   @Auth({
     action: 'delete',
     possession: 'own',
-    resource: AppResource.CATEGORY,
+    resource: AppResource.FILM,
   })
   @Delete(':id')
   @ApiOperation({
-    summary: 'Soft Delete Category',
+    summary: 'Soft Delete Film',
   })
   async deleteOne(@Param('id') id: number, @User() user: UserEntity) {
     let data;
 
-    data = await this.categoryService.deleteOne(id);
+    data = await this.filmService.deleteOne(id);
     return { message: 'Film deleted', data };
   }
 }

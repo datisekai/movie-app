@@ -4,12 +4,19 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
+  ManyToOne,
 } from 'typeorm';
+import { Film as FilmEntity } from '../film/film.entity';
 
 @Entity()
-export class Category {
+export class Episode {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ unique: true })
+  slug: string;
 
   @Column()
   title: string;
@@ -17,14 +24,26 @@ export class Category {
   @Column({ nullable: true })
   title_search: string;
 
-  @Column({ unique: true, nullable: true })
-  slug: string;
-
   @Column({ nullable: true })
   description: string;
 
+  @Column({ default: 0 })
+  view: number;
+
   @Column({ nullable: true })
   thumbnail: string;
+
+  @Column()
+  url: string;
+
+  @Column()
+  duration: string;
+
+  @Column({ default: 0 })
+  position: number;
+
+  @ManyToOne(() => FilmEntity, (film) => film.episodes)
+  film!: FilmEntity;
 
   @Column({ default: true })
   is_active: boolean;
