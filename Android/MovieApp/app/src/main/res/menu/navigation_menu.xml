@@ -19,7 +19,10 @@
         android:id="@+id/menu_History"
         android:icon="@drawable/history"
         android:title="@string/history"/>
-
+    <item
+        android:id="@+id/menu_Favorite"
+        android:icon="@drawable/favorite"
+        android:title="@string/favourite" />
     <item
         android:id="@+id/menu_Logout"
         android:icon="@drawable/logout"
