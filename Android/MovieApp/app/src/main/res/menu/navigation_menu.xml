@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/menu_homePage"
+        android:icon="@drawable/home"
+        android:title="Home"/>
+    <item
         android:id="@+id/menu_Profile"
         android:icon="@drawable/profile"
         android:title="@string/profile"/>
@@ -23,6 +27,10 @@
         android:id="@+id/menu_Favorite"
         android:icon="@drawable/favorite"
         android:title="@string/favourite" />
+    <item
+        android:id="@+id/menu_Search"
+        android:icon="@drawable/favorite"
+        android:title="@string/search" />
     <item
         android:id="@+id/menu_Logout"
         android:icon="@drawable/logout"

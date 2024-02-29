@@ -23,10 +23,10 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.navigation.NavigationView
 
 class CardHomePage{
-     fun init(context: Context, linearLayout: LinearLayout) {
+     fun init(context: Context, linearLayout: LinearLayout, widthCard: Int, heightCard: Int, isBorderImage: Boolean) {
          val cardContainer: LinearLayout = linearLayout
          val cardDataList = listOf("Card 1", "Card 2", "Card 3","Card 1", "Card 2", "Card 3")
-         val maxWidthCard = 480
+         val maxWidthCard = widthCard
 
          for (cardData in cardDataList) {
              val cardView = LinearLayout(context)
@@ -56,7 +56,7 @@ class CardHomePage{
              val imageView = ImageView(context)
              imageView.layoutParams = LinearLayout.LayoutParams(
                  LinearLayout.LayoutParams.MATCH_PARENT,
-                 480
+                 heightCard
              )
              imageView.minimumWidth= maxWidthCard
              imageView.maxWidth = maxWidthCard;
@@ -64,10 +64,14 @@ class CardHomePage{
              imageView.setImageResource(R.drawable.anime1)
              imageView.contentDescription = "Image Anime1"
 
-             Glide.with(context)
-                 .load(R.drawable.anime1)
-                 .transform(RoundedCorners(200))
-                 .into(imageView)
+             if(isBorderImage){
+                 Glide.with(context)
+                     .load(R.drawable.anime1)
+                     .transform(RoundedCorners(200))
+                     .into(imageView)
+             }
+
+
 
              val secondaryLayoutParams = LinearLayout.LayoutParams(
                  LinearLayout.LayoutParams.WRAP_CONTENT,

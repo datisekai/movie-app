@@ -16,7 +16,7 @@ import { AppResource, AppRoles } from 'src/app.role';
 import { User as UserEntity } from './user.entity';
 import { CreateUserDto, EditUserDto, RegisterUserDto } from './user.dto';
 
-@ApiTags('User')
+@ApiTags(AppResource.USER)
 @Controller('api.user')
 export class UserController {
   constructor(

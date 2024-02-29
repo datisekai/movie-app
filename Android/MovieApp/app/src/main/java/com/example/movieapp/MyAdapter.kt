@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.movieapp.DataItem
+import com.example.movieapp.MovieItem
 
-class MyAdapter(private val dataList: List<DataItem>) :
+class MyAdapter(private val dataList: List<MovieItem>) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view: View =
@@ -34,7 +34,7 @@ class MyAdapter(private val dataList: List<DataItem>) :
             textView2 = itemView.findViewById<TextView>(R.id.textView2)
         }
 
-        fun bindData(data: DataItem?) {
+        fun bindData(data: MovieItem?) {
             image.setImageResource(data?.imageResId ?: 0)
             title.text = data?.title
             textView2.text = data?.year

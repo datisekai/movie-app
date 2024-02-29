@@ -113,7 +113,7 @@ export class UserService {
   async findOne(data: UserFindOne) {
     return await this.userRepository
       .createQueryBuilder('user')
-      .where(data)
+      .where({ ...data, is_deleted: false })
       .addSelect('user.password')
       .getOne();
   }
