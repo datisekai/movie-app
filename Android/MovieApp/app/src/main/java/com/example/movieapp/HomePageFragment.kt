@@ -66,16 +66,20 @@ class HomePageFragment : Fragment() {
             ) {
                 // Xử lý sự kiện khi nhấn phím Enter
 //                performSearch(editText.text.toString())
-                val searchFragment = SearchFragment()
-                val fragmentManager = requireActivity().supportFragmentManager
-                fragmentManager.beginTransaction()
-                    .add(R.id.navHostFragment, searchFragment)
-                    .addToBackStack(null)
-                    .commit()
+//                val searchFragment = SearchFragment()
+//                val fragmentManager = requireActivity().supportFragmentManager
+//                fragmentManager.beginTransaction()
+//                    .add(R.id.navHostFragment, searchFragment)
+//                    .addToBackStack(null)
+//                    .commit()
+//                val navController = Navigation.findNavController(view)
+//                navController.navigate(R.id.menu_Search)
                 val navigationview = inflater.inflate(R.layout.fragment_home_page, container, false).findViewById<NavigationView>(R.id.navigationView)
-                navigationview.setItemIconTintList(null)
-                val navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment)
+                navigationview.itemIconTintList = null
+
+                val navController = Navigation.findNavController(requireView())
                 NavigationUI.setupWithNavController(navigationview, navController)
+                navController.navigate(R.id.searchFragment)
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
