@@ -1,6 +1,7 @@
 package com.example.movieapp.ui.login
 
 import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -11,10 +12,13 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import com.example.movieapp.MainActivity
 import com.example.movieapp.databinding.ActivityLoginBinding
 
 import com.example.movieapp.R
+import com.example.movieapp.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -96,12 +100,19 @@ class LoginActivity : AppCompatActivity() {
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
         }
+        val underlinedTextView: TextView = findViewById(R.id.linkRegister)
+        underlinedTextView.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
         // TODO : initiate successful logged in experience
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
         Toast.makeText(
             applicationContext,
             "$welcome $displayName",

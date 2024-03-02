@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Login"
+        android:text="Register"
         android:textColor="@color/white"
         android:layout_marginTop="32dp"
         android:gravity="center"
@@ -68,7 +68,7 @@
         android:layout_gravity="start"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="64dp"
-        android:text="@string/action_sign_in"
+        android:text="Register"
         android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,30 +82,30 @@
         android:paddingVertical="16dp"
         android:backgroundTint="@color/bg1"
         />
-        <LinearLayout
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            android:gravity="center">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Do you have an account?"
-                android:textColor="@color/white"
-                android:textAppearance="?attr/textAppearanceBody1" />
-            <TextView
-                android:id="@+id/linkRegister"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" Register"
-                android:textColor="@color/start_color"
-                android:cursorVisible="true"
-                android:textAppearance="?attr/textAppearanceBody1" />
-        </LinearLayout>
+            android:text="Do you have an account?"
+            android:textColor="@color/white"
+            android:textAppearance="?attr/textAppearanceBody1" />
+        <TextView
+            android:id="@+id/linkLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Login"
+            android:textColor="@color/start_color"
+            android:cursorVisible="true"
+            android:textAppearance="?attr/textAppearanceBody1" />
+    </LinearLayout>
     <ProgressBar
         android:id="@+id/loading"
         android:layout_width="wrap_content"
