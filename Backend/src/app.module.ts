@@ -12,6 +12,7 @@ import { join } from 'path';
 import { CategoryModule } from './modules/category/category.module';
 import { FilmModule } from './modules/film/film.module';
 import { EpisodeModule } from './modules/episode/episode.module';
+import { ArticleModule } from './modules/article/article.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { EpisodeModule } from './modules/episode/episode.module';
     CategoryModule,
     FilmModule,
     EpisodeModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
