@@ -1,48 +1,36 @@
-import ReactPaginate from "react-paginate";
-import { useLocation, useNavigate,Link } from "react-router-dom";
-import { useState } from "react";
 const dummy = [
   {
     id: 1,
-    email: "user1@example.com",
-    fullname: "User One",
-    fullname_search: "user one",
-    password: "password123",
-    plan: "free",
-    role: "user",
-    is_active: true,
-    is_deleted: false,
-    created_at: "2024-02-26",
-    updated_at: "2024-02-26",
+    type: "post",
+    type_id: "1",
+    action: "create",
+    title: "First Post",
+    user_id: 1,
   },
   {
     id: 2,
-    email: "user2@example.com",
-    fullname: "User Two",
-    fullname_search: "user two",
-    password: "password456",
-    plan: "premium",
-    role: "user",
-    is_active: true,
-    is_deleted: false,
-    created_at: "2024-02-26",
-    updated_at: "2024-02-26",
+    type: "comment",
+    type_id: "5",
+    action: "update",
+    title: "Updated Comment",
+    user_id: 2,
   },
   {
     id: 3,
-    email: "admin@example.com",
-    fullname: "Admin",
-    fullname_search: "admin",
-    password: "admin123",
-    plan: "premium",
-    role: "admin",
-    is_active: true,
-    is_deleted: false,
-    created_at: "2024-02-26",
-    updated_at: "2024-02-26",
+    type: "post",
+    type_id: "2",
+    action: "delete",
+    title: "Second Post",
+    user_id: 1,
   },
+  // Add more dummy data objects as needed
 ];
-function Users() {
+
+import ReactPaginate from "react-paginate";
+import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useState } from "react";
+
+function History() {
   const itemsPerPage = 10;
   const [itemOffset, setItemOffset] = useState(0);
   const location = useLocation();
@@ -73,43 +61,35 @@ function Users() {
               Id
             </th>
             <th scope="col" className="px-6 py-3">
-              Email
-            </th>
-            <th scope="col" className="px-6 py-3">
-              FullName
-            </th>
-            <th scope="col" className="px-6 py-3">
-              isActive
+              Type
             </th>
             <th scope="col" className="px-6 py-3">
               Action
             </th>
-            
+            <th scope="col" className="px-6 py-3">
+              Title
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Action
+            </th>
           </tr>
         </thead>
         <tbody>
-          {dummy.map((user) => (
-            <tr key={user.id} className="">
-              <td className="px-6 py-4">{user.id}</td>
-              <td className="px-6 py-4">{user.email}</td>
-              <td className="px-6 py-4">{user.fullname}</td>
-              <td className="px-6 py-4">{user.is_active.toString()}</td>
+          {dummy.map((history) => (
+            <tr key={history.id} className="">
+              <td className="px-6 py-4">{history.id}</td>
+              <td className="px-6 py-4">{history.type}</td>
+              <td className="px-6 py-4">{history.action}</td>
+              <td className="px-6 py-4">{history.title}</td>
               <td className="space-x-2 flex justify-start">
-                  <Link
-                    type="button"
-                    className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
-                    to={`/users/${user.id}`}
-                    state={user}
-                  >
-                    Details
-                  </Link>
-                  <button
-                    type="button"
-                    className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                  >
-                    Delete
-                  </button>
-                </td>
+               
+                <button
+                  type="button"
+                  className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -134,4 +114,4 @@ function Users() {
   );
 }
 
-export default Users;
+export default History;

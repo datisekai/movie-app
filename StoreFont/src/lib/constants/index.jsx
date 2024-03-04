@@ -7,6 +7,7 @@ import {
 	HiOutlineQuestionMarkCircle,
 	HiOutlineCog
 } from 'react-icons/hi'
+import { BiCategory } from "react-icons/bi";
 
 export const DASHBOARD_SIDEBAR_LINKS = [
 	{
@@ -28,9 +29,15 @@ export const DASHBOARD_SIDEBAR_LINKS = [
 		icon: <HiOutlineUsers />
 	},
 	{
-		key: 'transactions',
-		label: 'Transactions',
-		path: '/transactions',
+		key: 'categories',
+		label: 'Categories',
+		path: '/categories',
+		icon: <BiCategory />,
+	},
+	{
+		key: 'articles',
+		label: 'Articles',
+		path: '/articles',
 		icon: <HiOutlineDocumentText />
 	},
 	{

@@ -1,48 +1,32 @@
-import ReactPaginate from "react-paginate";
-import { useLocation, useNavigate,Link } from "react-router-dom";
-import { useState } from "react";
 const dummy = [
   {
     id: 1,
-    email: "user1@example.com",
-    fullname: "User One",
-    fullname_search: "user one",
-    password: "password123",
-    plan: "free",
-    role: "user",
+    title: "Category 1",
+    title_search: "category_1",
+    description: "Description for Category 1",
+    thumbnail: "thumbnail_url_1",
     is_active: true,
     is_deleted: false,
-    created_at: "2024-02-26",
-    updated_at: "2024-02-26",
+    created_at: "2024-02-28",
+    updated_at: "2024-02-28",
   },
   {
     id: 2,
-    email: "user2@example.com",
-    fullname: "User Two",
-    fullname_search: "user two",
-    password: "password456",
-    plan: "premium",
-    role: "user",
+    title: "Category 2",
+    title_search: "category_2",
+    description: "Description for Category 2",
+    thumbnail: "thumbnail_url_2",
     is_active: true,
     is_deleted: false,
-    created_at: "2024-02-26",
-    updated_at: "2024-02-26",
+    created_at: "2024-02-28",
+    updated_at: "2024-02-28",
   },
-  {
-    id: 3,
-    email: "admin@example.com",
-    fullname: "Admin",
-    fullname_search: "admin",
-    password: "admin123",
-    plan: "premium",
-    role: "admin",
-    is_active: true,
-    is_deleted: false,
-    created_at: "2024-02-26",
-    updated_at: "2024-02-26",
-  },
+  // Add more dummy data objects as needed
 ];
-function Users() {
+import ReactPaginate from "react-paginate";
+import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useState } from "react";
+function Category() {
   const itemsPerPage = 10;
   const [itemOffset, setItemOffset] = useState(0);
   const location = useLocation();
@@ -73,43 +57,43 @@ function Users() {
               Id
             </th>
             <th scope="col" className="px-6 py-3">
-              Email
+              Title
             </th>
             <th scope="col" className="px-6 py-3">
-              FullName
+              Is Active
             </th>
             <th scope="col" className="px-6 py-3">
-              isActive
+              Updated At
             </th>
             <th scope="col" className="px-6 py-3">
-              Action
+              Created At
             </th>
-            
           </tr>
         </thead>
         <tbody>
-          {dummy.map((user) => (
-            <tr key={user.id} className="">
-              <td className="px-6 py-4">{user.id}</td>
-              <td className="px-6 py-4">{user.email}</td>
-              <td className="px-6 py-4">{user.fullname}</td>
-              <td className="px-6 py-4">{user.is_active.toString()}</td>
+          {dummy.map((category) => (
+            <tr key={category.id} className="">
+              <td className="px-6 py-4">{category.id}</td>
+              <td className="px-6 py-4">{category.title}</td>
+              <td className="px-6 py-4">{category.is_active.toString()}</td>
+              <td className="px-6 py-4">{category.updated_at}</td>
+              <td className="px-6 py-4">{category.created_at}</td>
               <td className="space-x-2 flex justify-start">
-                  <Link
-                    type="button"
-                    className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
-                    to={`/users/${user.id}`}
-                    state={user}
-                  >
-                    Details
-                  </Link>
-                  <button
-                    type="button"
-                    className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                  >
-                    Delete
-                  </button>
-                </td>
+                <Link
+                  type="button"
+                  className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+                  to={`/categories/${category.id}`}
+                  state={category}
+                >
+                  Details
+                </Link>
+                <button
+                  type="button"
+                  className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -134,4 +118,4 @@ function Users() {
   );
 }
 
-export default Users;
+export default Category;
