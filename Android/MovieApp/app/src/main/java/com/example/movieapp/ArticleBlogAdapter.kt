@@ -11,7 +11,6 @@ class ArticleBlogAdapter (var ds:List<Article>)
     //Tạo class ViewHolder
     inner class ArticleViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
         val article_content: TextView = itemView.findViewById(R.id.article_content)
-        val article_username: TextView = itemView.findViewById(R.id.article_username)
         val article_title: TextView = itemView.findViewById(R.id.article_title)
         val article_dateCreated: TextView = itemView.findViewById(R.id.article_dateCreated)
     }
@@ -23,7 +22,6 @@ class ArticleBlogAdapter (var ds:List<Article>)
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         holder.itemView.apply {
-            holder.article_username.text = ds[position].author
             holder.article_content.text = ds[position].content
             holder.article_title.text = ds[position].title
             holder.article_dateCreated.text = ds[position].createDate
