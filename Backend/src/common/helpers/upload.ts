@@ -11,11 +11,13 @@ cloudinary.config({
   api_secret: process.env.UPLOAD_API_SECRET,
 });
 
-export const uploadFromBuffer = (file, folder = 'movie-image') => {
+export const uploadFromBuffer = (file, type: 'video' | 'image' = 'image') => {
+  const folder = type === 'image' ? 'movie-image' : 'movie-video';
   return new Promise((resolve, reject) => {
     let cld_upload_stream = cloudinary.uploader.upload_stream(
       {
-        folder: folder,
+        folder,
+        resource_type: type,
       },
       (error: any, result: any) => {
         if (result) {
