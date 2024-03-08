@@ -51,6 +51,7 @@ roles
     AppResource.CATEGORY,
     AppResource.FILM,
     AppResource.EPISODE,
+    AppResource.UPLOAD,
   ])
   .updateAny([
     AppResource.USER,
