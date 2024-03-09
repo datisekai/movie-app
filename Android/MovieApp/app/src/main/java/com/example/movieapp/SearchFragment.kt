@@ -64,7 +64,7 @@ class SearchFragment : Fragment() {
 
         val dataList: List<MovieItem>? = generateDataList() // Tạo danh sách dữ liệu
 
-        val adapter = dataList?.let { MyAdapter(it) } ?: MyAdapter(emptyList())
+        val adapter = dataList?.let { MyAdapter(it, R.layout.card) } ?: MyAdapter(emptyList(), R.layout.card)
         recyclerView.adapter = adapter
 
         return view

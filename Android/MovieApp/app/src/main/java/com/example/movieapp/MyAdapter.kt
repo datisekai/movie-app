@@ -6,13 +6,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.MovieItem
+import com.example.movieapp.GenreItem
+import com.example.movieapp.PaymentHistoryItem
 
-class MyAdapter(private val dataList: List<MovieItem>) :
+class MyAdapter(private val dataList: List<Any>, private val view: Int) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val view: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.card, parent, false)
-        return MyViewHolder(view)
+        val itemView = LayoutInflater.from(parent.context).inflate(view, parent, false)
+        return MyViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -25,19 +27,33 @@ class MyAdapter(private val dataList: List<MovieItem>) :
     }
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val image: ImageView
-        private val title: TextView
-        private val textView2: TextView
-        init {
-            image = itemView.findViewById<ImageView>(R.id.imageCard)
-            title = itemView.findViewById<TextView>(R.id.title)
-            textView2 = itemView.findViewById<TextView>(R.id.textView2)
-        }
-
-        fun bindData(data: MovieItem?) {
-            image.setImageResource(data?.imageResId ?: 0)
-            title.text = data?.title
-            textView2.text = data?.year
+        fun bindData(data: Any) {
+            when (data) {
+                is MovieItem -> {
+                    val image: ImageView = itemView.findViewById(R.id.imageCard)
+                    val title: TextView = itemView.findViewById(R.id.title)
+                    val textView2: TextView = itemView.findViewById(R.id.textView2)
+                    val movieItem = data as MovieItem
+                    image.setImageResource(movieItem.imageResId)
+                    title.text = movieItem.title
+                    textView2.text = movieItem.year
+                }
+                is GenreItem -> {
+                    val textView: TextView = itemView.findViewById(R.id.textView)
+                    val genreItem = data as GenreItem
+                    textView.text=genreItem.name
+                    textView.tooltipText= genreItem.name
+                }
+                is PaymentHistoryItem -> {
+                    val title: TextView = itemView.findViewById(R.id.textTitle)
+                    val date: TextView = itemView.findViewById(R.id.textDate)
+                    val money: TextView = itemView.findViewById(R.id.textMoney)
+                    val paymentHistoryItem = data as PaymentHistoryItem
+                    title.text = paymentHistoryItem.title
+                    date.text = paymentHistoryItem.date
+                    money.text = "-" + paymentHistoryItem.money.toString() +"đ"
+                }
+            }
         }
     }
 }

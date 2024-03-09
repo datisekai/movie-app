@@ -30,7 +30,7 @@ class HistoryFragment : Fragment() {
         val dataList: MutableList<MovieItem> = ArrayList()
         dataList.add(MovieItem(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
         dataList.add(MovieItem(R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(MovieItem(R.drawable.anime3, "abc 3", "2024"))
+//        dataList.add(MovieItem(R.drawable.anime3, "abc 3", "2024"))
         // Thêm các phần tử khác vào danh sách dữ liệu
         return dataList
     }
@@ -60,7 +60,7 @@ class HistoryFragment : Fragment() {
 
         val dataList: List<MovieItem>? = generateDataList() // Tạo danh sách dữ liệu
 
-        val adapter = dataList?.let { MyAdapter(it) } ?: MyAdapter(emptyList())
+        val adapter = dataList?.let { MyAdapter(it, R.layout.card) } ?: MyAdapter(emptyList(), R.layout.card)
         recyclerView.adapter = adapter
 
         return view

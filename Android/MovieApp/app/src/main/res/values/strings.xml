@@ -5,6 +5,7 @@
     <string name="search">Search</string>
     <string name="genre">Genre</string>
     <string name="history">History</string>
+    <string name="payment_history">Payment History</string>
     <string name="watch_film">Watch Film</string>
     <string name="favourite">Favourite</string>
     <string name="logout">Logout</string>
