@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterPremiumActivity">
+    tools:context=".RegisterPremiumActivity"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,24 +37,292 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Đặc quyền VIP"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:textSize="16sp"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        android:layout_marginLeft="5dp" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView2"
         android:layout_margin="9dp"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewPager">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_marginStart="16dp"
+            android:id="@+id/scrollView">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Chọn gói phù hợp với bạn"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:src="@drawable/pack1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:background="@android:color/transparent"
+                        android:id="@+id/buttonPack1"
+                        android:layout_width="30dp"
+                        android:layout_height="90dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:src="@drawable/baseline_keyboard_arrow_down_24"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#F4F2F2"
+                    android:visibility="gone">
+
+                    <RadioButton
+                        android:id="@+id/radion_one"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="06 Tháng - Tự động gia hạn\n499.000 đ  " />
+
+                    <RadioButton
+                        android:id="@+id/radion_two"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="03 Tháng - Tự động gia hạn\n249.000 đ  " />
+
+                    <RadioButton
+                        android:id="@+id/radion_three"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="01 Tháng - Tự động gia hạn\n99.000 đ  " />
+
+                </RadioGroup>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:src="@drawable/pack2"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:background="@android:color/transparent"
+                        android:id="@+id/buttonPack2"
+                        android:layout_width="30dp"
+                        android:layout_height="90dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:src="@drawable/baseline_keyboard_arrow_down_24"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <RadioGroup
+                    android:id="@+id/radioGroup2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#F4F2F2"
+                    android:visibility="gone">
+
+                    <RadioButton
+                        android:id="@+id/radion_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="06 Tháng - Tự động gia hạn\n289.000 đ  " />
+
+                    <RadioButton
+                        android:id="@+id/radion_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="03 Tháng - Tự động gia hạn\n165.000 đ  " />
+
+                    <RadioButton
+                        android:id="@+id/radion_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="01 Tháng - Tự động gia hạn\n69.000 đ  " />
+
+                </RadioGroup>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:src="@drawable/pack3"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:background="@android:color/transparent"
+                        android:id="@+id/buttonPack3"
+                        android:layout_width="30dp"
+                        android:layout_height="90dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:src="@drawable/baseline_keyboard_arrow_down_24"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <RadioGroup
+                    android:id="@+id/radioGroup3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#F4F2F2"
+                    android:visibility="gone">
+
+                    <RadioButton
+                        android:id="@+id/radion_1_pack3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="06 Tháng - Tự động gia hạn\n1.079.000 đ  " />
+
+                    <RadioButton
+                        android:id="@+id/radion_2_pack3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="03 Tháng - Tự động gia hạn\n539.000 đ  " />
+
+                    <RadioButton
+                        android:id="@+id/radion_3_pack3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="01 Tháng - Tự động gia hạn\n189.000 đ  " />
+
+                </RadioGroup>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:src="@drawable/pack4"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:background="@android:color/transparent"
+                        android:id="@+id/buttonPack4"
+                        android:layout_width="30dp"
+                        android:layout_height="90dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView4"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:src="@drawable/baseline_keyboard_arrow_down_24"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <RadioGroup
+                    android:id="@+id/radioGroup4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#F4F2F2"
+                    android:visibility="gone">
+
+                    <RadioButton
+                        android:id="@+id/radion_1_pack4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="06 Tháng - Tự động gia hạn\n289.000 đ  " />
+
+                    <RadioButton
+                        android:id="@+id/radion_2_pack4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="03 Tháng - Tự động gia hạn\n165.000 đ  " />
+
+                    <RadioButton
+                        android:id="@+id/radion_3_pack4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="01 Tháng - Tự động gia hạn\n69.000 đ  " />
+
+                </RadioGroup>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Điều khoản dịch vụ"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="15dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Phí thuê bao sẽ trả băng ZaloPay "/>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+
+
+</LinearLayout>

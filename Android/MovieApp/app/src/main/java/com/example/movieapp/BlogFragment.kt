@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,21 +24,46 @@ class BlogFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            arguments?.let {
+                param1 = it.getString(ARG_PARAM1)
+                param2 = it.getString(ARG_PARAM2)
+            }
         }
-    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_blog, container, false)
-    }
+        override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
+            // Inflate the layout for this fragment
+            val blogView = inflater.inflate(R.layout.fragment_blog, container, false)
+            // Get RecyclerView from layout
+            val rcvBlog = blogView.findViewById<RecyclerView>(R.id.rcv_articles_blog)
+
+            val ds = mutableListOf<Article>()
+            ds.add(Article("Test1","UserTest1","Content1","1/1/2024"))
+            ds.add(Article("Test2","UserTest2","Content2","1/1/2024"))
+            ds.add(Article("Test3","UserTest3","Content3","1/1/2024"))
+            ds.add(Article("Test4","UserTest4","Content4","1/1/2024"))
+            ds.add(Article("Test5","UserTest5","Content5","1/1/2024"))
+            ds.add(Article("Test6","UserTest6","Content6","1/1/2024"))
+
+
+            val blogAdapter = ArticleBlogAdapter(ds)
+            rcvBlog.adapter = blogAdapter
+            rcvBlog.layoutManager = LinearLayoutManager(
+                this.requireContext(),
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+
+            val DevideritemDeco = DividerItemDecoration(rcvBlog.context, LinearLayoutManager.VERTICAL)
+            rcvBlog.addItemDecoration(DevideritemDeco)
+
+            // Inflate the layout for this fragment
+            return blogView
+        }
 
     companion object {
         /**
