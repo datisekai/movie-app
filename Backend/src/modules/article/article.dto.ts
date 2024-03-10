@@ -1,13 +1,17 @@
 import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import {
+  ArrayMinSize,
+  IsArray,
   IsBoolean,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
+import { EnumToString } from 'src/common/helpers';
 
-export class EpisodeDto {
+export class ArticleDto {
   @IsOptional()
   @ApiPropertyOptional()
   @IsString()
@@ -31,17 +35,7 @@ export class EpisodeDto {
   @IsNotEmpty()
   @ApiProperty()
   @IsString()
-  url: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  duration: string;
-
-  @ApiPropertyOptional()
-  @IsNumber()
-  @IsOptional()
-  position: number;
+  content: string;
 
   @IsOptional()
   @ApiPropertyOptional()
@@ -49,19 +43,11 @@ export class EpisodeDto {
   is_active: boolean;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  film_id: number;
+  @ArrayMinSize(1)
+  @IsNumber({}, { each: true })
+  @IsArray()
+  categoryIds: number[];
 }
 
-export class EpisodeUpdatePositionDto {
-  positions: UpdatePositionEpisode[];
-}
-
-class UpdatePositionEpisode {
-  id: number;
-  position: number;
-}
-
-export class CreateEpisodeDto extends EpisodeDto {}
-export class EditEpisodeDto extends PartialType(EpisodeDto) {}
+export class CreateArticleDto extends ArticleDto {}
+export class EditArticleDto extends PartialType(ArticleDto) {}
