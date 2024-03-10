@@ -14,7 +14,7 @@ import { RolesBuilder, InjectRolesBuilder } from 'nest-access-control';
 import { AppResource, AppRoles } from 'src/app.role';
 import { User as UserEntity } from '../user/user.entity';
 import { EpisodeService } from './episode.service';
-import { CreateEpisodeDto } from './episode.dto';
+import { CreateEpisodeDto, EpisodeUpdatePositionDto } from './episode.dto';
 import { Episode } from './episode.entity';
 
 @ApiTags(AppResource.EPISODE)
@@ -91,5 +91,21 @@ export class EpisodeController {
 
     data = await this.episodeService.deleteOne(id);
     return { message: 'Episode deleted', data };
+  }
+
+  @Auth({
+    possession: 'own',
+    action: 'update',
+    resource: AppResource.EPISODE,
+  })
+  @ApiOperation({
+    summary: 'Edit Episode',
+  })
+  @Put('position')
+  async updatePosition(
+    @Body() update_position_dto: EpisodeUpdatePositionDto,
+  ) {
+   
+    return this.episodeService.updatePosition(update_position_dto);
   }
 }
