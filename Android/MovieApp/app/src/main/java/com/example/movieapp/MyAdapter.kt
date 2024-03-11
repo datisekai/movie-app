@@ -4,10 +4,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.MovieItem
 import com.example.movieapp.GenreItem
 import com.example.movieapp.PaymentHistoryItem
+import com.example.movieapp.ResultGenreFragment
 
 class MyAdapter(private val dataList: List<Any>, private val view: Int) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
@@ -25,6 +27,7 @@ class MyAdapter(private val dataList: List<Any>, private val view: Int) :
     override fun getItemCount(): Int {
         return dataList.size
     }
+
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindData(data: Any) {
