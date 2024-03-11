@@ -1,6 +1,8 @@
 import ReactPaginate from "react-paginate";
 import { useLocation, useNavigate,Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import API_URL from "../url";
 const dummy = [
   {
     id: 1,
@@ -47,6 +49,7 @@ function Users() {
   const [itemOffset, setItemOffset] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
+  const [users,setUsers] = useState([]);
 
   // Simulate fetching items from another resources.
   // (This could be items from props; or items loaded in a local state
@@ -64,6 +67,16 @@ function Users() {
     );
     setItemOffset(newOffset);
   };
+  useEffect(()=>{
+    axios.get(`${API_URL}.user`)
+    .then((res)=>{
+      setUsers(res.data);
+      console.log(res);
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+  },[])
   return (
     <div className="relative overflow-x-auto">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -88,7 +101,7 @@ function Users() {
           </tr>
         </thead>
         <tbody>
-          {dummy.map((user) => (
+          {users.map((user) => (
             <tr key={user.id} className="">
               <td className="px-6 py-4">{user.id}</td>
               <td className="px-6 py-4">{user.email}</td>

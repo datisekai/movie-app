@@ -6,7 +6,6 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import ReactPaginate from "react-paginate";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import SortableEpisode from "../components/SortableEpisode";
 const dummy = [
@@ -150,30 +149,6 @@ const dummy = [
 
 
 const Episodes = () => {
-  const itemsPerPage = 5;
-  // boilerplate for pagination
-  const [itemOffset, setItemOffset] = useState(0);
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  // Simulate fetching items from another resources.
-  // (This could be items from props; or items loaded in a local state
-  // from an API endpoint with useEffect and useState)
-  const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-  const currentItems = dummy.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(dummy.length / itemsPerPage);
-
-  // Invoke when user click to request another page.
-  const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % dummy.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
-    setItemOffset(newOffset);
-  };
-
-  //  end boilerplate
 
   //Logic for drag and drop
   const [episodes, setEpisodes] = useState(dummy);
@@ -257,21 +232,7 @@ const Episodes = () => {
           </tbody>
         </table>
       </div>
-      <ReactPaginate
-        activeClassName="bg-red-600 hover:bg-red-700 transiton-colors duration-300 text-white 	"
-        previousClassName="border  border-black py-1 md:px-5  hover:text-black transition-all duration-300 md:text-xl text-xs px-2"
-        nextClassName="border  border-black py-1 md:px-5  hover:text-black transition-all duration-300 md:text-xl text-xs px-2"
-        disabledClassName="bg-gray-400  md:text-lg text-sm px-2 text-white"
-        pageClassName="border md:text-xl text-xs  border-black p-1 md:px-4  hover:text-black transition-all duration-300 px-2"
-        breakLabel="..."
-        nextLabel="Next >"
-        onPageChange={handlePageClick}
-        pageRangeDisplayed={5}
-        pageCount={pageCount}
-        previousLabel="< Previous"
-        renderOnZeroPageCount={null}
-        className="flex gap-2  w-full justify-center items-center py-2"
-      />
+     
     </div>
   );
 };
