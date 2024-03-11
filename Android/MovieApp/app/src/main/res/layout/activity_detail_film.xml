@@ -26,7 +26,7 @@
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="0dp"
-            android:layout_height="500dp"
+            android:layout_height="350dp"
             android:src="@drawable/radient_bg"
             app:layout_constraintBottom_toBottomOf="@id/imagePoster"
             app:layout_constraintEnd_toEndOf="@+id/imagePoster"
@@ -57,6 +57,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imagePoster" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:onClick="clickBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:src="@drawable/icons8_back_18"
+            app:layout_constraintBottom_toTopOf="@+id/imageView2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

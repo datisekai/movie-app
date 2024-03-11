@@ -41,6 +41,9 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
         val button_pack4 = findViewById<ImageButton>(R.id.buttonPack4)
         button_pack4.setOnClickListener(this)
 
+        val button = findViewById<ImageButton>(R.id.imgButtonPremium)
+        button.setOnClickListener(this)
+
         list = ArrayList()
         list.add(slideItem(R.drawable.premium1))
         list.add(slideItem(R.drawable.premium2))
@@ -130,6 +133,9 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
 
     override fun onClick(v: View) {
         when(v.id){
+            R.id.imgButtonPremium -> {
+                finish()
+            }
             R.id.buttonPack1 -> {
                 val radiogp3 = findViewById<RadioGroup>(R.id.radioGroup3)
                 val button3 = findViewById<ImageButton>(R.id.buttonPack3)

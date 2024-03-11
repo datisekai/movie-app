@@ -17,4 +17,9 @@ class DetailFilmActivity : AppCompatActivity() {
 
     }
 
+    public fun clickBack(view: View){
+        finish()
+    }
+
+
 }

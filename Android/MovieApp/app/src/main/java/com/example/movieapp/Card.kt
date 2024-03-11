@@ -1,5 +1,6 @@
 package com.example.movieapp
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
@@ -28,5 +29,8 @@ class Card : AppCompatActivity(){
             .load(R.drawable.anime1)
             .transform(RoundedCorners(200))
             .into(image)
+
+
     }
+
 }

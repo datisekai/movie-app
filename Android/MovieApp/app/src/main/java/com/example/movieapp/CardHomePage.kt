@@ -1,10 +1,12 @@
 package com.example.movieapp
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -13,6 +15,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.Navigation
@@ -54,6 +57,11 @@ class CardHomePage{
 //            linearLayout.setPadding(4, 4, 4, 4)
 
              val imageView = ImageView(context)
+             imageView.id = View.generateViewId()
+             imageView.setOnClickListener(View.OnClickListener {
+                 val intent : Intent =  Intent(context,DetailFilmActivity::class.java)
+                 context.startActivity(intent);
+             })
              imageView.layoutParams = LinearLayout.LayoutParams(
                  LinearLayout.LayoutParams.MATCH_PARENT,
                  heightCard
