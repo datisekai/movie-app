@@ -26,6 +26,21 @@
         android:label="history"
         tools:layout="@layout/fragment_history" />
     <fragment
+        android:id="@+id/menu_Favorite"
+        android:name="com.example.movieapp.FavoriteFragment"
+        android:label="fragment_favorite"
+        tools:layout="@layout/fragment_favorite" />
+    <fragment
+        android:id="@+id/menu_Genre"
+        android:name="com.example.movieapp.GenreFragment"
+        android:label="fragment_genre"
+        tools:layout="@layout/fragment_genre" />
+    <fragment
+        android:id="@+id/menu_PaymentHistory"
+        android:name="com.example.movieapp.PaymentHistoryFragment"
+        android:label="fragment_payment_history"
+        tools:layout="@layout/fragment_payment_history" />
+    <fragment
         android:id="@+id/menu_homePage"
         android:name="com.example.movieapp.HomePageFragment"
         android:label="fragment_home_page"
