@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg1"
+    >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thông tin tài khoản"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_marginVertical="10dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/round_back_setting">
+            <!--Full Name-->
+            <RelativeLayout
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                >
+                <ImageView
+                    android:id="@+id/profile_detail_img_account"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/baseline_account_circle_24"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Họ tên"
+                    android:textColor="@color/white"
+                    android:layout_toEndOf="@id/profile_detail_img_account"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/profile_detail_acc_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right_icon"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lines"
+                android:layout_marginHorizontal="15dp"/>
+
+            <!--Email-->
+            <RelativeLayout
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                >
+                <ImageView
+                    android:id="@+id/profile_detail_email"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/baseline_mail_outline_24"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    android:textColor="@color/white"
+                    android:layout_toEndOf="@id/profile_detail_email"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16dp"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right_icon"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lines"
+                android:layout_marginHorizontal="15dp"/>
+            <!--Phone Number-->
+            <RelativeLayout
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                >
+                <ImageView
+                    android:id="@+id/profile_detail_phone"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/baseline_phone_24"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Số điện thoại"
+                    android:textColor="@color/white"
+                    android:layout_toEndOf="@id/profile_detail_phone"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16dp"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right_icon"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lines"
+                android:layout_marginHorizontal="15dp"/>
+            <!--Birth Day-->
+            <RelativeLayout
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                >
+                <ImageView
+                    android:id="@+id/profile_detail_birth_day"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/baseline_event_note_24"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sinh nhật"
+                    android:textColor="@color/white"
+                    android:layout_toEndOf="@id/profile_detail_birth_day"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16dp"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right_icon"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lines"
+                android:layout_marginHorizontal="15dp"/>
+            <!--Gender-->
+            <RelativeLayout
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                >
+                <ImageView
+                    android:id="@+id/profile_detail_gender"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="12dp"
+                    android:src="@drawable/equality"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Giới tính"
+                    android:textColor="@color/white"
+                    android:layout_toEndOf="@id/profile_detail_gender"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16dp"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right_icon"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lines"
+                android:layout_marginHorizontal="15dp"/>
+            <!--Password-->
+            <RelativeLayout
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                >
+                <ImageView
+                    android:id="@+id/profile_detail_password"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="12dp"
+                    android:src="@drawable/baseline_key_24"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mật khẩu"
+                    android:textColor="@color/white"
+                    android:layout_toEndOf="@id/profile_detail_password"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16dp"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right_icon"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Liên kết tài khoản"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_marginVertical="10dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/round_back_setting">
+            <!--Google-->
+            <RelativeLayout
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                >
+                <ImageView
+                    android:id="@+id/profile_link_google"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="12dp"
+                    android:src="@drawable/google"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Liên kết google"
+                    android:textColor="@color/white"
+                    android:layout_toEndOf="@id/profile_link_google"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16dp"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right_icon"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lines"
+                android:layout_marginHorizontal="15dp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
