@@ -16,6 +16,7 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '../src/', 'views'));
   app.setViewEngine('ejs');
 
+  app.enableCors();
   const config = new DocumentBuilder()
     .setTitle('Movie API Example')
     .setDescription('Movie API')
