@@ -11,7 +11,11 @@ import { convertToSlug } from 'src/common/helpers/convertToSlug';
 import { CategoryService } from '../category/category.service';
 import { Category } from '../category/category.entity';
 import { Episode } from './episode.entity';
-import { CreateEpisodeDto, EditEpisodeDto } from './episode.dto';
+import {
+  CreateEpisodeDto,
+  EditEpisodeDto,
+  EpisodeUpdatePositionDto,
+} from './episode.dto';
 import { FilmService } from '../film/film.service';
 
 export interface EpisodeFindOne {
@@ -35,6 +39,7 @@ export class EpisodeService {
       .createQueryBuilder('episode')
       .where('episode.is_deleted = false')
       .andWhere('episode.film.id = :filmId', { filmId })
+      .orderBy('episode.position', 'ASC')
       .take(limit)
       .skip((page - 1) * limit);
 
@@ -128,5 +133,14 @@ export class EpisodeService {
       .createQueryBuilder('film')
       .where({ ...data, is_deleted: false })
       .getOne();
+  }
+
+  async updatePosition(episode_update_position_dto: EpisodeUpdatePositionDto) {
+    const listPositionUpdate = episode_update_position_dto.positions;
+    for (const positionUpdate of listPositionUpdate) {
+      const { id, position } = positionUpdate;
+      await this.episodeRepository.update(id, { position });
+    }
+    return true;
   }
 }

@@ -54,5 +54,14 @@ export class EpisodeDto {
   film_id: number;
 }
 
+export class EpisodeUpdatePositionDto {
+  positions: UpdatePositionEpisode[];
+}
+
+class UpdatePositionEpisode {
+  id: number;
+  position: number;
+}
+
 export class CreateEpisodeDto extends EpisodeDto {}
 export class EditEpisodeDto extends PartialType(EpisodeDto) {}

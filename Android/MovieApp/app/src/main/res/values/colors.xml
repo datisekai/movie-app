@@ -4,4 +4,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="bg1">#18181B</color>
     <color name="bg2">#1A1A1D</color>
+    <color name="start_color">#19A1BE</color>
+    <color name="end_color">#7D4192</color>
+    <color name="border_color">#000000</color>
+    <color name="lines">#7C7070</color>
 </resources>
