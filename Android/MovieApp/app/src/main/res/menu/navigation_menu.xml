@@ -18,12 +18,22 @@
         android:id="@+id/menu_Blog"
         android:icon="@drawable/blog"
         android:title="@string/blog"/>
-
     <item
         android:id="@+id/menu_History"
         android:icon="@drawable/history"
         android:title="@string/history"/>
-
+    <item
+        android:id="@+id/menu_Favorite"
+        android:icon="@drawable/favorite"
+        android:title="@string/favourite" />
+    <item
+        android:id="@+id/menu_Genre"
+        android:icon="@drawable/baseline_article_24"
+        android:title="@string/genre" />
+    <item
+        android:id="@+id/menu_PaymentHistory"
+        android:icon="@drawable/baseline_attach_money_24"
+        android:title="@string/payment_history" />
     <item
         android:id="@+id/menu_Logout"
         android:icon="@drawable/logout"
