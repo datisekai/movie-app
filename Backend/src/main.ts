@@ -17,7 +17,6 @@ async function bootstrap() {
   app.setViewEngine('ejs');
 
   app.enableCors();
-
   const config = new DocumentBuilder()
     .setTitle('Movie API Example')
     .setDescription('Movie API')
