@@ -60,7 +60,7 @@ class HistoryFragment : Fragment() {
 
         val dataList: List<MovieItem>? = generateDataList() // Tạo danh sách dữ liệu
 
-        val adapter = dataList?.let { MyAdapter(it, R.layout.card) } ?: MyAdapter(emptyList(), R.layout.card)
+        val adapter = dataList?.let { MyAdapter(it, R.layout.card, 480, 480, true) } ?: MyAdapter(emptyList(), R.layout.card, 480, 480, true)
         recyclerView.adapter = adapter
 
         return view

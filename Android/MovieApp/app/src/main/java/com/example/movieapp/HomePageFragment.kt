@@ -1,5 +1,6 @@
 package com.example.movieapp
 
+import MyAdapter
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -17,6 +18,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 
 // TODO: Rename parameter arguments, choose names that match
@@ -42,12 +46,26 @@ class HomePageFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
-    private fun generateDataList(): List<cardSize> {
-        val dataList: MutableList<cardSize> = ArrayList()
-        dataList.add(cardSize(480, 480, false))
-        dataList.add(cardSize(640, 320, false))
-        dataList.add(cardSize(480, 720, false))
-        dataList.add(cardSize(480, 480, true))
+    private fun generateDataList(): List<CardHomeItem> {
+        val dataList: MutableList<CardHomeItem> = ArrayList()
+        dataList.add(CardHomeItem(R.id.recycler_view1,480, 480, false, generateDataListMovie()))
+        dataList.add(CardHomeItem(R.id.recycler_view2,640, 320, false, generateDataListMovie()))
+        dataList.add(CardHomeItem(R.id.recycler_view3, 480, 720, false, generateDataListMovie()))
+        dataList.add(CardHomeItem(R.id.recycler_view4, 480, 480, true , generateDataListMovie()))
+        // Thêm các phần tử khác vào danh sách dữ liệu
+        return dataList
+    }
+    private fun generateDataListMovie(): List<MovieItem> {
+        val dataList: MutableList<MovieItem> = ArrayList()
+        dataList.add(MovieItem(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
+        dataList.add(MovieItem(R.drawable.anime2, "abc 2", "2023"))
+        dataList.add(MovieItem(R.drawable.anime3, "abc 3", "2024"))
+        dataList.add(MovieItem(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
+        dataList.add(MovieItem(R.drawable.anime2, "abc 2", "2023"))
+        dataList.add(MovieItem(R.drawable.anime3, "abc 3", "2024"))
+        dataList.add(MovieItem(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
+        dataList.add(MovieItem(R.drawable.anime2, "abc 2", "2023"))
+        dataList.add(MovieItem(R.drawable.anime3, "abc 3", "2024"))
         // Thêm các phần tử khác vào danh sách dữ liệu
         return dataList
     }
@@ -58,6 +76,20 @@ class HomePageFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home_page, container, false)
+
+        val spacing = 24
+        for (data in generateDataList()){
+            val recyclerView1 = view.findViewById<RecyclerView>(data.view)
+            recyclerView1.addItemDecoration(GridSpacingItemDecoration(data.movieItem.size, spacing, false))
+            recyclerView1.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
+
+            val dataList: List<MovieItem>? = data.movieItem // Tạo danh sách dữ liệu
+
+            val adapter = dataList?.let { MyAdapter(it, R.layout.card, data.widthCard, data.heightCard, data.isBorderImage) } ?: MyAdapter(emptyList(), R.layout.card, data.widthCard, data.heightCard, data.isBorderImage)
+            recyclerView1.adapter = adapter
+        }
+
+
 
         val editText = view.findViewById<EditText>(R.id.editTextSearch)
         editText.setOnEditorActionListener { _, actionId, event ->
@@ -84,96 +116,6 @@ class HomePageFragment : Fragment() {
             }
             return@setOnEditorActionListener false
         }
-        val cardDataList = generateDataList()
-        val listCardContainer = view.findViewById<LinearLayout>(R.id.listCardContainer)
-
-        for (cardData in cardDataList) {
-            val card = LinearLayout(view.context)
-            val layoutParams1 = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            layoutParams1.setMargins(8, 0, 8, 0)
-            card.layoutParams = layoutParams1
-
-            val linearLayout = LinearLayout(view.context)
-            linearLayout.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-
-            linearLayout.orientation = LinearLayout.VERTICAL
-
-            val textView = TextView(view.context)
-            textView.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                1f
-            )
-            textView.text = "Popular Movie"
-            textView.setTextColor(Color.WHITE)
-//            textView.setTextAppearance(com.google.android.material.R.style.TextAppearance_MaterialComponents_Headline6)
-            textView.setTypeface(Typeface.DEFAULT_BOLD)
-            val textSize = 20
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize.toFloat())
-            textView.setPadding(16,0,0,24)
-
-//            val button = Button(this)
-//            button.layoutParams = LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.WRAP_CONTENT,
-//                LinearLayout.LayoutParams.WRAP_CONTENT
-//            )
-//            button.text = "View More"
-//            button.setTextColor(ContextCompat.getColor(this, R.color.white))
-////            button.setBackgroundResource(R.drawable.rounded_button)
-//            button.setPadding(8, 0, 8, 0)
-
-//            val layoutParams = LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.WRAP_CONTENT,
-//                LinearLayout.LayoutParams.WRAP_CONTENT
-//            )
-//            layoutParams.marginEnd = 8
-
-//            button.layoutParams = layoutParams
-
-//            val linearLayoutCard = LinearLayout(this)
-//            linearLayoutCard.layoutParams = LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.MATCH_PARENT,
-//                LinearLayout.LayoutParams.WRAP_CONTENT
-//            )
-
-            val horizontalScrollView = HorizontalScrollView(view.context)
-            horizontalScrollView.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            horizontalScrollView.isHorizontalScrollBarEnabled = false
-            horizontalScrollView.isScrollbarFadingEnabled = false
-            horizontalScrollView.setPadding(8,0,0,40)
-
-            val cardContainer = LinearLayout(view.context)
-            cardContainer.id = View.generateViewId()
-            cardContainer.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            cardContainer.orientation = LinearLayout.HORIZONTAL
-
-            horizontalScrollView.addView(cardContainer)
-
-            val cardHomePage = CardHomePage()
-            cardHomePage.init(view.context, cardContainer, cardData.widthCard, cardData.heightCard, cardData.isBorderImage)
-
-            linearLayout.addView(textView)
-//            linearLayout.addView(button)
-            linearLayout.addView(horizontalScrollView)
-
-            card.addView(linearLayout)
-
-            listCardContainer.addView(card)
-
-        }
-
         return view
     }
 

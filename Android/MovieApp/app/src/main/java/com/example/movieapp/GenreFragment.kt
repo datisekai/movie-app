@@ -62,7 +62,7 @@ class GenreFragment : Fragment() {
 
         val dataList: List<GenreItem>? = generateDataList() // Tạo danh sách dữ liệu
 
-        val adapter = dataList?.let { MyAdapter(it, R.layout.genre) } ?: MyAdapter(emptyList(),R.layout.genre)
+        val adapter = dataList?.let { MyAdapter(it, R.layout.genre, 0, 0, true) } ?: MyAdapter(emptyList(), R.layout.genre, 0, 0, true)
         recyclerView.adapter = adapter
 
         return view

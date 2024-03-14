@@ -57,7 +57,7 @@ class PaymentHistoryFragment : Fragment() {
 
         val dataList: List<PaymentHistoryItem>? = generateDataList() // Tạo danh sách dữ liệu
 
-        val adapter = dataList?.let { MyAdapter(it, R.layout.payment_history) } ?: MyAdapter(emptyList(), R.layout.payment_history)
+        val adapter = dataList?.let { MyAdapter(it, R.layout.payment_history, 0, 0, true) } ?: MyAdapter(emptyList(), R.layout.payment_history, 0, 0, true)
         recyclerView.adapter = adapter
 
         return view

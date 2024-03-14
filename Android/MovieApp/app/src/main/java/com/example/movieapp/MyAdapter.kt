@@ -5,11 +5,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.movieapp.MovieItem
 import com.example.movieapp.GenreItem
 import com.example.movieapp.PaymentHistoryItem
+import com.makeramen.roundedimageview.RoundedImageView
 
-class MyAdapter(private val dataList: List<Any>, private val view: Int) :
+class MyAdapter(private val dataList: List<Any>, private val view: Int,private val widthCard: Int ,private val heightCard: Int ,private val isBorderImage: Boolean) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -30,13 +33,35 @@ class MyAdapter(private val dataList: List<Any>, private val view: Int) :
         fun bindData(data: Any) {
             when (data) {
                 is MovieItem -> {
-                    val image: ImageView = itemView.findViewById(R.id.imageCard)
+                    val image: RoundedImageView = itemView.findViewById(R.id.imageCard)
                     val title: TextView = itemView.findViewById(R.id.title)
                     val textView2: TextView = itemView.findViewById(R.id.textView2)
                     val movieItem = data as MovieItem
                     image.setImageResource(movieItem.imageResId)
                     title.text = movieItem.title
                     textView2.text = movieItem.year
+
+                    //Custom
+                    val layoutParams = image.layoutParams
+                    layoutParams.width = widthCard
+                    layoutParams.height = heightCard
+                    image.layoutParams = layoutParams
+
+                    image.minimumWidth= widthCard
+                    image.maxWidth = widthCard;
+                    image.maxHeight = heightCard
+                    image.minimumHeight = heightCard
+
+                    title.minimumWidth = widthCard
+                    title.maxWidth = widthCard
+
+                    textView2.minimumWidth = widthCard
+                    textView2.maxWidth = widthCard
+
+                    if(isBorderImage){
+                        val cornerRadius = itemView.context.resources.getDimensionPixelSize(R.dimen.corner_radius)
+                        image.cornerRadius = cornerRadius.toFloat()
+                    }
                 }
                 is GenreItem -> {
                     val textView: TextView = itemView.findViewById(R.id.textView)
