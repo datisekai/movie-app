@@ -89,29 +89,14 @@ class HomePageFragment : Fragment() {
             recyclerView1.adapter = adapter
         }
 
-
-
         val editText = view.findViewById<EditText>(R.id.editTextSearch)
         editText.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE ||
                 (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
             ) {
-                // Xử lý sự kiện khi nhấn phím Enter
-//                performSearch(editText.text.toString())
-//                val searchFragment = SearchFragment()
-//                val fragmentManager = requireActivity().supportFragmentManager
-//                fragmentManager.beginTransaction()
-//                    .add(R.id.navHostFragment, searchFragment)
-//                    .addToBackStack(null)
-//                    .commit()
-//                val navController = Navigation.findNavController(view)
-//                navController.navigate(R.id.menu_Search)
-                val navigationview = inflater.inflate(R.layout.fragment_home_page, container, false).findViewById<NavigationView>(R.id.navigationView)
-                navigationview.itemIconTintList = null
-
-                val navController = Navigation.findNavController(requireView())
-                NavigationUI.setupWithNavController(navigationview, navController)
-                navController.navigate(R.id.searchFragment)
+                val intent = Intent(view.context, SearchActivity::class.java)
+                intent.putExtra("q", editText.text.toString())
+                startActivity(intent)
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false

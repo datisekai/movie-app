@@ -1,7 +1,10 @@
+import android.content.Intent
+import android.os.Bundle
 import com.example.movieapp.R
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +13,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.movieapp.MovieItem
 import com.example.movieapp.GenreItem
 import com.example.movieapp.PaymentHistoryItem
+import com.example.movieapp.ResultGenreActivity
+import com.example.movieapp.SearchActivity
 import com.makeramen.roundedimageview.RoundedImageView
 
 class MyAdapter(private val dataList: List<Any>, private val view: Int,private val widthCard: Int ,private val heightCard: Int ,private val isBorderImage: Boolean) :
@@ -64,10 +69,18 @@ class MyAdapter(private val dataList: List<Any>, private val view: Int,private v
                     }
                 }
                 is GenreItem -> {
-                    val textView: TextView = itemView.findViewById(R.id.textView)
+                    val buttonGenre: Button = itemView.findViewById(R.id.buttonGenre)
                     val genreItem = data as GenreItem
-                    textView.text=genreItem.name
-                    textView.tooltipText= genreItem.name
+                    buttonGenre.text=genreItem.name
+                    buttonGenre.tooltipText= genreItem.name
+                    buttonGenre.setOnClickListener{
+                        val intent = Intent(itemView.context, ResultGenreActivity::class.java)
+                        val bundle = Bundle()
+                        bundle.putInt("id", genreItem.id)
+                        bundle.putString("name", genreItem.name)
+                        intent.putExtras(bundle)
+                        itemView.context.startActivity(intent)
+                    }
                 }
                 is PaymentHistoryItem -> {
                     val title: TextView = itemView.findViewById(R.id.textTitle)
