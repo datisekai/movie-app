@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
         view.setOnClickListener{
             val intent = Intent(this, HomePage_Activity::class.java)
             startActivity(intent)
+
         }
 
     }

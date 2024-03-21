@@ -67,6 +67,7 @@ class HistoryFragment : Fragment() {
             R.layout.card, 480, 480, true)
         recyclerView.adapter = adapter
 
+
         return view
 
     }

@@ -12,6 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieApp"
         tools:targetApi="31">
+        <activity
+            android:name=".RegisterPremiumActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PlayerActivity"
+            android:exported="false"
+            android:resizeableActivity="true"
+            android:screenOrientation="landscape"
+            android:supportsPictureInPicture="true"
+            android:theme="@style/Theme.AppCompat.FullScreen" />
+            
         <service
             android:name=".service.AccountService"
             android:enabled="true"
@@ -54,5 +65,3 @@
             android:name=".ui.activity.MainActivity"
             android:exported="false" />
     </application>
-
-</manifest>

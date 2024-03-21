@@ -17,6 +17,9 @@ export enum AppResource {
   FILM = 'FILM',
   EPISODE = 'EPISODE',
   RATING = 'RATING',
+  ARTICLE = 'ARTICLE',
+  HISTORY = 'HISTORY',
+  UPLOAD = 'UPLOAD',
 }
 
 export const roles: RolesBuilder = new RolesBuilder();
@@ -48,6 +51,7 @@ roles
     AppResource.CATEGORY,
     AppResource.FILM,
     AppResource.EPISODE,
+    AppResource.UPLOAD,
   ])
   .updateAny([
     AppResource.USER,
