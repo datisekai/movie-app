@@ -1,10 +1,12 @@
-package com.example.movieapp
+package com.example.movieapp.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.movieapp.R
+import com.example.movieapp.model.Article
 
 class ArticleBlogAdapter (var ds:List<Article>)
     :RecyclerView.Adapter<ArticleBlogAdapter.ArticleViewHolder>(){

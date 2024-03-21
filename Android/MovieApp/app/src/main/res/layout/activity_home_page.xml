@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomePage_Activity">
+    tools:context=".ui.activity.HomePage_Activity">
 
     <include
         layout="@layout/appbar" />

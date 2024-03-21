@@ -14,11 +14,11 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.example.movieapp.MainActivity
+import com.example.movieapp.ui.activity.MainActivity
 import com.example.movieapp.databinding.ActivityLoginBinding
 
 import com.example.movieapp.R
-import com.example.movieapp.RegisterActivity
+import com.example.movieapp.ui.activity.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
 

@@ -1,11 +1,8 @@
-package com.example.movieapp
+package com.example.movieapp.ui.fragment
 
-import MyAdapter
+import com.example.movieapp.adapter.CustomAdapter
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,15 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.widget.HorizontalScrollView
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.navigation.Navigation
-import androidx.navigation.ui.NavigationUI
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.navigation.NavigationView
+import com.example.movieapp.GridSpacingItemDecoration
+import com.example.movieapp.R
+import com.example.movieapp.ui.activity.SearchActivity
+import com.example.movieapp.model.CardHome
+import com.example.movieapp.model.Movie
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -46,26 +41,26 @@ class HomePageFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
-    private fun generateDataList(): List<CardHomeItem> {
-        val dataList: MutableList<CardHomeItem> = ArrayList()
-        dataList.add(CardHomeItem(R.id.recycler_view1,480, 480, false, generateDataListMovie()))
-        dataList.add(CardHomeItem(R.id.recycler_view2,640, 320, false, generateDataListMovie()))
-        dataList.add(CardHomeItem(R.id.recycler_view3, 480, 720, false, generateDataListMovie()))
-        dataList.add(CardHomeItem(R.id.recycler_view4, 480, 480, true , generateDataListMovie()))
+    private fun generateDataList(): List<CardHome> {
+        val dataList: MutableList<CardHome> = ArrayList()
+        dataList.add(CardHome(R.id.recycler_view1,480, 480, false, generateDataListMovie()))
+        dataList.add(CardHome(R.id.recycler_view2,640, 320, false, generateDataListMovie()))
+        dataList.add(CardHome(R.id.recycler_view3, 480, 720, false, generateDataListMovie()))
+        dataList.add(CardHome(R.id.recycler_view4, 480, 480, true , generateDataListMovie()))
         // Thêm các phần tử khác vào danh sách dữ liệu
         return dataList
     }
-    private fun generateDataListMovie(): List<MovieItem> {
-        val dataList: MutableList<MovieItem> = ArrayList()
-        dataList.add(MovieItem(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(MovieItem(R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(MovieItem(R.drawable.anime3, "abc 3", "2024"))
-        dataList.add(MovieItem(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(MovieItem(R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(MovieItem(R.drawable.anime3, "abc 3", "2024"))
-        dataList.add(MovieItem(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(MovieItem(R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(MovieItem(R.drawable.anime3, "abc 3", "2024"))
+    private fun generateDataListMovie(): List<Movie> {
+        val dataList: MutableList<Movie> = ArrayList()
+        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
+        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023"))
+        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024"))
+        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
+        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023"))
+        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024"))
+        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
+        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023"))
+        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024"))
         // Thêm các phần tử khác vào danh sách dữ liệu
         return dataList
     }
@@ -83,9 +78,11 @@ class HomePageFragment : Fragment() {
             recyclerView1.addItemDecoration(GridSpacingItemDecoration(data.movieItem.size, spacing, false))
             recyclerView1.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
 
-            val dataList: List<MovieItem>? = data.movieItem // Tạo danh sách dữ liệu
+            val dataList: List<Movie>? = data.movieItem // Tạo danh sách dữ liệu
 
-            val adapter = dataList?.let { MyAdapter(it, R.layout.card, data.widthCard, data.heightCard, data.isBorderImage) } ?: MyAdapter(emptyList(), R.layout.card, data.widthCard, data.heightCard, data.isBorderImage)
+            val adapter = dataList?.let { CustomAdapter(it,
+                R.layout.card, data.widthCard, data.heightCard, data.isBorderImage) } ?: CustomAdapter(emptyList(),
+                R.layout.card, data.widthCard, data.heightCard, data.isBorderImage)
             recyclerView1.adapter = adapter
         }
 

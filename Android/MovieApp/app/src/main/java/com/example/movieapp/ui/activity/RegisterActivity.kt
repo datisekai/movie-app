@@ -1,9 +1,10 @@
-package com.example.movieapp
+package com.example.movieapp.ui.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import com.example.movieapp.R
 import com.example.movieapp.ui.login.LoginActivity
 
 class RegisterActivity : AppCompatActivity() {

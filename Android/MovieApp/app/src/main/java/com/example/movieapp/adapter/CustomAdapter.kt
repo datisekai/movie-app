@@ -1,3 +1,5 @@
+package com.example.movieapp.adapter
+
 import android.content.Intent
 import android.os.Bundle
 import com.example.movieapp.R
@@ -5,20 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.movieapp.MovieItem
-import com.example.movieapp.GenreItem
-import com.example.movieapp.PaymentHistoryItem
-import com.example.movieapp.ResultGenreActivity
-import com.example.movieapp.SearchActivity
+import com.example.movieapp.model.Movie
+import com.example.movieapp.model.Genre
+import com.example.movieapp.model.PaymentHistory
+import com.example.movieapp.ui.activity.ResultGenreActivity
 import com.makeramen.roundedimageview.RoundedImageView
 
-class MyAdapter(private val dataList: List<Any>, private val view: Int,private val widthCard: Int ,private val heightCard: Int ,private val isBorderImage: Boolean) :
-    RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+class CustomAdapter(private val dataList: List<Any>, private val view: Int, private val widthCard: Int, private val heightCard: Int, private val isBorderImage: Boolean) :
+    RecyclerView.Adapter<CustomAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(view, parent, false)
@@ -37,11 +35,11 @@ class MyAdapter(private val dataList: List<Any>, private val view: Int,private v
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindData(data: Any) {
             when (data) {
-                is MovieItem -> {
+                is Movie -> {
                     val image: RoundedImageView = itemView.findViewById(R.id.imageCard)
                     val title: TextView = itemView.findViewById(R.id.title)
                     val textView2: TextView = itemView.findViewById(R.id.textView2)
-                    val movieItem = data as MovieItem
+                    val movieItem = data as Movie
                     image.setImageResource(movieItem.imageResId)
                     title.text = movieItem.title
                     textView2.text = movieItem.year
@@ -68,9 +66,9 @@ class MyAdapter(private val dataList: List<Any>, private val view: Int,private v
                         image.cornerRadius = cornerRadius.toFloat()
                     }
                 }
-                is GenreItem -> {
+                is Genre -> {
                     val buttonGenre: Button = itemView.findViewById(R.id.buttonGenre)
-                    val genreItem = data as GenreItem
+                    val genreItem = data as Genre
                     buttonGenre.text=genreItem.name
                     buttonGenre.tooltipText= genreItem.name
                     buttonGenre.setOnClickListener{
@@ -82,11 +80,11 @@ class MyAdapter(private val dataList: List<Any>, private val view: Int,private v
                         itemView.context.startActivity(intent)
                     }
                 }
-                is PaymentHistoryItem -> {
+                is PaymentHistory -> {
                     val title: TextView = itemView.findViewById(R.id.textTitle)
                     val date: TextView = itemView.findViewById(R.id.textDate)
                     val money: TextView = itemView.findViewById(R.id.textMoney)
-                    val paymentHistoryItem = data as PaymentHistoryItem
+                    val paymentHistoryItem = data as PaymentHistory
                     title.text = paymentHistoryItem.title
                     date.text = paymentHistoryItem.date
                     money.text = "-" + paymentHistoryItem.money.toString() +"đ"

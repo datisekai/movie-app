@@ -12,15 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieApp"
         tools:targetApi="31">
+        <service
+            android:name=".service.AccountService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <activity
-            android:name=".ResultGenreActivity"
-            android:exported="false">
-        </activity>
-        <activity
-            android:name=".SearchActivity"
+            android:name=".ui.activity.ResultGenreActivity"
             android:exported="false"></activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".ui.activity.SearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.RegisterActivity"
             android:exported="false">
 
             <!-- <intent-filter> -->
@@ -41,13 +45,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DetailFilmActivity"
+            android:name=".ui.activity.DetailFilmActivity"
             android:exported="false" />
         <activity
-            android:name=".HomePage_Activity"
+            android:name=".ui.activity.HomePage_Activity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:exported="false" />
     </application>
 
