@@ -3,8 +3,11 @@ package com.example.movieapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import com.example.movieapp.ui.login.LoginActivity
+import com.example.movieapp.Api.ServiceBuilder
+import com.example.movieapp.data.model.LoginDTO
+import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,4 +22,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+
 }
