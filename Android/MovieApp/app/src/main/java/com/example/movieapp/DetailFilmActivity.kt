@@ -14,6 +14,7 @@ import com.example.movieapp.Api.DetailFilmLoader
 import com.example.movieapp.Api.ServiceBuilder
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.LoginDTO
+import com.example.movieapp.ui.login.classToken
 import java.util.concurrent.Executors
 
 class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Film>{
@@ -39,11 +40,8 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
        val connMgr : ConnectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
        val networkInfo = connMgr.activeNetworkInfo
         if (networkInfo != null && networkInfo.isConnected) {
-            val intent = intent;
-            val bundle = intent.getBundleExtra("data")
-            val token = bundle?.getString("Token")
             val bundle2 = Bundle()
-            bundle2.putString("header",token)
+            bundle2.putString("header",classToken.MY_TOKEN)
             supportLoaderManager.restartLoader<Film>(0, bundle2, this)
 
         }
@@ -67,7 +65,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
         try {
             val txtTitle = findViewById<TextView>(R.id.txtTitleFilm)
             if (data != null){
-                txtTitle.text = data.title
+                txtTitle.text = data.data.title
                 Log.e("DATA", "result")
             }
         }catch (e : Exception){

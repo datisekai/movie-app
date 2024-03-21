@@ -17,8 +17,7 @@ interface ApiService {
 
 
     @GET("api.film/{id}")
-    fun getFilmById(@Header("Authorization") header : String,
-                    @Path("id") id:Int) : Call<Film>
+    fun getFilmById(@Path("id") id:Int) : Call<Film>
 
     @GET("api.film")
     fun getListFilm() : Call<List<Film>>

@@ -9,6 +9,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -21,7 +22,10 @@ import com.example.movieapp.databinding.ActivityLoginBinding
 import com.example.movieapp.R
 import com.example.movieapp.RegisterActivity
 import com.example.movieapp.data.model.LoginDTO
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import java.util.concurrent.Executors
 
 class LoginActivity : AppCompatActivity() {
 
@@ -127,6 +131,14 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 }
+
+class classToken{
+    companion object {
+        var MY_TOKEN : String = ""
+
+    }
+}
+
 
 /**
  * Extension function to simplify setting an afterTextChanged action to EditText components.

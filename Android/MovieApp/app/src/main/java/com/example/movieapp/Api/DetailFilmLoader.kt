@@ -13,11 +13,11 @@ class DetailFilmLoader(context: Context, private val header : String) : AsyncTas
         Log.e("CALL","call2")
         try {
             val service = ServiceBuilder().apiService
-            val filmDetailResponse  = service.getFilmById(header,1).execute()
+            val filmDetailResponse  = service.getFilmById(1).execute()
             Log.e("RESPONSE", filmDetailResponse.toString() + "data")
             if (filmDetailResponse.isSuccessful){
                 val filmDetail = filmDetailResponse.body()
-                Log.e("OK", filmDetailResponse.body().id.toString() + "data")
+                Log.e("OK", filmDetailResponse.body().data.id.toString() + "data")
                 return filmDetail
             }
         }catch (e : Exception){
