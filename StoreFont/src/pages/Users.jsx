@@ -70,8 +70,8 @@ function Users() {
   useEffect(()=>{
     axios.get(`${API_URL}.user`)
     .then((res)=>{
-      setUsers(res.data);
-      console.log(res);
+      setUsers(res.data.data);
+      console.log("data",res.data);
     })
     .catch((err)=>{
       console.log(err);

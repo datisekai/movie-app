@@ -14,10 +14,12 @@ import History from './pages/History'
 import Episodes from './pages/Episodes'
 import EpisodeDetail from './pages/EpisodeDetail'
 import TestDND from "./pages/TestDND";
+import Login from './pages/Login'
 function App() {
     return (
         <Router>
             <Routes>
+                <Route path='login' element={<Login />} />
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Dashboard />} />
                     <Route path="movies" element={<Movies />}/>
