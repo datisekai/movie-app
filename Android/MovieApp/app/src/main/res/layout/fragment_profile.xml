@@ -18,6 +18,7 @@
 
             <!--Area Infor-->
             <RelativeLayout
+                android:id="@+id/fragment_profile_click_details"
                 android:layout_width="360dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -128,6 +129,7 @@
 
                 <!--Mục Lịch sử-->
                 <RelativeLayout
+                    android:id="@+id/fragment_profile_click_history"
                     android:layout_width="360dp"
                     android:layout_height="wrap_content"
                     >

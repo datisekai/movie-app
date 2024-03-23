@@ -16,6 +16,24 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".BlogDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfilePhoneNumberActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfilePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileFullNameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileEmailActivity"
+            android:exported="false" />
+        <activity
             android:name=".RegisterPremiumActivity"
             android:exported="false" />
         <activity
@@ -43,7 +61,7 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true"
-            android:label="@string/title_activity_login" >
+            android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -26,6 +26,7 @@
             android:background="@drawable/round_back_setting">
             <!--Full Name-->
             <RelativeLayout
+                android:id="@+id/profile_detail_fullname_onclick"
                 android:layout_width="360dp"
                 android:layout_height="wrap_content"
                 >
@@ -64,6 +65,7 @@
 
             <!--Email-->
             <RelativeLayout
+                android:id="@+id/profile_detail_email_onclick"
                 android:layout_width="360dp"
                 android:layout_height="wrap_content"
                 >
@@ -100,6 +102,7 @@
                 android:layout_marginHorizontal="15dp"/>
             <!--Phone Number-->
             <RelativeLayout
+                android:id="@+id/profile_detail_phonenumber_onclick"
                 android:layout_width="360dp"
                 android:layout_height="wrap_content"
                 >
@@ -136,6 +139,7 @@
                 android:layout_marginHorizontal="15dp"/>
             <!--Birth Day-->
             <RelativeLayout
+                android:id="@+id/profile_detail_birthday_onclick"
                 android:layout_width="360dp"
                 android:layout_height="wrap_content"
                 >
@@ -172,6 +176,7 @@
                 android:layout_marginHorizontal="15dp"/>
             <!--Gender-->
             <RelativeLayout
+                android:id="@+id/profile_detail_gender_onclick"
                 android:layout_width="360dp"
                 android:layout_height="wrap_content"
                 >
@@ -208,6 +213,7 @@
                 android:layout_marginHorizontal="15dp"/>
             <!--Password-->
             <RelativeLayout
+                android:id="@+id/profile_detail_password_onclick"
                 android:layout_width="360dp"
                 android:layout_height="wrap_content"
                 >

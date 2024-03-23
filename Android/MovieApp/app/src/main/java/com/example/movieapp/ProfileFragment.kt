@@ -2,11 +2,14 @@ package com.example.movieapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,6 +42,12 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         val view =  inflater.inflate(R.layout.fragment_profile, container, false)
         val buttonBuyPremium = view.findViewById<Button>(R.id.button2)
         buttonBuyPremium.setOnClickListener(this)
+        //set onclick for profile to detail
+        val buttonclickProfile: RelativeLayout = view.findViewById(R.id.fragment_profile_click_details)
+        buttonclickProfile.setOnClickListener(this)
+        //set onclick from profile to history
+        val buttonclickHistory: RelativeLayout = view.findViewById(R.id.fragment_profile_click_history)
+        buttonclickHistory.setOnClickListener(this)
         return view
     }
 
@@ -47,6 +56,14 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             R.id.button2 -> {
                 val intent = Intent(requireContext(),RegisterPremiumActivity::class.java)
                 startActivity(intent)
+            }
+
+            R.id.fragment_profile_click_details -> {
+                val intent = Intent(requireContext(),ProfileDetailsActivity::class.java)
+                startActivity(intent)
+            }
+
+            R.id.fragment_profile_click_history ->{
             }
 
         }
