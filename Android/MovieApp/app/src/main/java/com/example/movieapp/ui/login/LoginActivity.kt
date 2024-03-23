@@ -41,7 +41,9 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val token = Helper.TokenManager.getToken(this)
+        val f = Helper.TokenManager.getFullName(this)
         Log.e("TOKEN", token.toString())
+        Log.e("TOKEN", f.toString())
         if (token != null && !isTokenExpired(token)) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -156,7 +158,7 @@ class LoginActivity : AppCompatActivity() {
                 val data : DataDTO =result.body().data
                 ClassToken.MY_TOKEN= token
                 ClassToken.DATA.user = data.user
-                Helper.TokenManager.saveToken(this, token)
+                Helper.TokenManager.saveToken(this, token, data.user)
             }
         }
     }
