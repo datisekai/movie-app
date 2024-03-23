@@ -2,6 +2,7 @@ package com.example.movieapp.adapter
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import com.example.movieapp.R
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +11,10 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.movieapp.model.Movie
-import com.example.movieapp.model.Genre
-import com.example.movieapp.model.PaymentHistory
+import com.example.movieapp.adapter.model.Movie
+import com.example.movieapp.adapter.model.Genre
+import com.example.movieapp.adapter.model.PaymentHistory
+import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.ui.activity.DetailFilmActivity
 import com.example.movieapp.ui.activity.ResultGenreActivity
 import com.makeramen.roundedimageview.RoundedImageView
@@ -80,6 +82,7 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                     buttonGenre.text=genreItem.name
                     buttonGenre.tooltipText= genreItem.name
                     buttonGenre.setOnClickListener{
+                        Log.d("TAG", ClassToken.DATA.user.fullname)
                         val intent = Intent(itemView.context, ResultGenreActivity::class.java)
                         val bundle = Bundle()
                         bundle.putInt("id", genreItem.id)

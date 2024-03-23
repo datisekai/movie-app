@@ -1,6 +1,6 @@
-package com.example.movieapp.Api
+package com.example.movieapp.service
 
-import com.example.movieapp.ui.login.classToken
+import com.example.movieapp.data.model.ClassToken
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
@@ -15,7 +15,7 @@ class ServiceBuilder {
     var interceptor : Interceptor = Interceptor { chain ->
         val request = chain.request()
         val builder = request.newBuilder()
-        builder.addHeader("Authorization",classToken.MY_TOKEN)
+        builder.addHeader("Authorization",ClassToken.MY_TOKEN)
         return@Interceptor chain.proceed(builder.build())
     }
 

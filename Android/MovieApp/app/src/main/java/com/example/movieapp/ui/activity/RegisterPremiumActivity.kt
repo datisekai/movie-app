@@ -1,17 +1,14 @@
-package com.example.movieapp
+package com.example.movieapp.ui.activity
 
 import android.animation.Animator
 import android.graphics.Color
-import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.RadioButton
 import android.widget.RadioGroup
@@ -20,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.example.movieapp.Api.ServiceBuilder
-import com.example.movieapp.data.model.LoginDTO
+import com.example.movieapp.R
+import com.example.movieapp.adapter.SlideAdapter
+import com.example.movieapp.slideItem
 import java.lang.Math.abs
-import java.util.concurrent.Executors
 
 class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
     private var Slidehandler : Handler = Handler()

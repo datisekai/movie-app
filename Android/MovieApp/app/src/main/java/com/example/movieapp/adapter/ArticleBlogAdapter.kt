@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.R
-import com.example.movieapp.model.Article
+import com.example.movieapp.adapter.model.Article
 
 class ArticleBlogAdapter (var ds:List<Article>)
     :RecyclerView.Adapter<ArticleBlogAdapter.ArticleViewHolder>(){

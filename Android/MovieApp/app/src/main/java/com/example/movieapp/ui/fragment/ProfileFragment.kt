@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.example.movieapp.R
-import com.example.movieapp.RegisterPremiumActivity
+import com.example.movieapp.ui.activity.RegisterPremiumActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,7 +47,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     override fun onClick(view: View) {
         when(view.id){
             R.id.button2 -> {
-                val intent = Intent(requireContext(),RegisterPremiumActivity::class.java)
+                val intent = Intent(requireContext(), RegisterPremiumActivity::class.java)
                 startActivity(intent)
             }
 

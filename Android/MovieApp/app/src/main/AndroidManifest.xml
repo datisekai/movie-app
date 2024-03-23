@@ -13,10 +13,10 @@
         android:theme="@style/Theme.MovieApp"
         tools:targetApi="31">
         <activity
-            android:name=".RegisterPremiumActivity"
+            android:name=".ui.activity.RegisterPremiumActivity"
             android:exported="false" />
         <activity
-            android:name=".PlayerActivity"
+            android:name=".ui.activity.PlayerActivity"
             android:exported="false"
             android:resizeableActivity="true"
             android:screenOrientation="landscape"

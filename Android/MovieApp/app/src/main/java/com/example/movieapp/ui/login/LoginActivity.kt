@@ -9,23 +9,20 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.example.movieapp.Api.ServiceBuilder
+import com.example.movieapp.service.ServiceBuilder
 
 import com.example.movieapp.data.model.LoginDTO
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
 import com.example.movieapp.ui.activity.MainActivity
 import com.example.movieapp.databinding.ActivityLoginBinding
 
 import com.example.movieapp.R
+import com.example.movieapp.data.model.DataDTO
 import com.example.movieapp.ui.activity.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -106,12 +103,23 @@ class LoginActivity : AppCompatActivity() {
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
                 loginViewModel.login(username.text.toString(), password.text.toString())
+                performNetWorkRequest(username.text.toString(), password.text.toString())
             }
         }
         val underlinedTextView: TextView = findViewById(R.id.linkRegister)
         underlinedTextView.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
+        }
+    }
+    private fun performNetWorkRequest(email: String, password: String) {
+        val excutor = Executors.newSingleThreadExecutor()
+        excutor.execute{
+            val login = LoginDTO("datly030102@gmail.com", "datisekai")
+            val result = ServiceBuilder().apiService.login(login).execute()
+            if (result.isSuccessful){
+                val data : DataDTO =result.body().data
+            }
         }
     }
 
@@ -128,18 +136,11 @@ class LoginActivity : AppCompatActivity() {
         ).show()
     }
 
+
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 }
-
-class classToken{
-    companion object {
-        var MY_TOKEN : String = ""
-
-    }
-}
-
 
 /**
  * Extension function to simplify setting an afterTextChanged action to EditText components.

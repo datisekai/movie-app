@@ -1,11 +1,9 @@
-package com.example.movieapp.Api
+package com.example.movieapp.service
 
 import android.content.Context
 import android.util.Log
 import androidx.loader.content.AsyncTaskLoader
 import com.example.movieapp.data.model.Film
-import com.example.movieapp.data.model.LoginDTO
-import java.util.concurrent.Executors
 
 class DetailFilmLoader(context: Context, private val header : String) : AsyncTaskLoader<Film>(context) {
     override fun loadInBackground(): Film? {
