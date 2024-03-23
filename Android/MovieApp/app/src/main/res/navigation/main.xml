@@ -7,42 +7,42 @@
 
     <fragment
         android:id="@+id/menu_Profile"
-        android:name="com.example.movieapp.ProfileFragment"
+        android:name="com.example.movieapp.ui.fragment.ProfileFragment"
         android:label="profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/menu_watchFilm"
-        android:name="com.example.movieapp.WatchFilmFragment"
+        android:name="com.example.movieapp.ui.fragment.WatchFilmFragment"
         android:label="watch_film"
         tools:layout="@layout/fragment_watch_film" />
     <fragment
         android:id="@+id/menu_Blog"
-        android:name="com.example.movieapp.BlogFragment"
+        android:name="com.example.movieapp.ui.fragment.BlogFragment"
         android:label="blog"
         tools:layout="@layout/fragment_blog" />
     <fragment
         android:id="@+id/menu_History"
-        android:name="com.example.movieapp.HistoryFragment"
+        android:name="com.example.movieapp.ui.fragment.HistoryFragment"
         android:label="history"
         tools:layout="@layout/fragment_history" />
     <fragment
         android:id="@+id/menu_Favorite"
-        android:name="com.example.movieapp.FavoriteFragment"
+        android:name="com.example.movieapp.ui.fragment.FavoriteFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
     <fragment
         android:id="@+id/menu_Genre"
-        android:name="com.example.movieapp.GenreFragment"
+        android:name="com.example.movieapp.ui.fragment.GenreFragment"
         android:label="fragment_genre"
         tools:layout="@layout/fragment_genre" />
     <fragment
         android:id="@+id/menu_PaymentHistory"
-        android:name="com.example.movieapp.PaymentHistoryFragment"
+        android:name="com.example.movieapp.ui.fragment.PaymentHistoryFragment"
         android:label="fragment_payment_history"
         tools:layout="@layout/fragment_payment_history" />
     <fragment
         android:id="@+id/menu_homePage"
-        android:name="com.example.movieapp.HomePageFragment"
+        android:name="com.example.movieapp.ui.fragment.HomePageFragment"
         android:label="fragment_home_page"
         tools:layout="@layout/fragment_home_page" />
 </navigation>

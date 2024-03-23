@@ -1,10 +1,12 @@
 package com.example.movieapp
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -13,14 +15,24 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.movieapp.data.model.LoginDTO
+import com.example.movieapp.ui.activity.DetailFilmActivity
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import java.util.concurrent.Executors
 
 class CardHomePage{
      fun init(context: Context, linearLayout: LinearLayout, widthCard: Int, heightCard: Int, isBorderImage: Boolean) {
@@ -54,6 +66,11 @@ class CardHomePage{
 //            linearLayout.setPadding(4, 4, 4, 4)
 
              val imageView = ImageView(context)
+             imageView.id = View.generateViewId()
+             imageView.setOnClickListener(View.OnClickListener {
+                   val intent : Intent =  Intent(context,DetailFilmActivity::class.java)
+                   context.startActivity(intent);
+             })
              imageView.layoutParams = LinearLayout.LayoutParams(
                  LinearLayout.LayoutParams.MATCH_PARENT,
                  heightCard
@@ -115,5 +132,6 @@ class CardHomePage{
              cardContainer.addView(cardView)
          }
     }
+
 
 }

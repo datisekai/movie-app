@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,50 +11,53 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieApp"
-        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".BlogDetailActivity"
+            android:name=".ui.activity.BlogDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfileDetailsActivity"
+            android:name=".ui.activity.ProfileDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfilePhoneNumberActivity"
+            android:name=".ui.activity.ProfilePhoneNumberActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfilePasswordActivity"
+            android:name=".ui.activity.ProfilePasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfileFullNameActivity"
+            android:name=".ui.activity.ProfileFullNameActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfileEmailActivity"
+            android:name=".ui.activity.ProfileEmailActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterPremiumActivity"
+            android:name=".ui.activity.RegisterPremiumActivity"
             android:exported="false" />
         <activity
-            android:name=".PlayerActivity"
+            android:name=".ui.activity.PlayerActivity"
             android:exported="false"
             android:resizeableActivity="true"
             android:screenOrientation="landscape"
             android:supportsPictureInPicture="true"
             android:theme="@style/Theme.AppCompat.FullScreen" />
-        <activity
-            android:name=".DetailFilmActivity"
-            android:exported="false" />
-        <activity
-            android:name=".HomePage_Activity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
+        <activity
+            android:name=".ui.activity.ResultGenreActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ui.activity.SearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.RegisterActivity"
+            android:exported="false">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".ui.login.LoginActivity"
@@ -68,6 +69,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activity.DetailFilmActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.HomePage_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:exported="false" />
     </application>
-
 </manifest>
