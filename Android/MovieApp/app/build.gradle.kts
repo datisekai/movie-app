@@ -61,6 +61,8 @@ dependencies {
     implementation("com.google.android.exoplayer:exoplayer:2.19.1")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
 
+    implementation ("com.auth0:java-jwt:3.18.2")
+
     //border radius image
     implementation("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")

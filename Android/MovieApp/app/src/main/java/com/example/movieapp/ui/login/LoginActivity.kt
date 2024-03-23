@@ -9,11 +9,16 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.interfaces.DecodedJWT
+import com.example.movieapp.Helper
 
 import com.example.movieapp.data.model.LoginDTO
 import java.util.concurrent.Executors
@@ -21,9 +26,11 @@ import com.example.movieapp.ui.activity.MainActivity
 import com.example.movieapp.databinding.ActivityLoginBinding
 
 import com.example.movieapp.R
+import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.DataDTO
 import com.example.movieapp.service.ServiceBuilder
 import com.example.movieapp.ui.activity.RegisterActivity
+import java.util.Date
 
 class LoginActivity : AppCompatActivity() {
 
@@ -32,6 +39,16 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val token = Helper.TokenManager.getToken(this)
+        Log.e("TOKEN", token.toString())
+        if (token != null && !isTokenExpired(token)) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            Toast.makeText(applicationContext, "Token is invalid or expired. Please log in again.", Toast.LENGTH_SHORT).show()
+        }
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -91,19 +108,22 @@ class LoginActivity : AppCompatActivity() {
 
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
-                    EditorInfo.IME_ACTION_DONE ->
+                    EditorInfo.IME_ACTION_DONE ->{
+                        performNetWorkRequest(username.text.toString(), password.text.toString())
                         loginViewModel.login(
                             username.text.toString(),
                             password.text.toString()
                         )
+                    }
+
                 }
                 false
             }
 
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString())
                 performNetWorkRequest(username.text.toString(), password.text.toString())
+                loginViewModel.login(username.text.toString(), password.text.toString())
             }
         }
         val underlinedTextView: TextView = findViewById(R.id.linkRegister)
@@ -112,13 +132,31 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
+    fun isTokenExpired(jwtToken: String): Boolean {
+        val algorithm = Algorithm.HMAC256("datisekai")
+        val jwtVerifier = JWT.require(algorithm).build()
+        val decodedJWT: DecodedJWT = jwtVerifier.verify(jwtToken)
+
+        val expirationTime: Date? = decodedJWT.expiresAt
+        if (expirationTime != null) {
+            val currentTime = Date()
+            return currentTime.after(expirationTime)
+        }
+
+        return true
+    }
     private fun performNetWorkRequest(email: String, password: String) {
         val excutor = Executors.newSingleThreadExecutor()
         excutor.execute{
             val login = LoginDTO("datly030102@gmail.com", "datisekai")
             val result = ServiceBuilder().apiService.login(login).execute()
             if (result.isSuccessful){
+                val token : String =result.body().data.accessToken
                 val data : DataDTO =result.body().data
+                ClassToken.MY_TOKEN= token
+                ClassToken.DATA.user = data.user
+                Helper.TokenManager.saveToken(this, token)
             }
         }
     }
