@@ -14,7 +14,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.example.movieapp.service.ServiceBuilder
 
 import com.example.movieapp.data.model.LoginDTO
 import java.util.concurrent.Executors
@@ -23,6 +22,7 @@ import com.example.movieapp.databinding.ActivityLoginBinding
 
 import com.example.movieapp.R
 import com.example.movieapp.data.model.DataDTO
+import com.example.movieapp.service.ServiceBuilder
 import com.example.movieapp.ui.activity.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {

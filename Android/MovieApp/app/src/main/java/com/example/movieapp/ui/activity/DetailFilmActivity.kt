@@ -6,14 +6,16 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import com.example.movieapp.R
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
+import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.service.DetailFilmLoader
 import com.example.movieapp.data.model.Film
-import com.example.movieapp.R
-import com.example.movieapp.data.model.ClassToken
+import com.example.movieapp.data.model.LoginDTO
+import java.util.concurrent.Executors
 
 class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Film>{
     override fun onCreate(savedInstanceState: Bundle?) {
