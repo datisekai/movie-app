@@ -22,7 +22,6 @@ class ProfileFullNameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_profile_detail_fullname)
 
-        val context = this
         val btnSave = findViewById<AppCompatButton>(R.id.profile_detail_fullname_btn_confirm)
         val editText = findViewById<EditText>(R.id.profile_detail_fullname_editText)
         btnSave.setOnClickListener {
