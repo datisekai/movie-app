@@ -17,6 +17,8 @@ import com.example.movieapp.R
 import com.example.movieapp.ui.activity.SearchActivity
 import com.example.movieapp.adapter.model.CardHome
 import com.example.movieapp.adapter.model.Movie
+import com.example.movieapp.data.model.Film
+import com.example.movieapp.ui.activity.HomePage_Activity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,7 +45,7 @@ class HomePageFragment : Fragment() {
     }
     private fun generateDataList(): List<CardHome> {
         val dataList: MutableList<CardHome> = ArrayList()
-        dataList.add(CardHome(R.id.recycler_view1,480, 480, false, generateDataListMovie()))
+        dataList.add(CardHome(R.id.recycler_view1,480, 480, false, generateDataListMovie1()))
         dataList.add(CardHome(R.id.recycler_view2,640, 320, false, generateDataListMovie()))
         dataList.add(CardHome(R.id.recycler_view3, 480, 720, false, generateDataListMovie()))
         dataList.add(CardHome(R.id.recycler_view4, 480, 480, true , generateDataListMovie()))
@@ -64,6 +66,17 @@ class HomePageFragment : Fragment() {
         // Thêm các phần tử khác vào danh sách dữ liệu
         return dataList
     }
+
+    private fun generateDataListMovie1() : List<Movie>{
+        val dataList: MutableList<Movie> = ArrayList()
+        val tmp :  MutableList<Film> = ArrayList()
+        tmp.addAll(HomePage_Activity.filmData.listFilm)
+        for (o in tmp){
+            dataList.add(Movie(R.drawable.anime1,o.data.title,"2023"))
+        }
+        return dataList
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -14,6 +14,7 @@ class MyViewModel() : ViewModel() {
     private val filmListLiveData = MutableLiveData<List<Film>>()
 
     fun getFilmListLiveData(): LiveData<List<Film>> {
+        fetchFilmList()
         return filmListLiveData
     }
 
@@ -22,8 +23,8 @@ class MyViewModel() : ViewModel() {
         call.enqueue(object : Callback<List<Film>> {
             override fun onResponse(call: Call<List<Film>>, response: Response<List<Film>>) {
                 if (response.isSuccessful) {
-                    val filmList = response.body()
-                    filmListLiveData.value = filmList
+                    val filmList = response.body().toList().size
+                    Log.e("ERROR",filmList.toString())
                 } else {
                     Log.e("ERROR","Get Film Fail")
                 }
@@ -31,6 +32,7 @@ class MyViewModel() : ViewModel() {
 
             override fun onFailure(call: Call<List<Film>>, t: Throwable) {
                 Log.e("ERROR","Call api fail")
+                t.printStackTrace()
             }
         })
     }
