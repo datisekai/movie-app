@@ -84,7 +84,7 @@ class HomePageFragment : Fragment() {
 
                 val navController = Navigation.findNavController(requireView())
                 NavigationUI.setupWithNavController(navigationview, navController)
-                navController.navigate(R.id.searchFragment)
+                navController.navigate(R.id.editTextSearch)
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false

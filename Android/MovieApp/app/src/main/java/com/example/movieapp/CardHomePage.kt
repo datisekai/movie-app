@@ -26,6 +26,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.movieapp.Api.MyViewModel
 import com.example.movieapp.Api.ServiceBuilder
 import com.example.movieapp.data.model.LoginDTO
+import com.example.movieapp.ui.activity.DetailFilmActivity
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
@@ -72,7 +73,7 @@ class CardHomePage{
              val imageView = ImageView(context)
              imageView.id = View.generateViewId()
              imageView.setOnClickListener(View.OnClickListener {
-                   val intent : Intent =  Intent(context,DetailFilmActivity::class.java)
+                   val intent : Intent =  Intent(context, DetailFilmActivity::class.java)
                    context.startActivity(intent);
              })
              imageView.layoutParams = LinearLayout.LayoutParams(

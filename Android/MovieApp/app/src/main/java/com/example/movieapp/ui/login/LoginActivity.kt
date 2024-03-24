@@ -16,16 +16,17 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.example.movieapp.Api.ServiceBuilder
-import com.example.movieapp.MainActivity
-import com.example.movieapp.databinding.ActivityLoginBinding
 
-import com.example.movieapp.R
-import com.example.movieapp.RegisterActivity
 import com.example.movieapp.data.model.LoginDTO
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
+import com.example.movieapp.ui.activity.MainActivity
+import com.example.movieapp.databinding.ActivityLoginBinding
+
+import com.example.movieapp.R
+import com.example.movieapp.ui.activity.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
 
