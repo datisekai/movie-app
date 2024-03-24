@@ -32,6 +32,10 @@ class ProfileDetailsActivity : AppCompatActivity(), View.OnClickListener {
         buttonclickGender.setOnClickListener(this)
     }
 
+    public fun clickBack(view: View){
+        finish()
+    }
+
     override fun onClick(view: View) {
         when(view.id){
             R.id.profile_detail_fullname_onclick -> {

@@ -10,7 +10,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.TextView
+import com.example.movieapp.Helper
 import com.example.movieapp.R
+import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.ui.activity.RegisterPremiumActivity
 import com.example.movieapp.ui.activity.ProfileDetailsActivity
 
@@ -51,6 +54,18 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         //set onclick from profile to history
         val buttonclickHistory: RelativeLayout = view.findViewById(R.id.fragment_profile_click_history)
         buttonclickHistory.setOnClickListener(this)
+
+        //Get Username
+        val id = ClassToken.ID
+        val fullname = ClassToken.FULLNAME
+        val email = ClassToken.EMAIL
+
+        val tvFullname = view.findViewById<TextView>(R.id.profile_username_textview)
+        val tvEmail = view.findViewById<TextView>(R.id.profile_email_textview)
+
+        tvFullname.setText(fullname)
+        tvEmail.setText(email)
+
         return view
     }
 
