@@ -13,6 +13,24 @@
         android:theme="@style/Theme.MovieApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activity.BlogDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.ProfileDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.ProfilePhoneNumberActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.ProfilePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.ProfileFullNameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.ProfileEmailActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.RegisterPremiumActivity"
             android:exported="false" />
         <activity

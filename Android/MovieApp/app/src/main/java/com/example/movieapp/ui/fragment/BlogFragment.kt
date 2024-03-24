@@ -1,16 +1,21 @@
 package com.example.movieapp.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.movieapp.BlogItemClickListener
 import com.example.movieapp.R
 import com.example.movieapp.adapter.ArticleBlogAdapter
 import com.example.movieapp.adapter.model.Article
+import com.example.movieapp.ui.activity.BlogDetailActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,7 +27,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [BlogFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class BlogFragment : Fragment() {
+class BlogFragment : Fragment(), BlogItemClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -53,7 +58,7 @@ class BlogFragment : Fragment() {
             ds.add(Article("Test6","UserTest6","Content6","1/1/2024"))
 
 
-            val blogAdapter = ArticleBlogAdapter(ds)
+            val blogAdapter = ArticleBlogAdapter(ds,this)
             rcvBlog.adapter = blogAdapter
             rcvBlog.layoutManager = LinearLayoutManager(
                 this.requireContext(),
@@ -68,12 +73,16 @@ class BlogFragment : Fragment() {
             return blogView
         }
 
+    override fun onItemClicked(article: Article) {
+        val intent = Intent(requireContext(), BlogDetailActivity::class.java)
+        startActivity(intent)
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
          * @param param2 Parameter 2.
          * @return A new instance of fragment BlogFragment.
          */
