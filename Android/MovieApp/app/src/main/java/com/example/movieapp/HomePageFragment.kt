@@ -15,8 +15,12 @@ import android.widget.EditText
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
+import androidx.navigation.navGraphViewModels
 import androidx.navigation.ui.NavigationUI
+import com.example.movieapp.Api.MyViewModel
+import com.example.movieapp.data.model.Film
 import com.google.android.material.navigation.NavigationView
 
 // TODO: Rename parameter arguments, choose names that match
@@ -56,6 +60,7 @@ class HomePageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home_page, container, false)
 
@@ -176,6 +181,7 @@ class HomePageFragment : Fragment() {
 
         return view
     }
+
 
     companion object {
         /**
