@@ -12,14 +12,14 @@ class Helper {
         private const val KEY_EMAIL = "email"
         private const val KEY_FULLNAME = "fullname"
         private const val KEY_IS_ACTIVE = "is_active"
-        fun saveToken(context: Context, token: String, user: UserDTO) {
+        fun saveToken(context: Context, token: String, id: Int, email: String, fullname: String, isActive:Boolean) {
             val sharedPreferences = context.getSharedPreferences(TOKEN_PREFS_NAME, Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
             editor.putString(KEY_TOKEN, token)
-            editor.putInt(KEY_ID,user.id)
-            editor.putString(KEY_EMAIL,user.email)
-            editor.putString(KEY_FULLNAME,user.fullname)
-            editor.putBoolean(KEY_IS_ACTIVE,user.is_active)
+            editor.putInt(KEY_ID,id)
+            editor.putString(KEY_EMAIL,email)
+            editor.putString(KEY_FULLNAME,fullname)
+            editor.putBoolean(KEY_IS_ACTIVE,isActive)
             editor.apply()
         }
 

@@ -17,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.exceptions.TokenExpiredException
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.example.movieapp.Helper
 
@@ -28,6 +29,7 @@ import com.example.movieapp.databinding.ActivityLoginBinding
 import com.example.movieapp.R
 import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.DataDTO
+import com.example.movieapp.data.model.UserDTO
 import com.example.movieapp.service.ServiceBuilder
 import com.example.movieapp.ui.activity.RegisterActivity
 import java.util.Date
@@ -40,16 +42,33 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val token = Helper.TokenManager.getToken(this)
-        val f = Helper.TokenManager.getFullName(this)
-        Log.e("TOKEN", token.toString())
-        Log.e("TOKEN", f.toString())
-        if (token != null && !isTokenExpired(token)) {
-            val intent = Intent(this, MainActivity::class.java)
+        try {
+            val token = Helper.TokenManager.getToken(this)
+            val id = Helper.TokenManager.getId(this)
+            val email = Helper.TokenManager.getEmail(this)
+            val fullname = Helper.TokenManager.getFullName(this)
+            val isActive = Helper.TokenManager.getIsActive(this)
+            Log.e("TOKEN", token.toString())
+            Log.e("TOKEN", fullname.toString())
+            Log.e("TOKEN", id.toString())
+            Log.e("TOKEN", isActive.toString())
+            if (token != null && !isTokenExpired(token)) {
+                ClassToken.MY_TOKEN= token.toString()
+                ClassToken.ID= id?: 0
+                ClassToken.EMAIL= email.toString()
+                ClassToken.FULLNAME= fullname.toString()
+                ClassToken.IS_ACTIVE = isActive!!
+//                val checkToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTcxMTI2MTU5MiwiZXhwIjoxNzExMjY4NzkyfQ.ijPEfRK325BP_3ubNSHkoxUWtbxfvPkntaav-zIeL-k"
+//                Helper.TokenManager.saveToken(this, checkToken, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE)
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        } catch (e: TokenExpiredException) {
+            Helper.TokenManager.clearToken(this)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
-        } else {
-            Toast.makeText(applicationContext, "Token is invalid or expired. Please log in again.", Toast.LENGTH_SHORT).show()
         }
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -155,10 +174,13 @@ class LoginActivity : AppCompatActivity() {
             val result = ServiceBuilder().apiService.login(login).execute()
             if (result.isSuccessful){
                 val token : String =result.body().data.accessToken
-                val data : DataDTO =result.body().data
+                val user : UserDTO =result.body().data.user
                 ClassToken.MY_TOKEN= token
-                ClassToken.DATA.user = data.user
-                Helper.TokenManager.saveToken(this, token, data.user)
+                ClassToken.ID= user.id
+                ClassToken.EMAIL= user.email
+                ClassToken.FULLNAME= user.fullname
+                ClassToken.IS_ACTIVE = user.is_active
+                Helper.TokenManager.saveToken(this, token, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE)
             }
         }
     }
