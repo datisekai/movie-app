@@ -15,18 +15,24 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.example.movieapp.Api.ServiceBuilder
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.exceptions.TokenExpiredException
+import com.auth0.jwt.interfaces.DecodedJWT
+import com.example.movieapp.Helper
 
 import com.example.movieapp.data.model.LoginDTO
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
 import com.example.movieapp.ui.activity.MainActivity
 import com.example.movieapp.databinding.ActivityLoginBinding
 
 import com.example.movieapp.R
+import com.example.movieapp.data.model.ClassToken
+import com.example.movieapp.data.model.DataDTO
+import com.example.movieapp.data.model.UserDTO
+import com.example.movieapp.service.ServiceBuilder
 import com.example.movieapp.ui.activity.RegisterActivity
+import java.util.Date
 
 class LoginActivity : AppCompatActivity() {
 
@@ -35,6 +41,35 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        try {
+            val token = Helper.TokenManager.getToken(this)
+            val id = Helper.TokenManager.getId(this)
+            val email = Helper.TokenManager.getEmail(this)
+            val fullname = Helper.TokenManager.getFullName(this)
+            val isActive = Helper.TokenManager.getIsActive(this)
+            Log.e("TOKEN", token.toString())
+            Log.e("TOKEN", fullname.toString())
+            Log.e("TOKEN", id.toString())
+            Log.e("TOKEN", isActive.toString())
+            if (token != null && !isTokenExpired(token)) {
+                ClassToken.MY_TOKEN= token.toString()
+                ClassToken.ID= id?: 0
+                ClassToken.EMAIL= email.toString()
+                ClassToken.FULLNAME= fullname.toString()
+                ClassToken.IS_ACTIVE = isActive!!
+//                val checkToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTcxMTI2MTU5MiwiZXhwIjoxNzExMjY4NzkyfQ.ijPEfRK325BP_3ubNSHkoxUWtbxfvPkntaav-zIeL-k"
+//                Helper.TokenManager.saveToken(this, checkToken, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE)
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        } catch (e: TokenExpiredException) {
+            Helper.TokenManager.clearToken(this)
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -94,17 +129,21 @@ class LoginActivity : AppCompatActivity() {
 
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
-                    EditorInfo.IME_ACTION_DONE ->
+                    EditorInfo.IME_ACTION_DONE ->{
+                        performNetWorkRequest(username.text.toString(), password.text.toString())
                         loginViewModel.login(
                             username.text.toString(),
                             password.text.toString()
                         )
+                    }
+
                 }
                 false
             }
 
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
+                performNetWorkRequest(username.text.toString(), password.text.toString())
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
         }
@@ -112,6 +151,37 @@ class LoginActivity : AppCompatActivity() {
         underlinedTextView.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
+        }
+    }
+
+    fun isTokenExpired(jwtToken: String): Boolean {
+        val algorithm = Algorithm.HMAC256("datisekai")
+        val jwtVerifier = JWT.require(algorithm).build()
+        val decodedJWT: DecodedJWT = jwtVerifier.verify(jwtToken)
+
+        val expirationTime: Date? = decodedJWT.expiresAt
+        if (expirationTime != null) {
+            val currentTime = Date()
+            return currentTime.after(expirationTime)
+        }
+
+        return true
+    }
+    private fun performNetWorkRequest(email: String, password: String) {
+        val excutor = Executors.newSingleThreadExecutor()
+        excutor.execute{
+            val login = LoginDTO("datly030102@gmail.com", "datisekai")
+            val result = ServiceBuilder().apiService.login(login).execute()
+            if (result.isSuccessful){
+                val token : String =result.body().data.accessToken
+                val user : UserDTO =result.body().data.user
+                ClassToken.MY_TOKEN= token
+                ClassToken.ID= user.id
+                ClassToken.EMAIL= user.email
+                ClassToken.FULLNAME= user.fullname
+                ClassToken.IS_ACTIVE = user.is_active
+                Helper.TokenManager.saveToken(this, token, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE)
+            }
         }
     }
 
@@ -128,18 +198,11 @@ class LoginActivity : AppCompatActivity() {
         ).show()
     }
 
+
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 }
-
-class classToken{
-    companion object {
-        var MY_TOKEN : String = ""
-
-    }
-}
-
 
 /**
  * Extension function to simplify setting an afterTextChanged action to EditText components.

@@ -1,15 +1,11 @@
-package com.example.movieapp.Api
+package com.example.movieapp.service
 
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.LoginDTO
 import com.example.movieapp.data.model.TokenDTO
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 

@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.GridSpacingItemDecoration
 import com.example.movieapp.R
 import com.example.movieapp.ui.activity.SearchActivity
-import com.example.movieapp.model.CardHome
-import com.example.movieapp.model.Movie
+import com.example.movieapp.adapter.model.CardHome
+import com.example.movieapp.adapter.model.Movie
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

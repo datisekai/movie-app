@@ -24,7 +24,6 @@ import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.movieapp.Api.MyViewModel
-import com.example.movieapp.Api.ServiceBuilder
 import com.example.movieapp.data.model.LoginDTO
 import com.example.movieapp.ui.activity.DetailFilmActivity
 import com.google.android.material.card.MaterialCardView
@@ -39,7 +38,6 @@ import java.util.concurrent.Executors
 
 
 class CardHomePage{
-
      fun init(context: Context, linearLayout: LinearLayout, widthCard: Int, heightCard: Int, isBorderImage: Boolean) {
          val cardContainer: LinearLayout = linearLayout
          val cardDataList = listOf("Card 1", "Card 2", "Card 3","Card 1", "Card 2", "Card 3")

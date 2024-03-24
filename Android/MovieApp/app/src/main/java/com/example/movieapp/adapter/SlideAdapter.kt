@@ -1,14 +1,13 @@
-package com.example.movieapp
+package com.example.movieapp.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.makeramen.roundedimageview.RoundedImageView
-import java.math.RoundingMode
+import com.example.movieapp.R
+import com.example.movieapp.slideItem
 
 class SlideAdapter(private val imageList : ArrayList<slideItem>, private val viewPager2: ViewPager2)
     : RecyclerView.Adapter<SlideAdapter.SlideViewHodler>() {
@@ -16,12 +15,12 @@ class SlideAdapter(private val imageList : ArrayList<slideItem>, private val vie
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): SlideAdapter.SlideViewHodler {
+    ): SlideViewHodler {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.slide_item_container,parent,false)
         return SlideViewHodler(view)
     }
 
-    override fun onBindViewHolder(holder: SlideAdapter.SlideViewHodler, position: Int) {
+    override fun onBindViewHolder(holder: SlideViewHodler, position: Int) {
         holder.roundedImage.setImageResource(imageList[position].Image)
         if (position == imageList.size-2){
             viewPager2.post(runnable)
