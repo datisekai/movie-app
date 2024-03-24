@@ -2,6 +2,7 @@ package com.example.movieapp.service
 
 import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.Film
+import com.example.movieapp.data.model.Film1
 import com.example.movieapp.data.model.LoginDTO
 import com.example.movieapp.data.model.TokenDTO
 import com.example.movieapp.data.model.UserDTO
@@ -20,7 +21,7 @@ interface ApiService {
     fun getFilmById(@Path("id") id:Int) : Call<Film>
 
     @GET("api.film")
-    fun getListFilm() : Call<List<Film>>
+    fun getListFilm() : Call<Film1>
 
     @POST("api.auth/login")
     fun login(

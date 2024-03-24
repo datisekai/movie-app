@@ -3,6 +3,7 @@ package com.example.movieapp.ui.fragment
 import com.example.movieapp.adapter.CustomAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,6 +19,8 @@ import com.example.movieapp.ui.activity.SearchActivity
 import com.example.movieapp.adapter.model.CardHome
 import com.example.movieapp.adapter.model.Movie
 import com.example.movieapp.data.model.Film
+import com.example.movieapp.data.model.Film1
+import com.example.movieapp.data.model.FilmDTO
 import com.example.movieapp.ui.activity.HomePage_Activity
 
 // TODO: Rename parameter arguments, choose names that match
@@ -68,11 +71,13 @@ class HomePageFragment : Fragment() {
     }
 
     private fun generateDataListMovie1() : List<Movie>{
+        Log.e("DATA","run")
         val dataList: MutableList<Movie> = ArrayList()
-        val tmp :  MutableList<Film> = ArrayList()
+        val tmp :  MutableList<FilmDTO> = mutableListOf()
         tmp.addAll(HomePage_Activity.filmData.listFilm)
         for (o in tmp){
-            dataList.add(Movie(R.drawable.anime1,o.data.title,"2023"))
+            Log.e("DATA",o.title.toString())
+           dataList.add(Movie(R.drawable.anime1, o.title.toString(),"2023"))
         }
         return dataList
     }

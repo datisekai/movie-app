@@ -12,12 +12,13 @@ import androidx.navigation.ui.NavigationUI
 import com.example.movieapp.Api.MyViewModel
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.R
+import com.example.movieapp.data.model.FilmDTO
 import com.google.android.material.navigation.NavigationView
 
 class HomePage_Activity : AppCompatActivity() {
 
 
-    private  val filmList: MutableList<Film> = mutableListOf()
+    private  val filmList: MutableList<FilmDTO> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
@@ -35,11 +36,9 @@ class HomePage_Activity : AppCompatActivity() {
 
 
         val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
-        viewModel.getFilmListLiveData().observe(this, { films ->
-            Log.e("ERROR","fail")
-            filmList.clear()
-            filmList.addAll(films)
-            filmData.listFilm.addAll(filmList)
+        viewModel.getListFilm().observe(this, { films ->
+            Log.e("DATA",films.data.get(0).title)
+           filmData.listFilm.addAll(films.data)
 
         })
 
@@ -48,7 +47,7 @@ class HomePage_Activity : AppCompatActivity() {
 
     class filmData(){
         companion object{
-            val listFilm : MutableList<Film> = mutableListOf()
+            val listFilm : MutableList<FilmDTO> = mutableListOf()
         }
 
     }

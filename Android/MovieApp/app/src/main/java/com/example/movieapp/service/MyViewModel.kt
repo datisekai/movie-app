@@ -4,36 +4,35 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.movieapp.data.model.DataDTO
 import com.example.movieapp.data.model.Film
+import com.example.movieapp.data.model.Film1
 import com.example.movieapp.service.ServiceBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MyViewModel() : ViewModel() {
-    private val filmListLiveData = MutableLiveData<List<Film>>()
+    fun getListFilm(): LiveData<Film1> {
+        val filmLiveData = MutableLiveData<Film1>()
 
-    fun getFilmListLiveData(): LiveData<List<Film>> {
-        fetchFilmList()
-        return filmListLiveData
-    }
-
-    fun fetchFilmList() {
+        // Gửi yêu cầu mạng và nhận kết quả
         val call = ServiceBuilder().apiService.getListFilm()
-        call.enqueue(object : Callback<List<Film>> {
-            override fun onResponse(call: Call<List<Film>>, response: Response<List<Film>>) {
+        call.enqueue(object : Callback<Film1> {
+            override fun onResponse(call: Call<Film1>, response: Response<Film1>) {
                 if (response.isSuccessful) {
-                    val filmList = response.body().toList().size
-                    Log.e("ERROR",filmList.toString())
+                    val filmList = response.body()
+                    filmLiveData.value = filmList
                 } else {
-                    Log.e("ERROR","Get Film Fail")
+                   Log.e("ERROR",  "fail")
                 }
             }
 
-            override fun onFailure(call: Call<List<Film>>, t: Throwable) {
-                Log.e("ERROR","Call api fail")
-                t.printStackTrace()
+            override fun onFailure(call: Call<Film1>, t: Throwable) {
+               t.printStackTrace()
             }
         })
+
+        return filmLiveData
     }
 }
