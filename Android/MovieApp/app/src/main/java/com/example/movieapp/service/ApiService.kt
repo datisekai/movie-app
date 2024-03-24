@@ -4,6 +4,7 @@ import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.LoginDTO
 import com.example.movieapp.data.model.TokenDTO
+import com.example.movieapp.data.model.User
 import com.example.movieapp.data.model.UserDTO
 import retrofit2.Call
 import retrofit2.http.Body
@@ -31,5 +32,5 @@ interface ApiService {
     fun editUser(
         @Path("id") id: Int,
         @Body EditUserDto: UserDTO
-    ) : Call<TokenDTO>
+    ) : Call<User>
 }
