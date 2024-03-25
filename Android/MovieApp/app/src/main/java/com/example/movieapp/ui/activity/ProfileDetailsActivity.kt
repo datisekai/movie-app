@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.RelativeLayout
 import android.view.View
 import com.example.movieapp.R
+import com.example.movieapp.ui.fragment.ProfileFragment
 
 class ProfileDetailsActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +34,8 @@ class ProfileDetailsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     public fun clickBack(view: View){
-        finish()
+        val intent = Intent(this,HomePage_Activity::class.java)
+        startActivity(intent)
     }
 
     override fun onClick(view: View) {
