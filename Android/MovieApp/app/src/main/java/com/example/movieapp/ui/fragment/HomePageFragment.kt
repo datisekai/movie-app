@@ -104,7 +104,7 @@ class HomePageFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home_page, container, false)
-
+        filmData.listFilm.clear()
         progressbar = view.findViewById(R.id.progressBar)
         titleMovie1 = view.findViewById(R.id.txtMoveGroup_1)
         titleMovie2 = view.findViewById(R.id.txtMoveGroup_2)
