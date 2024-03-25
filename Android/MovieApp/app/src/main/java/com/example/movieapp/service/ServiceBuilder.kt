@@ -15,7 +15,7 @@ class ServiceBuilder {
     var interceptor : Interceptor = Interceptor { chain ->
         val request = chain.request()
         val builder = request.newBuilder()
-        builder.addHeader("Authorization",ClassToken.MY_TOKEN)
+        builder.addHeader("Authorization","Bearer ${ClassToken.MY_TOKEN}")
         return@Interceptor chain.proceed(builder.build())
     }
 
