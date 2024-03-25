@@ -13,8 +13,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MyViewModel() : ViewModel() {
+    private val _dataLoaded = MutableLiveData<Boolean>()
+    val dataLoaded : LiveData<Boolean>
+        get() = _dataLoaded
     fun getListFilm(): LiveData<Film1> {
         val filmLiveData = MutableLiveData<Film1>()
+
 
         // Gửi yêu cầu mạng và nhận kết quả
         val call = ServiceBuilder().apiService.getListFilm()
@@ -23,6 +27,7 @@ class MyViewModel() : ViewModel() {
                 if (response.isSuccessful) {
                     val filmList = response.body()
                     filmLiveData.value = filmList
+                    _dataLoaded.value = true
                 } else {
                    Log.e("ERROR",  "fail")
                 }

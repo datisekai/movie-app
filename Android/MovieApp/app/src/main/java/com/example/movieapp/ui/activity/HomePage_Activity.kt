@@ -17,12 +17,16 @@ import com.google.android.material.navigation.NavigationView
 
 class HomePage_Activity : AppCompatActivity() {
 
-
-    private  val filmList: MutableList<FilmDTO> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
 
+//        val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+//        viewModel.getListFilm().observe(this, { films ->
+//            Log.e("DATA",films.data.get(0).title)
+//            filmData.listFilm.addAll(films.data)
+//
+//        })
 
         val drawerlayout = findViewById<DrawerLayout>(R.id.myDrawer)
         findViewById<ImageView>(R.id.imgMenu).setOnClickListener {
@@ -35,21 +39,14 @@ class HomePage_Activity : AppCompatActivity() {
         NavigationUI.setupWithNavController(navigationview, navController)
 
 
-        val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
-        viewModel.getListFilm().observe(this, { films ->
-            Log.e("DATA",films.data.get(0).title)
-           filmData.listFilm.addAll(films.data)
-
-        })
-
     }
 
 
-    class filmData(){
-        companion object{
-            val listFilm : MutableList<FilmDTO> = mutableListOf()
-        }
-
-    }
+//    public class filmData(){
+//        companion object{
+//            val listFilm : MutableList<FilmDTO> = mutableListOf()
+//        }
+//
+//    }
 
 }
