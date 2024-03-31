@@ -65,7 +65,8 @@
                     android:layout_height="wrap_content"
                     android:hint="Số điện thoại"
                     android:layout_gravity="center"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"/>
             </LinearLayout>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/profile_detail_phone_btn_confirm"

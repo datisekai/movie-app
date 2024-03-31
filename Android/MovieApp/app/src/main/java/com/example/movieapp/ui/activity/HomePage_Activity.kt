@@ -13,6 +13,7 @@ import com.example.movieapp.Api.MyViewModel
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.R
 import com.example.movieapp.data.model.FilmDTO
+import com.example.movieapp.ui.fragment.ProfileFragment
 import com.google.android.material.navigation.NavigationView
 
 class HomePage_Activity : AppCompatActivity() {
@@ -38,7 +39,14 @@ class HomePage_Activity : AppCompatActivity() {
         val navController = Navigation.findNavController(this, R.id.navHostFragment)
         NavigationUI.setupWithNavController(navigationview, navController)
 
-
+        val typeFragment = intent.extras?.getInt("typeFragment")
+        if(typeFragment != null && typeFragment == 1){
+            val fragmentManager = supportFragmentManager
+            val fragmentTransaction = fragmentManager.beginTransaction()
+            val profileFragment = ProfileFragment()
+            fragmentTransaction.replace(R.id.navHostFragment, profileFragment)
+            fragmentTransaction.commit()
+        }
     }
 
 

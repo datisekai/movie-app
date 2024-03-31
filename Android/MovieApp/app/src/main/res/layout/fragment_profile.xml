@@ -64,6 +64,11 @@
                         android:textSize="16sp"
                         android:textColor="#FFFFFF"/>
                 </LinearLayout>
+                <ProgressBar
+                    android:id="@+id/fragment_profile_name_progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"/>
 
                 <ImageView
                     android:layout_width="wrap_content"

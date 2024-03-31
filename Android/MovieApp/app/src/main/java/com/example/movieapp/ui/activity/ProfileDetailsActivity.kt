@@ -34,8 +34,7 @@ class ProfileDetailsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     public fun clickBack(view: View){
-        val intent = Intent(this,HomePage_Activity::class.java)
-        startActivity(intent)
+        finish()
     }
 
     override fun onClick(view: View) {

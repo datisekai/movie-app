@@ -9,11 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.loader.content.Loader
+import androidx.loader.app.LoaderManager
 import com.example.movieapp.Helper
 import com.example.movieapp.R
 import com.example.movieapp.data.model.ClassToken
+import com.example.movieapp.data.model.Film
+import com.example.movieapp.data.model.GetUser
+import com.example.movieapp.data.model.User
+import com.example.movieapp.service.UserLoader
 import com.example.movieapp.ui.activity.RegisterPremiumActivity
 import com.example.movieapp.ui.activity.ProfileDetailsActivity
 
@@ -27,11 +34,14 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ProfileFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ProfileFragment : Fragment(), View.OnClickListener {
+class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCallbacks<GetUser> {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var progressBar: ProgressBar
+    private lateinit var tvFullname: TextView
+    private lateinit var tvEmail: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -55,16 +65,12 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         val buttonclickHistory: RelativeLayout = view.findViewById(R.id.fragment_profile_click_history)
         buttonclickHistory.setOnClickListener(this)
 
-        //Get Username
-        val id = ClassToken.ID
-        val fullname = ClassToken.FULLNAME
-        val email = ClassToken.EMAIL
+        progressBar = view.findViewById(R.id.fragment_profile_name_progressBar)
+        tvFullname = view.findViewById(R.id.profile_username_textview)
+        tvEmail = view.findViewById<TextView>(R.id.profile_email_textview)
 
-        val tvFullname = view.findViewById<TextView>(R.id.profile_username_textview)
-        val tvEmail = view.findViewById<TextView>(R.id.profile_email_textview)
-
-        tvFullname.setText(fullname)
-        tvEmail.setText(email)
+        //Init Loader
+        loaderManager.initLoader(0, null, this)
 
         return view
     }
@@ -106,5 +112,37 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<GetUser> {
+        tvFullname.visibility = View.GONE
+        tvEmail.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
+        return UserLoader(requireContext())
+    }
+
+    override fun onLoaderReset(loader: Loader<GetUser>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onLoadFinished(loader: Loader<GetUser>, data: GetUser?) {
+        try {
+            tvFullname.visibility = View.VISIBLE
+            tvEmail.visibility = View.VISIBLE
+            progressBar.visibility = View.GONE
+            if(data != null){
+                val fullname = data.data.fullname
+                val email = data.data.email
+
+                ClassToken.FULLNAME = fullname
+                ClassToken.EMAIL = email
+                tvFullname?.setText(fullname)
+                tvEmail?.setText(email)
+            }
+
+
+        }catch (e : Exception){
+            e.printStackTrace()
+        }
     }
 }

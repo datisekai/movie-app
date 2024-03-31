@@ -3,6 +3,7 @@ package com.example.movieapp.service
 import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
+import com.example.movieapp.data.model.GetUser
 import com.example.movieapp.data.model.LoginDTO
 import com.example.movieapp.data.model.TokenDTO
 import com.example.movieapp.data.model.User
@@ -29,6 +30,11 @@ interface ApiService {
        @Body loginDto : LoginDTO
     ) : Call<TokenDTO>
 
+    //User
+    @GET("api.user/{id}")
+    fun getUserById(
+        @Path("id") id: Int
+    ) : Call<GetUser>
     @PUT("api.user/{id}")
     fun editUser(
         @Path("id") id: Int,

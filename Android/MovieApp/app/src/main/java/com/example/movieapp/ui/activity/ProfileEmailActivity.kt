@@ -1,5 +1,6 @@
 package com.example.movieapp.ui.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -25,6 +26,11 @@ class ProfileEmailActivity : AppCompatActivity() {
             if (Email?.isNotEmpty() == true){
                 executeEditEmail(Email)
                 editText.setText("")
+
+                //Return To Profile Fragment
+                val intent = Intent(this, HomePage_Activity::class.java)
+                intent.putExtra("typeFragment",1)
+                startActivity(intent)
             } else{
                 val alertDialog = AlertDialog.Builder(this)
                     .setTitle("Thông báo")
