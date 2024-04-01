@@ -2,30 +2,58 @@ import { useState } from "react";
 import Header from "../components/AuthHeader";
 import { loginFields } from "../lib/constants/authFields";
 import AuthInput from "../components/AuthInput";
+import API_URL from "../url";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
 const fields = loginFields;
 let fieldsState = {};
 fields.forEach((field) => (fieldsState[field.id] = ""));
 
 function Login() {
+  const navigate = useNavigate()
   const [loginState, setLoginState] = useState(fieldsState);
   const handleChange = (e) => {
     setLoginState({ ...loginState, [e.target.id]: e.target.value });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(loginState);
-    setLoginState(fieldsState);
+    //  test acc
+    // datly030102@gmail.com
+    // datisekai
+    axios.post(`${API_URL}.auth/login`,loginState)
+    .then(res => {
+      localStorage.setItem('accessToken', res.data.data.accessToken)
+      localStorage.setItem('user', JSON.stringify(res.data.data.user))
+      Swal.fire({
+        title: 'Success!',
+        text: 'Login Successfully!',
+        icon: 'success'
+      });
+      setTimeout(() => {
+        navigate('/')
+      },2500)
+      
+    })
+    .catch(err => {
+      console.log(err)
+      Swal.fire({
+        title: 'Error!',
+        text: err.response.data.message,
+        icon: 'error'
+      });
+    })
   }
   return (
-    <div className="">
+    <div className="h-screen justify-center flex-col items-center flex">
       <Header
         heading="Login to your account"
         paragraph="Don't have an account yet? "
         linkName="Signup"
         linkUrl="/signup"
       />
-      <div className="flex flex-col items-center">
-        <form className="mt-8 space-y-6 grow w-1/3">
+      <div className="flex flex-col items-center w-1/3">
+        <form className="space-y-6 grow w-full">
           <div className="-space-y-px">
             {fields.map((field) => (
               <AuthInput
@@ -45,7 +73,7 @@ function Login() {
         </form>
 
         {/* extra */}
-        <div className="flex items-center justify-between w-1/3 py-2 mt-5 ">
+        <div className="flex items-center justify-between w-full py-2 mt-5 ">
           <div className="flex items-center">
             <input
               id="remember-me"
@@ -72,7 +100,7 @@ function Login() {
         </div>
         <button
           type="button"
-          className="group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 mt-5 w-1/3"
+          className="group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 mt-5 w-full"
           onClick={handleSubmit}
         >
           Login

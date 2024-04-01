@@ -1,5 +1,5 @@
 /* eslint react/prop-types: 0 */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { closestCenter, DndContext } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -8,150 +8,16 @@ import {
 } from "@dnd-kit/sortable";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import SortableEpisode from "../components/SortableEpisode";
-const dummy = [
-  {
-    id: 1,
-    slug: "episode-1",
-    title: "Episode 1: The Beginning",
-    title_search: "episode beginning",
-    description: "<p>This is the first episode of our series.</p>",
-    view: 1000,
-    thumbnail: "https://example.com/thumbnails/episode1.jpg",
-    url: "https://example.com/episodes/episode-1",
-    duration: "00:25:00",
-    position: 1,
-    film_id: 1,
-    is_active: true,
-    is_deleted: false,
-    created_at: "2023-01-15",
-    updated_at: "2023-01-20",
-  },
-  {
-    id: 2,
-    slug: "episode-2",
-    title: "Episode 2: The Encounter",
-    title_search: "episode encounter",
-    description: "<p>This is the second episode of our series.</p>",
-    view: 800,
-    thumbnail: "https://example.com/thumbnails/episode2.jpg",
-    url: "https://example.com/episodes/episode-2",
-    duration: "00:30:00",
-    position: 2,
-    film_id: 1,
-    is_active: true,
-    is_deleted: false,
-    created_at: "2023-02-01",
-    updated_at: "2023-02-05",
-  },
-  {
-    id: 3,
-    slug: "episode-3",
-    title: "Episode 3: The Discovery",
-    title_search: "episode discovery",
-    description: "<p>This is the third episode of our series.</p>",
-    view: 1200,
-    thumbnail: "https://example.com/thumbnails/episode3.jpg",
-    url: "https://example.com/episodes/episode-3",
-    duration: "00:35:00",
-    position: 3,
-    film_id: 1,
-    is_active: true,
-    is_deleted: false,
-    created_at: "2023-02-15",
-    updated_at: "2023-02-20",
-  },
-  {
-    id: 4,
-    slug: "episode-4",
-    title: "Episode 4: The Journey Continues",
-    title_search: "episode journey continues",
-    description: "<p>This is the fourth episode of our series.</p>",
-    view: 900,
-    thumbnail: "https://example.com/thumbnails/episode4.jpg",
-    url: "https://example.com/episodes/episode-4",
-    duration: "00:28:00",
-    position: 4,
-    film_id: 1,
-    is_active: true,
-    is_deleted: false,
-    created_at: "2023-03-01",
-    updated_at: "2023-03-05",
-  },
-  {
-    id: 5,
-    slug: "episode-5",
-    title: "Episode 5: The Revelation",
-    title_search: "episode revelation",
-    description: "<p>This is the fifth episode of our series.</p>",
-    view: 1100,
-    thumbnail: "https://example.com/thumbnails/episode5.jpg",
-    url: "https://example.com/episodes/episode-5",
-    duration: "00:32:00",
-    position: 5,
-    film_id: 1,
-    is_active: true,
-    is_deleted: false,
-    created_at: "2023-03-15",
-    updated_at: "2023-03-20",
-  },
-  {
-    id: 6,
-    slug: "episode-6",
-    title: "Episode 6: The Climax",
-    title_search: "episode climax",
-    description: "<p>This is the sixth episode of our series.</p>",
-    view: 1500,
-    thumbnail: "https://example.com/thumbnails/episode6.jpg",
-    url: "https://example.com/episodes/episode-6",
-    duration: "00:40:00",
-    position: 6,
-    film_id: 1,
-    is_active: true,
-    is_deleted: false,
-    created_at: "2023-04-01",
-    updated_at: "2023-04-05",
-  },
-  {
-    id: 7,
-    slug: "episode-7",
-    title: "Episode 7: The Resolution",
-    title_search: "episode resolution",
-    description: "<p>This is the seventh episode of our series.</p>",
-    view: 1300,
-    thumbnail: "https://example.com/thumbnails/episode7.jpg",
-    url: "https://example.com/episodes/episode-7",
-    duration: "00:38:00",
-    position: 7,
-    film_id: 1,
-    is_active: true,
-    is_deleted: false,
-    created_at: "2023-04-15",
-    updated_at: "2023-04-20",
-  },
-  {
-    id: 8,
-    slug: "episode-8",
-    title: "Episode 8: The Conclusion",
-    title_search: "episode conclusion",
-    description: "<p>This is the eighth episode of our series.</p>",
-    view: 1400,
-    thumbnail: "https://example.com/thumbnails/episode8.jpg",
-    url: "https://example.com/episodes/episode-8",
-    duration: "00:42:00",
-    position: 8,
-    film_id: 1,
-    is_active: true,
-    is_deleted: false,
-    created_at: "2023-05-01",
-    updated_at: "2023-05-05",
-  },
-];
-
+import API_URL from "../url";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const Episodes = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
   //Logic for drag and drop
-  const [episodes, setEpisodes] = useState(dummy);
+  const [episodes, setEpisodes] = useState([]);
   const onDragEnd = (event) => {
     const { active, over } = event;
     if (active.id === over.id) {
@@ -184,11 +50,57 @@ const Episodes = () => {
     });
   };
   const handleDetailsClick = (episode) => {
-    console.log("clicked")
+    console.log("clicked");
     navigate(`${episode.position}`, { state: { episode } }); // Pass episode data using useNavigate
   };
+  useEffect(() => {
+    const film_id = location.pathname.split("/")[2];
+    axios
+      .get(`${API_URL}.episode/film/${film_id}`)
+      .then((res) => {
+        console.log(res.data);
+        setEpisodes(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  function deleteEpisode(id) {
+    console.log("delete", id);
+    Swal.fire({
+      title: "Do you want to delete this episode?",
+      showDenyButton: true,
+      confirmButtonText: "Yes",
+      denyButtonText: "No",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${API_URL}.episode/${id}`,{
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            }
+          })
+          .then((res) => {
+            console.log(res.data);
+            Swal.fire("Deleted!", "", "success");
+            setEpisodes(episodes.filter((episode)=>episode.id!==id))
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+  }
   return (
     <div>
+      <button
+        type="button"
+        className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+      >
+        <Link to={`create`} state={location.pathname.split("/")[2]}>
+          Create new Episode
+        </Link>
+      </button>
       <div>Total: {episodes.length}</div>
       <div>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -225,6 +137,7 @@ const Episodes = () => {
                     key={user.id}
                     episode={user}
                     onDetailsClick={handleDetailsClick}
+                    onDeleteClick={deleteEpisode}
                   />
                 ))}
               </SortableContext>
@@ -232,7 +145,6 @@ const Episodes = () => {
           </tbody>
         </table>
       </div>
-     
     </div>
   );
 };
