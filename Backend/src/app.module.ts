@@ -14,6 +14,7 @@ import { FilmModule } from './modules/film/film.module';
 import { EpisodeModule } from './modules/episode/episode.module';
 import { ArticleModule } from './modules/article/article.module';
 import { UploadModule } from './modules/upload/upload.module';
+import { CommentModule } from './modules/comment/comment.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { UploadModule } from './modules/upload/upload.module';
     EpisodeModule,
     ArticleModule,
     UploadModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

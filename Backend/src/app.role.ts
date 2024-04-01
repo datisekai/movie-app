@@ -20,6 +20,7 @@ export enum AppResource {
   ARTICLE = 'ARTICLE',
   HISTORY = 'HISTORY',
   UPLOAD = 'UPLOAD',
+  COMMENT = 'COMMENT',
 }
 
 export const roles: RolesBuilder = new RolesBuilder();
@@ -27,6 +28,7 @@ export const roles: RolesBuilder = new RolesBuilder();
 roles
   // USER ROLES
   .grant(AppRoles.FREE)
+  .createAny([AppResource.COMMENT])
   .updateOwn([
     AppResource.USER,
     AppResource.CATEGORY,

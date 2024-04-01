@@ -7,8 +7,10 @@ import {
   UpdateDateColumn,
   BeforeInsert,
   BeforeUpdate,
+  OneToMany,
 } from 'typeorm';
 import { hash } from 'bcryptjs';
+import { Comment as CommentEntity } from '../comment/comment.entity';
 
 @Entity()
 @Unique(['email'])
@@ -42,6 +44,9 @@ export class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => CommentEntity, (comment) => comment.user)
+  comments!: CommentEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()
