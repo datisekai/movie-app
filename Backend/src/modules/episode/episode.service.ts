@@ -4,7 +4,7 @@ import {
   BadRequestException,
   Query,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { removeVietnameseDiacritics } from 'src/common/helpers';
 import { convertToSlug } from 'src/common/helpers/convertToSlug';
@@ -142,5 +142,13 @@ export class EpisodeService {
       await this.episodeRepository.update(id, { position });
     }
     return true;
+  }
+
+  async findEpisodesByIds(ids: number[]) {
+    return await this.episodeRepository
+      .createQueryBuilder('episode')
+      .where({ id: In(ids), is_deleted: false })
+      .leftJoinAndSelect('episode.film', 'film')
+      .getMany();
   }
 }
