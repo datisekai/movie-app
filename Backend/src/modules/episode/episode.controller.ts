@@ -103,7 +103,7 @@ export class EpisodeController {
     resource: AppResource.EPISODE,
   })
   @ApiOperation({
-    summary: 'Edit Episode',
+    summary: 'Edit Episode Position',
   })
   @Put('position')
   async updatePosition(@Body() update_position_dto: EpisodeUpdatePositionDto) {
