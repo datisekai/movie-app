@@ -58,6 +58,10 @@ export class EpisodeUpdatePositionDto {
   positions: UpdatePositionEpisode[];
 }
 
+export class EpisodeHistoryDto {
+  episode_ids: number[];
+}
+
 class UpdatePositionEpisode {
   id: number;
   position: number;

@@ -66,7 +66,7 @@ export class UserController {
     summary: 'Create User',
   })
   async createOne(@Body() dto: CreateUserDto) {
-    console.log('---passed---ƒ');
+    console.log('---passed---ƒ', dto);
     const data = await this.userService.createOne(dto);
     return { message: 'User created', data };
   }
