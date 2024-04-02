@@ -101,6 +101,7 @@ export class EpisodeService {
     episode.thumbnail = dto.thumbnail || episode.thumbnail;
     episode.slug = dto.slug ? convertToSlug(dto.slug) : episode.slug;
     episode.position = dto.position || episode.position;
+    episode.url = dto.url || episode.url;
     if (dto.title) {
       episode.title = dto.title;
       episode.title_search = removeVietnameseDiacritics(
