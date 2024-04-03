@@ -2,6 +2,7 @@ package com.example.movieapp.adapter
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import com.example.movieapp.R
 import android.view.LayoutInflater
@@ -47,7 +48,7 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                     val movieItem = data as Movie
                     image.setImageResource(movieItem.imageResId)
                     title.text = movieItem.title
-                    textView2.text = movieItem.year
+                    textView2.text = Html.fromHtml(movieItem.description)
 
                     //Custom
                     val layoutParams = image.layoutParams

@@ -91,7 +91,7 @@ class HomePageFragment : Fragment() {
         Log.e("SIZE",tmp.size.toString())
         for (o in tmp){
             Log.e("DATA",o.title.toString())
-            dataList.add(Movie(R.drawable.anime1, o.title.toString(),"2023"))
+            dataList.add(Movie(R.drawable.anime1, o.title.toString(),o.description.toString()))
         }
 
         return dataList
@@ -106,20 +106,17 @@ class HomePageFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home_page, container, false)
         filmData.listFilm.clear()
         progressbar = view.findViewById(R.id.progressBar)
-        titleMovie1 = view.findViewById(R.id.txtMoveGroup_1)
-        titleMovie2 = view.findViewById(R.id.txtMoveGroup_2)
-        titleMovie3 = view.findViewById(R.id.txtMoveGroup_3)
-        titleMovie4 = view.findViewById(R.id.txtMoveGroup_4)
+        view.findViewById<TextView?>(R.id.txtMoveGroup_1).setText("Popular Movie1")
+        view.findViewById<TextView?>(R.id.txtMoveGroup_2).setText("Popular Movie2")
+        view.findViewById<TextView?>(R.id.txtMoveGroup_3).setText("Popular Movie3")
+        view.findViewById<TextView?>(R.id.txtMoveGroup_4).setText("Popular Movie4")
         // viewModel
         val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
         viewModel.getListFilm().observe(viewLifecycleOwner) { films ->
             Log.e("DATA", films.data.get(0).title)
             filmData.listFilm.addAll(films.data)
             progressbar.visibility = View.GONE
-            titleMovie1.setText("Popular Movie1")
-            titleMovie2.setText("Popular Movie2")
-            titleMovie3.setText("Popular Movie3")
-            titleMovie4.setText("Popular Movie4")
+
             val spacing = 24
             for (data in generateDataList()) {
                 val recyclerView1 = view.findViewById<RecyclerView>(data.view)

@@ -4,9 +4,11 @@ import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
 import com.example.movieapp.data.model.LoginDTO
+import com.example.movieapp.data.model.RegisterDTO
 import com.example.movieapp.data.model.TokenDTO
 import com.example.movieapp.data.model.User
 import com.example.movieapp.data.model.UserDTO
+import com.example.movieapp.data.model.Register
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -28,6 +30,11 @@ interface ApiService {
     fun login(
        @Body loginDto : LoginDTO
     ) : Call<TokenDTO>
+
+    @POST("api.user/register")
+    fun register(
+        @Body registerDto : RegisterDTO
+    ) : Call<Register>
 
     @PUT("api.user/{id}")
     fun editUser(

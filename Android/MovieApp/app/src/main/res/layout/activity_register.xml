@@ -25,13 +25,12 @@
         android:textAppearance="?attr/textAppearanceHeadline4"/>
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/fullname"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="160dp"
-        android:autofillHints="@string/prompt_email"
-        android:hint="@string/prompt_email"
-        android:inputType="textEmailAddress"
+        android:autofillHints="@string/prompt_fullname"
+        android:hint="@string/prompt_fullname"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,38 +41,56 @@
         android:textColor="@color/white"/>
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/usernameRegister"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints="@string/prompt_email"
+        android:hint="@string/prompt_email"
+        android:inputType="textEmailAddress"
+        android:selectAllOnFocus="true"
+        android:layout_marginVertical="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColorHint="#80FFFFFF"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/fullname"
+        android:background="@drawable/image_border"
+        android:textColor="@color/white"/>
+
+    <EditText
+        android:id="@+id/passwordRegister"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
         android:autofillHints="@string/prompt_password"
         android:hint="@string/prompt_password"
-        android:imeActionLabel="@string/action_sign_in_short"
         android:imeOptions="actionDone"
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
         android:layout_marginVertical="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username"
+        app:layout_constraintTop_toBottomOf="@+id/usernameRegister"
         android:textColorHint="#80FFFFFF"
         android:paddingHorizontal="16dp"
         android:background="@drawable/image_border"
         android:textColor="@color/white"/>
 
+
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/login"
+        android:id="@+id/register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="64dp"
         android:text="Register"
         android:enabled="false"
+        android:imeOptions="actionDone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/passwordRegister"
         app:layout_constraintVertical_bias="0.2"
         android:textColor="@color/white"
         app:strokeColor="@color/white"
@@ -82,12 +99,13 @@
         android:paddingVertical="16dp"
         android:backgroundTint="@color/bg1"
         />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login"
+        app:layout_constraintTop_toBottomOf="@+id/register"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
         android:gravity="center">
@@ -115,8 +133,8 @@
         android:layout_marginBottom="64dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/password"
-        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintEnd_toEndOf="@+id/passwordRegister"
+        app:layout_constraintStart_toStartOf="@+id/passwordRegister"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
 
