@@ -54,16 +54,19 @@ roles
     AppResource.FILM,
     AppResource.EPISODE,
     AppResource.UPLOAD,
+    AppResource.ARTICLE,
   ])
   .updateAny([
     AppResource.USER,
     AppResource.CATEGORY,
     AppResource.FILM,
     AppResource.EPISODE,
+    AppResource.ARTICLE,
   ])
   .deleteAny([
     AppResource.USER,
     AppResource.CATEGORY,
     AppResource.FILM,
     AppResource.EPISODE,
+    AppResource.ARTICLE,
   ]);
