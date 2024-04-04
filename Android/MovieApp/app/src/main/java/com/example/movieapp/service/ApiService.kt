@@ -3,6 +3,7 @@ package com.example.movieapp.service
 import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
+import com.example.movieapp.data.model.Genre
 import com.example.movieapp.data.model.LoginDTO
 import com.example.movieapp.data.model.Payment
 import com.example.movieapp.data.model.PaymentDTO
@@ -34,6 +35,9 @@ interface ApiService {
 
     @GET("api.order/me")
     fun getListPayment(@Query("page") page: Int) : Call<Payment>
+
+    @GET("api.category")
+    fun getListGenre(@Query("page") page: Int) : Call<Genre>
 
     @POST("api.auth/login")
     fun login(
