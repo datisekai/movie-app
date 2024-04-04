@@ -19,6 +19,7 @@ import CreateUser from './pages/UserCreate'
 import MovieCreate from './pages/MovieCreate'
 import EpisodeCreate from './pages/EpisodeCreate'
 import CategoryCreate from './pages/CategoryCreate'
+import ArticleCreate from './pages/ArticleCreate'
 function App() {
     return (
         <Router>
@@ -40,7 +41,7 @@ function App() {
                     <Route path='categories/create' element={<CategoryCreate />}></Route>
                     <Route path="categories/:id" element={<CategoryDetail />}></Route>
                     <Route path="articles" element={<Article/>}/>
-                    <Route path="test" element={<TestDND/>}/>
+                    <Route path="articles/create" element={<ArticleCreate/>}/>
                     <Route path="articles/:id" element={<ArticleDetail/>}/>
                     <Route path="*" element={<h1>404</h1>}/>  
                 </Route>

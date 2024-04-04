@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation,useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import SunEditor from "suneditor-react";
@@ -6,14 +6,16 @@ import "suneditor/dist/css/suneditor.min.css";
 import axios from "axios";
 import API_URL from "../url";
 import Swal from "sweetalert2";
+import ClipLoader from "react-spinners/ClipLoader";
 function MovieDetail() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm();
   const location = useLocation();
   const movie = location.state;
   const [description, setDescription] = useState(movie.description);
   const addGenreRef = useRef(null);
-  const [currentGenre, setCurrentGenre] = useState([]);
+  const [currentGenre, setCurrentGenre] = useState(movie.categories || []);
   const [allGenre, setAllGenres] = useState([]);
   const initialImg = movie.thumbnail; // Initial image
   const [imgUrl, setImgUrl] = useState(initialImg);
@@ -58,8 +60,7 @@ function MovieDetail() {
           icon: "error",
         });
       }
-    }
-    else{
+    } else {
       data.thumbnail = initialImg;
     }
     const token = localStorage.getItem("accessToken");
@@ -75,12 +76,16 @@ function MovieDetail() {
       })
       .then((res) => {
         console.log(res);
-        setLoading(false)
+        setLoading(false);
         Swal.fire({
           title: "Success",
           text: "Film updated successfully",
           icon: "success",
-        });
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate(-1)
+          }
+        })
       })
       .catch((err) => {
         console.log(err);
@@ -129,7 +134,9 @@ function MovieDetail() {
         },
       })
       .then((res) => {
-        setAllGenres(res.data.data);
+        console.log(currentGenre)
+        console.log(res.data.data)
+        setAllGenres(res.data.data.filter(item => !currentGenre.some(currentItem => currentItem.id === item.id)));
       })
       .catch((err) => {
         console.log(err);
@@ -166,16 +173,7 @@ function MovieDetail() {
                 defaultValue={movie.title}
               />
             </div>
-            <div className="flex flex-col">
-              <label htmlFor="title_search">Title_Search:</label>
-              <input
-                type="text"
-                name="title_search"
-                className="rounded p-2 border border-gray-600 max-w-[250px]"
-                {...register("title_search")}
-                defaultValue={movie.title_search}
-              />
-            </div>
+            
             <div className="flex flex-col">
               <label htmlFor="director">Director:</label>
               <input
@@ -310,60 +308,33 @@ function MovieDetail() {
                 <option value="false">False</option>
               </select>
             </div>
-            <div className="flex flex-col">
-              <label htmlFor="is_deleted">Is Deleted:</label>
-              <select
-                name="is_deleted"
-                id=""
-                className="rounded p-2 border border-gray-600  max-w-[250px]"
-                defaultValue={movie.is_deleted}
-                {...register("is_deleted")}
-              >
-                <option value="false">False</option>
-                <option value="true">True</option>
-              </select>
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="created_at">Created At:</label>
-              <input
-                type="text"
-                name="created_at"
-                className="rounded p-2 border border-gray-600  max-w-[250px]"
-                readOnly
-                defaultValue={movie.created_at}
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="updated_at">Updated At:</label>
-              <input
-                type="text"
-                name="updated_at"
-                className="rounded p-2 border border-gray-600  max-w-[250px]"
-                readOnly
-                defaultValue={movie.updated_at}
-                {...register("updated_at")}
-              />
-            </div>
+            
           </div>
 
           {/*Save button  */}
-          <div className="flex">
-            <button
-              type="submit"
-              className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 ${
-                loading ? "disabled opacity-50 cursor-not-allowed" : ""
-              }`} // Conditional classNames for loading state
-              disabled={loading} // Use disabled prop for accessibility
-            >
+          <div className="flex gap-1">
+          <button
+            type="submit"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 max-w-20"
+          >
               {loading ? (
-                <span className="animate-spin mr-2">Updating...</span>
+                <ClipLoader
+                  color={"f"}
+                  size={20}
+                  loading={loading}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
               ) : (
                 "Save"
               )}
-            </button>
+          </button>
+          <div>
+            
+          </div>
             <Link
               to={`episodes`}
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 "
             >
               Episodes
             </Link>

@@ -1,17 +1,19 @@
-import { useLocation } from "react-router-dom";
+import { useLocation,useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import axios from "axios";
 import API_URL from "../url";
 import Swal from "sweetalert2";
+import ClipLoader from "react-spinners/ClipLoader";
 function CategoryDetail() {
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
   const location = useLocation();
   const category = location.state;
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit } = useForm();
   const initialImg = category.thumbnail; // Initial image
   const [imgUrl, setImgUrl] = useState(initialImg);
 
@@ -32,8 +34,8 @@ function CategoryDetail() {
 
   // Handle form submission
   const onSubmit = async (data) => {
+    setLoading(true);
     if (imgUrl != initialImg) {
-      setLoading(true);
       const res = await axios.post(
         `${API_URL}.upload/image`,
         {
@@ -61,9 +63,7 @@ function CategoryDetail() {
     setLoading(false);
     const token = localStorage.getItem("accessToken");
     const is_active = data.is_active === "true";
-    const is_deleted = data.is_deleted === "true";
     data.is_active = is_active;
-    data.is_deleted = is_deleted;
     data.description = description;
     data.updated_at = new Date();
     axios
@@ -78,7 +78,11 @@ function CategoryDetail() {
           title: "Success",
           text: "Category updated successfully",
           icon: "success",
-        });
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate(-1)
+          }
+        })
       })
       .catch((err) => {
         console.log(err);
@@ -127,16 +131,6 @@ function CategoryDetail() {
             {...register("title")}
           />
         </div>
-        <div className="flex flex-col">
-          <label htmlFor="title_search">Title_Search:</label>
-          <input
-            type="text"
-            name="title_search"
-            className="rounded p-2 border border-gray-600  max-w-[250px]"
-            defaultValue={category.title_search}
-            {...register("title_search")}
-          />
-        </div>
         <div className="flex flex-col md:col-span-3 w-full">
           <label htmlFor="description">Description:</label>
           <SunEditor
@@ -144,7 +138,7 @@ function CategoryDetail() {
             onChange={(content) => setDescription(content)}
           />
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col col-span-3">
           <label htmlFor="is_active">Is Active:</label>
           <select
             name="is_active"
@@ -157,53 +151,25 @@ function CategoryDetail() {
             <option value="false">False</option>
           </select>
         </div>
-        <div className="flex flex-col">
-          <label htmlFor="is_deleted">Is Deleted:</label>
-          <select
-            name="is_deleted"
-            id=""
-            className="rounded p-2 border border-gray-600  max-w-[250px]"
-            defaultValue={category.is_deleted}
-            {...register("is_deleted")}
-          >
-            <option value="true">True</option>
-            <option value="false">False</option>
-          </select>
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="created_at">Created At:</label>
-          <input
-            type="text"
-            name="created_at"
-            className="rounded p-2 border border-gray-600  max-w-[250px]"
-            readOnly
-            defaultValue={category.created_at}
-          />
-        </div>
-        <div className="flex flex-col col-span-3">
-          <label htmlFor="updated_at">Updated At:</label>
-          <input
-            type="text"
-            name="updated_at"
-            className="rounded p-2 border border-gray-600  max-w-[250px]"
-            readOnly
-            defaultValue={category.updated_at}
-            {...register("updated_at")}
-          />
-        </div>
+      
         <div>
-          <button
+        <button
             type="submit"
-            className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 ${
-              loading ? "disabled opacity-50 cursor-not-allowed" : ""
-            }`} // Conditional classNames for loading state
-            disabled={loading} // Use disabled prop for accessibility
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 max-w-20"
           >
-            {loading ? (
-              <span className="animate-spin mr-2">Uploading Image...</span>
-            ) : (
-              "Save"
-            )}
+            <span>
+              {loading ? (
+                <ClipLoader
+                  color={"f"}
+                  size={20}
+                  loading={loading}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              ) : (
+                "Save"
+              )}
+            </span>
           </button>
         </div>
       </div>

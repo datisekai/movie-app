@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation,useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import SunEditor from "suneditor-react";
@@ -6,7 +6,9 @@ import "suneditor/dist/css/suneditor.min.css";
 import API_URL from "../url";
 import axios from "axios";
 import Swal from "sweetalert2";
+import ClipLoader from "react-spinners/ClipLoader";
 function CategoryCreate() {
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
   const { register, handleSubmit, setValue } = useForm();
@@ -31,8 +33,8 @@ function CategoryCreate() {
 
   // Handle form submission
   const onSubmit = async (data) => {
+    setLoading(true)
     if (imgUrl != initialImg) {
-        setLoading(true)
         const res = await axios.post(
           `${API_URL}.upload/image`,
           {
@@ -61,9 +63,7 @@ function CategoryCreate() {
       setLoading(false)
       const token = localStorage.getItem("accessToken");
       const is_active = data.is_active === "true";
-      const is_deleted = data.is_deleted === "true";
       data.is_active = is_active;
-      data.is_deleted = is_deleted;
       data.description = description;
       data.updated_at = new Date();
       axios
@@ -78,10 +78,13 @@ function CategoryCreate() {
             title: "Success",
             text: "Category created successfully",
             icon: "success",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              navigate(-1)
+            }
           })
-          setTimeout(() => {
-            window.location.href = "/categories"
-          },2500)
+      
+          
         })
         .catch((err) => {
           console.log(err);
@@ -168,18 +171,23 @@ function CategoryCreate() {
           />
         </div>
         <div className="">
-          <button
+        <button
             type="submit"
-            className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800  ${
-              loading ? "disabled opacity-50 cursor-not-allowed" : ""
-            }`} // Conditional classNames for loading state
-            disabled={loading} // Use disabled prop for accessibility
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 max-w-20"
           >
-            {loading ? (
-              <span className="animate-spin mr-2">Uploading Image...</span>
-            ) : (
-              "Save"
-            )}
+            <span>
+              {loading ? (
+                <ClipLoader
+                  color={"f"}
+                  size={20}
+                  loading={loading}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              ) : (
+                "Save"
+              )}
+            </span>
           </button>
         </div>
       </div>
