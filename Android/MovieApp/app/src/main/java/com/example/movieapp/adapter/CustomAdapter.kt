@@ -48,8 +48,7 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                     val movieItem = data as Movie
                     image.setImageResource(movieItem.imageResId)
                     title.text = movieItem.title
-                    textView2.text = Html.fromHtml(movieItem.description)
-
+                    textView2.text = movieItem.description
                     //Custom
                     val layoutParams = image.layoutParams
                     layoutParams.width = widthCard
@@ -74,6 +73,9 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
 
                     container.setOnClickListener{
                         val intent : Intent =  Intent(itemView.context, DetailFilmActivity::class.java)
+                        val bundle = Bundle()
+                        bundle.putInt("id", movieItem.id) // Đặt giá trị vào Bundle
+                        intent.putExtras(bundle)
                         itemView.context.startActivity(intent);
                     }
                 }

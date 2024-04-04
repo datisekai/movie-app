@@ -43,8 +43,12 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
         if (networkInfo != null && networkInfo.isConnected) {
             val bundle2 = Bundle()
             bundle2.putString("header",ClassToken.MY_TOKEN)
-            supportLoaderManager.restartLoader<Film>(0, bundle2, this)
-
+            val bundle = intent.extras
+            if (bundle != null) {
+                val id = bundle.getInt("id") // Lấy giá trị từ Bundle
+                Log.e("CHECK", id.toString())
+                supportLoaderManager.restartLoader<Film>(id, bundle2, this)
+            }
         }
     }
 

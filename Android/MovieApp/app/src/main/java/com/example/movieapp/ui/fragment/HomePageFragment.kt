@@ -3,6 +3,7 @@ package com.example.movieapp.ui.fragment
 import com.example.movieapp.adapter.CustomAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
@@ -23,13 +24,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.Api.MyViewModel
 import com.example.movieapp.GridSpacingItemDecoration
 import com.example.movieapp.R
-import com.example.movieapp.ui.activity.SearchActivity
 import com.example.movieapp.adapter.model.CardHome
 import com.example.movieapp.adapter.model.Movie
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
 import com.example.movieapp.data.model.FilmDTO
 import com.example.movieapp.ui.activity.HomePage_Activity
+import com.example.movieapp.ui.activity.SearchActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -48,10 +49,6 @@ class HomePageFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var progressbar : ProgressBar
-    private lateinit var titleMovie1 : TextView
-    private lateinit var titleMovie2 : TextView
-    private lateinit var titleMovie3 : TextView
-    private lateinit var titleMovie4 : TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -70,15 +67,15 @@ class HomePageFragment : Fragment() {
     }
     private fun generateDataListMovie(): List<Movie> {
         val dataList: MutableList<Movie> = ArrayList()
-        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024"))
-        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024"))
-        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024"))
+        dataList.add(Movie(0, R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
+        dataList.add(Movie(0, R.drawable.anime2, "abc 2", "2023"))
+        dataList.add(Movie(0, R.drawable.anime3, "abc 3", "2024"))
+        dataList.add(Movie(0, R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
+        dataList.add(Movie(0, R.drawable.anime2, "abc 2", "2023"))
+        dataList.add(Movie(0, R.drawable.anime3, "abc 3", "2024"))
+        dataList.add(Movie(0, R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
+        dataList.add(Movie(0, R.drawable.anime2, "abc 2", "2023"))
+        dataList.add(Movie(0, R.drawable.anime3, "abc 3", "2024"))
         // Thêm các phần tử khác vào danh sách dữ liệu
         return dataList
     }
@@ -90,8 +87,7 @@ class HomePageFragment : Fragment() {
         tmp.addAll(filmData.listFilm)
         Log.e("SIZE",tmp.size.toString())
         for (o in tmp){
-            Log.e("DATA",o.title.toString())
-            dataList.add(Movie(R.drawable.anime1, o.title.toString(),o.description.toString()))
+            dataList.add(Movie(o.id ,R.drawable.anime1, o.title.toString(), Html.fromHtml(o.description.toString()).toString()))
         }
 
         return dataList
@@ -113,7 +109,6 @@ class HomePageFragment : Fragment() {
         // viewModel
         val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
         viewModel.getListFilm().observe(viewLifecycleOwner) { films ->
-            Log.e("DATA", films.data.get(0).title)
             filmData.listFilm.addAll(films.data)
             progressbar.visibility = View.GONE
 
