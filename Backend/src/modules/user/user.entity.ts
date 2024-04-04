@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { hash } from 'bcryptjs';
 import { Comment as CommentEntity } from '../comment/comment.entity';
+import { Order as OrderEntity } from '../order/order.entity';
 
 @Entity()
 @Unique(['email'])
@@ -47,6 +48,9 @@ export class User {
 
   @OneToMany(() => CommentEntity, (comment) => comment.user)
   comments!: CommentEntity[];
+
+  @OneToMany(() => OrderEntity, (order) => order.user)
+  orders!: OrderEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()

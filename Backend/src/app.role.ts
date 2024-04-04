@@ -21,6 +21,7 @@ export enum AppResource {
   HISTORY = 'HISTORY',
   UPLOAD = 'UPLOAD',
   COMMENT = 'COMMENT',
+  ORDER = 'ORDER',
 }
 
 export const roles: RolesBuilder = new RolesBuilder();
@@ -28,7 +29,7 @@ export const roles: RolesBuilder = new RolesBuilder();
 roles
   // USER ROLES
   .grant(AppRoles.FREE)
-  .createAny([AppResource.COMMENT])
+  .createAny([AppResource.COMMENT, AppResource.ORDER])
   .updateOwn([
     AppResource.USER,
     AppResource.CATEGORY,

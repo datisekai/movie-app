@@ -15,6 +15,7 @@ import { EpisodeModule } from './modules/episode/episode.module';
 import { ArticleModule } from './modules/article/article.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { CommentModule } from './modules/comment/comment.module';
+import { OrderModule } from './modules/order/order.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { CommentModule } from './modules/comment/comment.module';
     ArticleModule,
     UploadModule,
     CommentModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],
