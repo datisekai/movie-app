@@ -9,6 +9,7 @@ import API_URL from "../url";
 import "suneditor/dist/css/suneditor.min.css";
 import videojs from "video.js";
 import Video from "../components/Video";
+import ClipLoader from "react-spinners/ClipLoader";
 function EpisodeDetail() {
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm();
@@ -130,12 +131,12 @@ function EpisodeDetail() {
           title: "Success",
           text: "Episode updated successfully",
           icon: "success",
-        });
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate(-1)
+          }
+        })
         setLoading(false);
-
-        // setTimeout(() => {
-        //   navigate(-1);
-        // }, 2500);
       })
       .catch((err) => {
         console.log(err);
@@ -203,16 +204,6 @@ function EpisodeDetail() {
               />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="title_search">Title_Search:</label>
-              <input
-                type="text"
-                name="title_search"
-                className="rounded p-2 border border-gray-600 max-w-[250px]"
-                {...register("title_search")}
-                defaultValue={episode.title_search}
-              />
-            </div>
-            <div className="flex flex-col">
               <label htmlFor="slug">Slug:</label>
               <input
                 type="text"
@@ -274,57 +265,29 @@ function EpisodeDetail() {
                 <option value="false">False</option>
               </select>
             </div>
-            <div className="flex flex-col">
-              <label htmlFor="is_deleted">Is Deleted:</label>
-              <select
-                name="is_deleted"
-                id=""
-                className="rounded p-2 border border-gray-600  max-w-[250px]"
-                defaultValue={episode.is_deleted}
-                {...register("is_deleted")}
-              >
-                <option value="false">False</option>
-                <option value="true">True</option>
-              </select>
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="created_at">Created At:</label>
-              <input
-                type="text"
-                name="created_at"
-                className="rounded p-2 border border-gray-600  max-w-[250px]"
-                readOnly
-                defaultValue={episode.created_at}
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="updated_at">Updated At:</label>
-              <input
-                type="text"
-                name="updated_at"
-                className="rounded p-2 border border-gray-600  max-w-[250px]"
-                readOnly
-                defaultValue={episode.updated_at}
-                {...register("updated_at")}
-              />
-            </div>
+            
           </div>
 
           {/*Save button  */}
           <div className="flex">
-            <button
-              type="submit"
-              className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 ${
-                loading ? "disabled opacity-50 cursor-not-allowed" : ""
-              }`} // Conditional classNames for loading state
-              disabled={loading} // Use disabled prop for accessibility
-            >
+          <button
+            type="submit"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 max-w-20"
+          >
+            <span>
               {loading ? (
-                <span className="animate-spin mr-2">Uploading...</span>
+                <ClipLoader
+                  color={"f"}
+                  size={20}
+                  loading={loading}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
               ) : (
                 "Save"
               )}
-            </button>
+            </span>
+          </button>
           </div>
         </div>
       </form>

@@ -8,13 +8,14 @@ import API_URL from "../url";
 import Swal from "sweetalert2";
 import Video from "../components/Video";
 import videojs from "video.js";
-
+import ClipLoader from "react-spinners/ClipLoader";
 const initialImg =
   "https://image.tmdb.org/t/p/w500//A4j8S6moJS2zNtRR8oWF08gRnL5.jpg"; // Initial image
 const initialVid =
   "https://videos.pexels.com/video-files/20576968/20576968-hd_1920_1080_25fps.mp4";
 
 function EpisodeCreate() {
+  
   const [loading, setLoading] = useState(false);
   const playerRef = useRef(null);
   const navigate = useNavigate();
@@ -130,9 +131,7 @@ function EpisodeCreate() {
     data.description = description;
     data.film_id = parseInt(location.state);
     const is_active = data.is_active === "true";
-    const is_deleted = data.is_deleted === "true";
     data.is_active = is_active;
-    data.is_deleted = is_deleted;
     data.position = parseInt(data.position);
     data.updated_at = new Date();
     if (!data.duration) {
@@ -150,10 +149,11 @@ function EpisodeCreate() {
           title: "Success",
           text: "Episode created successfully",
           icon: "success",
-        });
-        setTimeout(() => {
-          navigate(-1);
-        }, 2500);
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate(-1)
+          }
+        })
       })
       .catch((err) => {
         console.log(err);
@@ -211,15 +211,6 @@ function EpisodeCreate() {
               />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="title_search">Title_Search:</label>
-              <input
-                type="text"
-                name="title_search"
-                className="rounded p-2 border border-gray-600 max-w-[250px]"
-                {...register("title_search")}
-              />
-            </div>
-            <div className="flex flex-col">
               <label htmlFor="slug">Slug:</label>
               <input
                 type="text"
@@ -271,54 +262,30 @@ function EpisodeCreate() {
                 <option value="false">False</option>
               </select>
             </div>
-            <div className="flex flex-col">
-              <label htmlFor="is_deleted">Is Deleted:</label>
-              <select
-                name="is_deleted"
-                id=""
-                className="rounded p-2 border border-gray-600  max-w-[250px]"
-                {...register("is_deleted")}
-              >
-                <option value="false">False</option>
-                <option value="true">True</option>
-              </select>
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="created_at">Created At:</label>
-              <input
-                type="text"
-                name="created_at"
-                className="rounded p-2 border border-gray-600  max-w-[250px]"
-                readOnly
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="updated_at">Updated At:</label>
-              <input
-                type="text"
-                name="updated_at"
-                className="rounded p-2 border border-gray-600  max-w-[250px]"
-                readOnly
-                {...register("updated_at")}
-              />
-            </div>
+            
+            
           </div>
 
           {/*Save button  */}
           <div className="flex">
-            <button
-              type="submit"
-              className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 ${
-                loading ? "disabled opacity-50 cursor-not-allowed" : ""
-              }`} // Conditional classNames for loading state
-              disabled={loading} // Use disabled prop for accessibility
-            >
+          <button
+            type="submit"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 max-w-20"
+          >
+            <span>
               {loading ? (
-                <span className="animate-spin mr-2">Uploading...</span>
+                <ClipLoader
+                  color={"f"}
+                  size={20}
+                  loading={loading}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
               ) : (
                 "Save"
               )}
-            </button>
+            </span>
+          </button>
           </div>
         </div>
       </form>

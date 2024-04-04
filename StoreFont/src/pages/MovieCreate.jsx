@@ -1,12 +1,14 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { set, useForm } from "react-hook-form";
+import {  useForm } from "react-hook-form";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import API_URL from "../url";
 import axios from "axios";
 import Swal from "sweetalert2";
+import ClipLoader from "react-spinners/ClipLoader";
 function MovieCreate() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit, } = useForm();
   const [description, setDescription] = useState("");
@@ -86,10 +88,12 @@ function MovieCreate() {
           title: "Success",
           text: "Film created successfully",
           icon: "success",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate(-1)
+          }
         })
-        setTimeout(() => {
-          window.location.href = "/movies"
-        },2500)
+        
       })
       .catch((err) => {
         console.log(err);
@@ -323,56 +327,29 @@ function MovieCreate() {
                 <option value="false">False</option>
               </select>
             </div>
-            <div className="flex flex-col">
-              <label htmlFor="is_deleted">Is Deleted:</label>
-              <select
-                name="is_deleted"
-                id=""
-                className="rounded p-2 border border-gray-600  max-w-[250px]"
-                {...register("is_deleted")}
-              >
-                <option value="false">False</option>
-                <option value="true">True</option>
-              </select>
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="created_at">Created At:</label>
-              <input
-                type="text"
-                name="created_at"
-                className="rounded p-2 border border-gray-600  max-w-[250px]"
-                readOnly
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="updated_at">Updated At:</label>
-              <input
-                type="text"
-                name="updated_at"
-                className="rounded p-2 border border-gray-600  max-w-[250px]"
-                readOnly
-                {...register("updated_at")}
-              />
-            </div>
+            
           </div>
 
           {/*Save button  */}
           <div className="flex">
-            <button
-              type="submit"
-              className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 ${
-                loading ? "disabled opacity-50 cursor-not-allowed" : ""
-              }`} // Conditional classNames for loading state
-              disabled={loading} // Use disabled prop for accessibility
-            >
+          <button
+            type="submit"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 max-w-20"
+          >
+            <span>
               {loading ? (
-                <span className="animate-spin mr-2">
-                  Uploading Image...
-                </span>
+                <ClipLoader
+                  color={"f"}
+                  size={20}
+                  loading={loading}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
               ) : (
                 "Save"
               )}
-            </button>
+            </span>
+          </button>
             <Link
               to={`episodes`}
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"

@@ -5,13 +5,15 @@ import AuthInput from "../components/AuthInput";
 import API_URL from "../url";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
+import ClipLoader from "react-spinners/ClipLoader";
 const fields = loginFields;
 let fieldsState = {};
 fields.forEach((field) => (fieldsState[field.id] = ""));
 
 function Login() {
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const [loginState, setLoginState] = useState(fieldsState);
   const handleChange = (e) => {
     setLoginState({ ...loginState, [e.target.id]: e.target.value });
@@ -21,29 +23,30 @@ function Login() {
     //  test acc
     // datly030102@gmail.com
     // datisekai
-    axios.post(`${API_URL}.auth/login`,loginState)
-    .then(res => {
-      localStorage.setItem('accessToken', res.data.data.accessToken)
-      localStorage.setItem('user', JSON.stringify(res.data.data.user))
-      Swal.fire({
-        title: 'Success!',
-        text: 'Login Successfully!',
-        icon: 'success'
+    setLoading(true);
+    axios
+      .post(`${API_URL}.auth/login`, loginState)
+      .then((res) => {
+        localStorage.setItem("accessToken", res.data.data.accessToken);
+        localStorage.setItem("user", JSON.stringify(res.data.data.user));
+        Swal.fire({
+          title: "Success!",
+          text: "Login Successfully!",
+          icon: "success",
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 2500);
+      })
+      .catch((err) => {
+        console.log(err);
+        Swal.fire({
+          title: "Error!",
+          text: err.response.data.message,
+          icon: "error",
+        });
       });
-      setTimeout(() => {
-        navigate('/')
-      },2500)
-      
-    })
-    .catch(err => {
-      console.log(err)
-      Swal.fire({
-        title: 'Error!',
-        text: err.response.data.message,
-        icon: 'error'
-      });
-    })
-  }
+  };
   return (
     <div className="h-screen justify-center flex-col items-center flex">
       <Header
@@ -103,7 +106,16 @@ function Login() {
           className="group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 mt-5 w-full"
           onClick={handleSubmit}
         >
-          Login
+          {loading ? (
+            <ClipLoader
+              color={"f"}
+              size="1rem"
+              loading={loading}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          ): "Login"}
+          
         </button>
       </div>
     </div>
