@@ -1,10 +1,13 @@
 import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
+  IsArray,
   IsBoolean,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
+  ValidateNested,
 } from 'class-validator';
 
 export class EpisodeDto {
@@ -55,16 +58,27 @@ export class EpisodeDto {
 }
 
 export class EpisodeUpdatePositionDto {
+  @ApiProperty({ type: () => UpdatePositionEpisode, isArray: true })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => UpdatePositionEpisode)
   positions: UpdatePositionEpisode[];
 }
 
-export class EpisodeHistoryDto {
-  episode_ids: number[];
-}
-
 class UpdatePositionEpisode {
+  @IsNumber()
+  @ApiProperty()
   id: number;
+
+  @IsNumber()
+  @ApiProperty()
   position: number;
+}
+export class EpisodeHistoryDto {
+  @ApiProperty({ type: [Number] })
+  // @IsNumber({}, { each: true })
+  @IsArray()
+  episode_ids: number[];
 }
 
 export class CreateEpisodeDto extends EpisodeDto {}
