@@ -33,6 +33,7 @@ export class FilmService {
     const queryBuilder = await this.filmRepository
       .createQueryBuilder('film')
       .where('film.is_deleted = false')
+      .leftJoinAndSelect('film.categories', 'category')
       .take(limit)
       .skip((page - 1) * limit);
 
@@ -144,6 +145,7 @@ export class FilmService {
     return await this.filmRepository
       .createQueryBuilder('film')
       .where({ ...data, is_deleted: false })
+      .leftJoinAndSelect('film.categories', 'category')
       .getOne();
   }
 }
