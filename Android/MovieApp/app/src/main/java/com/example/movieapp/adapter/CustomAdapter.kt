@@ -19,6 +19,10 @@ import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.ui.activity.DetailFilmActivity
 import com.example.movieapp.ui.activity.ResultGenreActivity
 import com.makeramen.roundedimageview.RoundedImageView
+import java.text.NumberFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class CustomAdapter(private val dataList: List<Any>, private val view: Int, private val widthCard: Int, private val heightCard: Int, private val isBorderImage: Boolean) :
     RecyclerView.Adapter<CustomAdapter.MyViewHolder>() {
@@ -98,10 +102,20 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                     val title: TextView = itemView.findViewById(R.id.textTitle)
                     val date: TextView = itemView.findViewById(R.id.textDate)
                     val money: TextView = itemView.findViewById(R.id.textMoney)
+                    val status: TextView= itemView.findViewById(R.id.textStatus)
                     val paymentHistoryItem = data as PaymentHistory
                     title.text = paymentHistoryItem.title
-                    date.text = paymentHistoryItem.date
-                    money.text = "-" + paymentHistoryItem.money.toString() +"đ"
+
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                    val dateTime: LocalDateTime = LocalDateTime.parse(paymentHistoryItem.date, formatter)
+                    val formattedDateTime: String = dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
+
+                    date.text = formattedDateTime
+
+                    val format = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
+                    val formattedMoney: String = format.format(paymentHistoryItem.money.toLong())
+                    money.text = formattedMoney
+                    status.text = paymentHistoryItem.status
                 }
             }
         }

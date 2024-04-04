@@ -45,26 +45,36 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/textDate"
                 android:layout_marginTop="8dp"
-                android:textAppearance="?attr/textAppearanceBody2"
+                android:textAppearance="?attr/textAppearanceBody1"
                 android:textColor="@color/white"
                 />
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right">
+            android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/textStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:id="@+id/textMoney"
                 android:textColor="@color/white"
                 android:textAppearance="?attr/textAppearanceHeadline5"
-                android:paddingHorizontal="8dp"/>
-        </LinearLayout>
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:id="@+id/textMoney"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@color/white"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                android:paddingHorizontal="8dp"
+                android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
     </LinearLayout>
 
 </LinearLayout>
