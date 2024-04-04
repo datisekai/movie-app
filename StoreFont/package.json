@@ -27,7 +27,7 @@
     "suneditor": "^2.45.1",
     "suneditor-react": "^3.6.1",
     "sweetalert": "^2.1.2",
-    "sweetalert2": "^11.10.6",
+    "sweetalert2": "^11.10.7",
     "videojs": "^1.0.0"
   },
   "devDependencies": {

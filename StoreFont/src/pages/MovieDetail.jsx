@@ -13,7 +13,7 @@ function MovieDetail() {
   const movie = location.state;
   const [description, setDescription] = useState(movie.description);
   const addGenreRef = useRef(null);
-  const [currentGenre, setCurrentGenre] = useState([]);
+  const [currentGenre, setCurrentGenre] = useState(movie.categories || []);
   const [allGenre, setAllGenres] = useState([]);
   const initialImg = movie.thumbnail; // Initial image
   const [imgUrl, setImgUrl] = useState(initialImg);
@@ -58,8 +58,7 @@ function MovieDetail() {
           icon: "error",
         });
       }
-    }
-    else{
+    } else {
       data.thumbnail = initialImg;
     }
     const token = localStorage.getItem("accessToken");
@@ -75,7 +74,7 @@ function MovieDetail() {
       })
       .then((res) => {
         console.log(res);
-        setLoading(false)
+        setLoading(false);
         Swal.fire({
           title: "Success",
           text: "Film updated successfully",
@@ -129,7 +128,9 @@ function MovieDetail() {
         },
       })
       .then((res) => {
-        setAllGenres(res.data.data);
+        console.log(currentGenre)
+        console.log(res.data.data)
+        setAllGenres(res.data.data.filter(item => !currentGenre.some(currentItem => currentItem.id === item.id)));
       })
       .catch((err) => {
         console.log(err);

@@ -1,41 +1,4 @@
-const dummy = [
-  {
-    id: 1,
-    slug: "film-1",
-    title: "Film 1",
-    title_search: "film one",
-    description: "<p>This is the description for Film 1.</p>",
-    view: 1000,
-    thumbnail: "film1.jpg",
-    type: "tv-show",
-    status: "Đang tiến hành",
-    is_required_premium: true,
-    director: "Director One",
-    location: "TPHCM",
-    is_active: true,
-    is_deleted: false,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 2,
-    slug: "film-2",
-    title: "Film 2",
-    title_search: "film two",
-    description: "<p>This is the description for Film 2.</p>",
-    view: 500,
-    thumbnail: "film2.jpg",
-    type: "movie",
-    status: "Full",
-    is_required_premium: false,
-    director: "Director Two",
-    location: "Hanoi",
-    is_active: true,
-    is_deleted: false,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-];
+
 
 import ReactPaginate from "react-paginate";
 import { useEffect, useState } from "react";
@@ -56,12 +19,12 @@ export default function Movies() {
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
   console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-  const currentItems = dummy.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(dummy.length / itemsPerPage);
+  const currentItems = movies.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(movies.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % dummy.length;
+    const newOffset = (event.selected * itemsPerPage) % movies.length;
     console.log(
       `User requested page number ${event.selected}, which is offset ${newOffset}`
     );
