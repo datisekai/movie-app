@@ -1,9 +1,0 @@
-{
-  "handler": "Backend/src/main.js",
-  "runtime": "nodejs18.x",
-  "environment": {},
-  "launcherType": "Nodejs",
-  "shouldAddHelpers": true,
-  "shouldAddSourcemapSupport": true,
-  "awsLambdaHandler": ""
-}
