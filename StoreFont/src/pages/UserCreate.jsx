@@ -1,16 +1,18 @@
-import { useLocation, Link } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import {  useState } from "react";
 import API_URL from "../url";
 import axios from "axios";
 import Swal from "sweetalert2";
+import ClipLoader from "react-spinners/ClipLoader";
 function CreateUser() {
-  const location = useLocation();
-  const user = location.state;
-  const { register, handleSubmit, setValue } = useForm();
+  const navigate = useNavigate()
+  const [loading,setLoading] = useState(false);
+  const { register, handleSubmit } = useForm();
   const token = localStorage.getItem("accessToken");
   // Handle form submission
   const onSubmit = (data) => {
+    setLoading(true)
     const is_active = data.is_active === "true";
     const is_deleted = data.is_deleted === "true";
     const roles = ["admin"];
@@ -33,10 +35,11 @@ function CreateUser() {
           title: "Success",
           text: "User created successfully",
           icon: "success",
-        });
-        setTimeout(() => {
-          window.location.href = "/users";
-        }, 2500);
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate(-1)
+          }
+        })
       })
       .catch((err) => {
         Swal.fire({
@@ -44,22 +47,15 @@ function CreateUser() {
           text: err.response.data.message,
           icon: "error",
         });
-      });
+      })
+      .finally(()=>{
+        setLoading(false)
+      })
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-2">
-        <div className="flex flex-col">
-          <label htmlFor="id">Id:</label>
-          <input
-            type="text"
-            name="id"
-            className="rounded p-2 border border-gray-600  max-w-[250px]"
-            {...register("id")}
-            readOnly
-          />
-        </div>
         <div className="flex flex-col">
           <label htmlFor="email">Email:</label>
           <input
@@ -76,15 +72,6 @@ function CreateUser() {
             name="fullname"
             className="rounded p-2 border border-gray-600  max-w-[250px]"
             {...register("fullname",{required: true})}
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="fullname_search">FullName Search:</label>
-          <input
-            type="text"
-            name="fullname_search"
-            className="rounded p-2 border border-gray-600  max-w-[250px]"
-            {...register("fullname_search")}
           />
         </div>
         <div className="flex flex-col">
@@ -132,45 +119,28 @@ function CreateUser() {
             <option value="false">False</option>
           </select>
         </div>
-        <div className="flex flex-col">
-          <label htmlFor="is_deleted">Is Deleted:</label>
-          <select
-            name="is_deleted"
-            id=""
-            className="rounded p-2 border border-gray-600  max-w-[250px]"
-            {...register("is_deleted")}
-          >
-            <option value="false">False</option>
-            <option value="true">True</option>
-          </select>
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="created_at">Created At:</label>
-          <input
-            type="text"
-            name="created_at"
-            className="rounded p-2 border border-gray-600  max-w-[250px]"
-            readOnly
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="updated_at">Updated At:</label>
-          <input
-            type="text"
-            name="updated_at"
-            className="rounded p-2 border border-gray-600  max-w-[250px]"
-            readOnly
-            {...register("updated_at")}
-          />
-        </div>
+       
+       
       </div>
 
       <button
-        type="submit"
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-      >
-        Create
-      </button>
+            type="submit"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 max-w-20"
+          >
+            <span>
+              {loading ? (
+                <ClipLoader
+                  color={"f"}
+                  size={20}
+                  loading={loading}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              ) : (
+                "Save"
+              )}
+            </span>
+          </button>
     </form>
   );
 }

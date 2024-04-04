@@ -1,27 +1,27 @@
-import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import SunEditor from "suneditor-react";
 import { useState, useRef, useEffect } from "react";
+import axios from "axios";
 import Swal from "sweetalert2";
 import API_URL from "../url";
 import ClipLoader from "react-spinners/ClipLoader";
-import axios from "axios";
-function ArticleDetail() {
+import { useNavigate } from "react-router-dom";
+function ArticleCreate() {
   const navigate = useNavigate()
-  const location = useLocation();
   const [loading, setLoading] = useState(false);
-  const article = location.state;
   const { register, handleSubmit } = useForm();
-  const [description, setDescription] = useState(article.content || "");
-  const initialImg = article.thumbnail; // Initial image
+  const [description, setDescription] = useState("");
+  const initialImg =
+    "https://images.unsplash.com/photo-1481349518771-20055b2a7b24?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cmFuZG9tfGVufDB8fDB8fHww";
   const [imgUrl, setImgUrl] = useState(initialImg);
+  const addGenreRef = useRef(null);
   const [currentGenre, setCurrentGenre] = useState([]);
   const [allGenre, setAllGenres] = useState([]);
-  const addGenreRef = useRef(null);
+  
   // Handle form submission
   const onSubmit = async (data) => {
     setLoading(true);
-
+    
     if (imgUrl != initialImg) {
       const res = await axios.post(
         `${API_URL}.upload/image`,
@@ -57,7 +57,7 @@ function ArticleDetail() {
       return genre.id;
     });
     axios
-      .put(`${API_URL}.article`, data, {
+      .post(`${API_URL}.article`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -68,11 +68,12 @@ function ArticleDetail() {
           title: "Success",
           text: "Article created successfully",
           icon: "success",
-        }).then((result) => {
+        })
+        .then((result) => {
           if (result.isConfirmed) {
             navigate(-1)
           }
-        });
+        })
       })
       .catch((err) => {
         console.log(err);
@@ -168,26 +169,21 @@ function ArticleDetail() {
       <div className=" flex flex-col w-2/3 mt-5">
         <div className="w-full grid grid-cols-2 gap-2">
           <div className="flex flex-col h-fit">
-            <label htmlFor="id">Id:</label>
-            <input
-              type="text"
-              name="id"
-              className="rounded p-2 border border-gray-600 max-w-[250px] "
-              defaultValue={article.id}
-              {...register("id")}
-              readOnly
-            />
-          </div>
-          <div className="flex flex-col h-fit">
             <label htmlFor="title">Title:</label>
             <input
               type="text"
               name="title"
               className="rounded p-2 border border-gray-600  max-w-[250px]"
-              defaultValue={article.title}
               {...register("title")}
             />
           </div>
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="desc">Description:</label>
+          <SunEditor
+            setContents={description}
+            onChange={(content) => setDescription(content)}
+          />
         </div>
         <div className="flex flex-col">
           <label htmlFor="released_date">Current Genre:</label>
@@ -236,21 +232,12 @@ function ArticleDetail() {
             Add Genre
           </button>
         </div>
-        <div className="flex flex-col">
-          <label htmlFor="desc">Description:</label>
-          <SunEditor
-            defaultValue={article.description}
-            setContents={description}
-            onChange={(content) => setDescription(content)}
-          />
-        </div>
         <div className="flex flex-col h-fit">
           <label htmlFor="is_active">Is Active:</label>
           <select
             name="is_active"
             id=""
             className="rounded p-2 border border-gray-600  max-w-[250px]"
-            defaultValue={article.is_active}
             {...register("is_active")}
           >
             <option value="true">True</option>
@@ -282,4 +269,4 @@ function ArticleDetail() {
   );
 }
 
-export default ArticleDetail;
+export default ArticleCreate;
