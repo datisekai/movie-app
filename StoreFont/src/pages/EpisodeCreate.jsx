@@ -1,26 +1,30 @@
-import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useState, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import SunEditor from "suneditor-react";
-import Swal from "sweetalert2";
+import "suneditor/dist/css/suneditor.min.css";
 import axios from "axios";
 import API_URL from "../url";
-import "suneditor/dist/css/suneditor.min.css";
-import videojs from "video.js";
+import Swal from "sweetalert2";
 import Video from "../components/Video";
-function EpisodeDetail() {
+import videojs from "video.js";
+
+const initialImg =
+  "https://image.tmdb.org/t/p/w500//A4j8S6moJS2zNtRR8oWF08gRnL5.jpg"; // Initial image
+const initialVid =
+  "https://videos.pexels.com/video-files/20576968/20576968-hd_1920_1080_25fps.mp4";
+
+function EpisodeCreate() {
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit } = useForm();
-  const location = useLocation();
   const playerRef = useRef(null);
-  const episode = location.state;
-  const initialImg = episode.thumbnail; // Initial image
-  const initialVid = episode.url;
-  const [description, setDescription] = useState(episode.description);
-  const [videoUrl, setVideoUrl] = useState(initialVid);
-  const [imgUrl, setImgUrl] = useState(initialImg);
   const navigate = useNavigate();
+  const { register, handleSubmit} = useForm();
+  const location = useLocation();
+  const [description, setDescription] = useState("");
+
+  const [imgUrl, setImgUrl] = useState(initialImg);
+  const [videoUrl, setVideoUrl] = useState(initialVid);
+
   const videoJSOptions = {
     autoplay: false,
     controls: true,
@@ -32,121 +36,10 @@ function EpisodeDetail() {
       {
         src: videoUrl,
         type: "video/mp4",
-      },
-    ],
-  };
-  const handlePlayerReady = (player) => {
-    playerRef.current = player;
-    // You can handle player events here, for example:
-    player.on("waiting", () => {
-      videojs.log("player is waiting");
-    });
-
-    player.on("dispose", () => {
-      videojs.log("player will dispose");
-    });
-  };
-  // Handle form submission
-  const onSubmit = async (data) => {
-    // Upload img
-    setLoading(true);
-    if (imgUrl != initialImg) {
-      const res = await axios.post(
-        `${API_URL}.upload/image`,
-        {
-          file: data.thumbnail[0],
-        },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-      if (res.status == 201) {
-        data.thumbnail = res.data.url;
-      } else {
-        Swal.fire({
-          title: "Error",
-          text: res,
-          icon: "error",
-        });
-        return;
       }
-    } else {
-      data.thumbnail = initialImg;
-    }
-    // upload video
-    if (videoUrl != initialVid) {
-      const res = await axios.post(
-        `${API_URL}.upload/video`,
-        {
-          file: data.videoFile[0],
-        },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-      if (res.status == 201) {
-        data.url = res.data.url;
-        setVideoUrl(res.data.url)
-      } else {
-        Swal.fire({
-          title: "Error",
-          text: res,
-          icon: "error",
-        });
-        return;
-      }
-    } 
-    else{
-      data.url = initialVid
-    }
-    const token = localStorage.getItem("accessToken");
-    data.description = description;
-    data.film_id = parseInt(location.state);
-    const is_active = data.is_active === "true";
-    const is_deleted = data.is_deleted === "true";
-    data.is_active = is_active;
-    data.is_deleted = is_deleted;
-    data.position = parseInt(data.position);
-    data.updated_at = new Date();
-    if (!data.duration) {
-      data.duration = "100";
-    }
-    console.log(data.url);
-    axios
-      .put(`${API_URL}.episode/${episode.id}`, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        console.log(res);
-        Swal.fire({
-          title: "Success",
-          text: "Episode updated successfully",
-          icon: "success",
-        });
-        setLoading(false);
-
-        // setTimeout(() => {
-        //   navigate(-1);
-        // }, 2500);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-        Swal.fire({
-          title: "Error",
-          text: err.response.data.message,
-          icon: "error",
-        });
-      });
+    ]
   };
+
   const handleFileChange = (event) => {
     const newImage = event.target.files[0];
 
@@ -166,10 +59,126 @@ function EpisodeDetail() {
     const newFile = event.target.files[0];
     const blobURL = URL.createObjectURL(newFile);
     setVideoUrl(blobURL);
+    
+  };
+
+  // Handle form submission
+  const onSubmit = async (data) => {
+    // Upload img
+    setLoading(true);
+    if (imgUrl != initialImg) {
+      
+      const res = await axios.post(
+        `${API_URL}.upload/image`,
+        {
+          file: data.thumbnail[0],
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      if (res.status == 201) {
+        data.thumbnail = res.data.url;
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: res,
+          icon: "error",
+          
+        });
+        return
+      }
+    }
+    else{
+      data.thumbnail = initialImg
+    }
+    if (videoUrl != initialVid) {
+      const res = await axios.post(
+        `${API_URL}.upload/video`,
+        {
+          file: data.url[0],
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      if (res.status == 201) {
+        console.log(res);
+        data.url = res.data.url;
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: res,
+          icon: "error",
+        });
+        return
+      }
+
+    }
+    else{
+      data.url = initialVid
+    }
+
+    setLoading(false);
+    const token = localStorage.getItem("accessToken");
+    data.description = description;
+    data.film_id = parseInt(location.state);
+    const is_active = data.is_active === "true";
+    const is_deleted = data.is_deleted === "true";
+    data.is_active = is_active;
+    data.is_deleted = is_deleted;
+    data.position = parseInt(data.position);
+    data.updated_at = new Date();
+    if (!data.duration) {
+      data.duration = "100";
+    }
+    axios
+      .post(`${API_URL}.episode`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        Swal.fire({
+          title: "Success",
+          text: "Episode created successfully",
+          icon: "success",
+        });
+        setTimeout(() => {
+          navigate(-1);
+        }, 2500);
+      })
+      .catch((err) => {
+        console.log(err);
+        Swal.fire({
+          title: "Error",
+          text: err.response.data.message,
+          icon: "error",
+        });
+      });
+  };
+
+  const handlePlayerReady = (player) => {
+    playerRef.current = player;
+    // You can handle player events here, for example:
+    player.on('waiting', () => {
+      videojs.log('player is waiting');
+    });
+
+    player.on('dispose', () => {
+      videojs.log('player will dispose');
+    });
   };
   return (
     <div className="w-full">
-      <h1 className="text-2xl font-bold pl-2">{episode.title}</h1>
+      <h1 className="text-2xl font-bold pl-2">Create new Episode</h1>
       <form
         action=""
         className="flex justify-between"
@@ -198,8 +207,7 @@ function EpisodeDetail() {
                 type="text"
                 name="title"
                 className="rounded p-2 border border-gray-600  max-w-[250px]"
-                {...register("title")}
-                defaultValue={episode.title}
+                {...register("title",{required: true})}
               />
             </div>
             <div className="flex flex-col">
@@ -209,7 +217,6 @@ function EpisodeDetail() {
                 name="title_search"
                 className="rounded p-2 border border-gray-600 max-w-[250px]"
                 {...register("title_search")}
-                defaultValue={episode.title_search}
               />
             </div>
             <div className="flex flex-col">
@@ -219,25 +226,16 @@ function EpisodeDetail() {
                 name="slug"
                 className="rounded p-2 border border-gray-600 max-w-[250px]"
                 {...register("slug")}
-                defaultValue={episode.slug}
               />
             </div>
             <div className="flex flex-col">
               <label htmlFor="position">Position:</label>
               <input
-                type="text"
+                type="number"
                 name="position"
                 className="rounded p-2 border border-gray-600 max-w-[250px]"
-                {...register("position")}
-                defaultValue={episode.position}
+                {...register("position",{required: true})}
               />
-            </div>
-
-            <div className="flex flex-col">
-              <label htmlFor="title">View:</label>
-              <p className="rounded p-2 border border-gray-600  max-w-[250px]">
-                {episode.view}
-              </p>
             </div>
           </div>
           <div className="flex flex-col">
@@ -246,18 +244,18 @@ function EpisodeDetail() {
               name="description"
               setContents={description}
               onChange={(content) => setDescription(content)}
-              defaultValue={episode.description}
             />
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="description">Video:</label>
-            <Video options={videoJSOptions} onReady={handlePlayerReady} />
+            <Video
+              options={videoJSOptions} onReady={handlePlayerReady} 
+            />
             <input
               type="file"
               multiple={false}
-              {...register("videoFile", { onChange: handleVideoFileChange })}
+              {...register("url", { onChange: handleVideoFileChange })}
             />
-            <input type="hidden"  {...register("url")}/>
           </div>
           {/* grid */}
           <div className="grid grid-cols-2">
@@ -267,7 +265,6 @@ function EpisodeDetail() {
                 name="is_active"
                 id=""
                 className="rounded p-2 border border-gray-600  max-w-[250px]"
-                defaultValue={episode.is_active}
                 {...register("is_active")}
               >
                 <option value="true">True</option>
@@ -280,7 +277,6 @@ function EpisodeDetail() {
                 name="is_deleted"
                 id=""
                 className="rounded p-2 border border-gray-600  max-w-[250px]"
-                defaultValue={episode.is_deleted}
                 {...register("is_deleted")}
               >
                 <option value="false">False</option>
@@ -294,7 +290,6 @@ function EpisodeDetail() {
                 name="created_at"
                 className="rounded p-2 border border-gray-600  max-w-[250px]"
                 readOnly
-                defaultValue={episode.created_at}
               />
             </div>
             <div className="flex flex-col">
@@ -304,7 +299,6 @@ function EpisodeDetail() {
                 name="updated_at"
                 className="rounded p-2 border border-gray-600  max-w-[250px]"
                 readOnly
-                defaultValue={episode.updated_at}
                 {...register("updated_at")}
               />
             </div>
@@ -332,4 +326,4 @@ function EpisodeDetail() {
   );
 }
 
-export default EpisodeDetail;
+export default EpisodeCreate;

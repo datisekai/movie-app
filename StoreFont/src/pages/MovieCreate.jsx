@@ -1,22 +1,21 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useRef, useState } from "react";
+import { set, useForm } from "react-hook-form";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
-import axios from "axios";
 import API_URL from "../url";
+import axios from "axios";
 import Swal from "sweetalert2";
-function MovieDetail() {
+function MovieCreate() {
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit } = useForm();
-  const location = useLocation();
-  const movie = location.state;
-  const [description, setDescription] = useState(movie.description);
-  const addGenreRef = useRef(null);
+  const { register, handleSubmit, } = useForm();
+  const [description, setDescription] = useState("");
   const [currentGenre, setCurrentGenre] = useState([]);
   const [allGenre, setAllGenres] = useState([]);
-  const initialImg = movie.thumbnail; // Initial image
+  const initialImg =
+    "https://image.tmdb.org/t/p/w500//A4j8S6moJS2zNtRR8oWF08gRnL5.jpg"; // Initial image
   const [imgUrl, setImgUrl] = useState(initialImg);
+  const addGenreRef = useRef(null);
 
   const handleFileChange = (event) => {
     const newImage = event.target.files[0];
@@ -35,8 +34,8 @@ function MovieDetail() {
 
   // Handle form submission
   const onSubmit = async (data) => {
-    setLoading(true);
     if (imgUrl != initialImg) {
+      setLoading(true)
       const res = await axios.post(
         `${API_URL}.upload/image`,
         {
@@ -60,27 +59,37 @@ function MovieDetail() {
       }
     }
     else{
-      data.thumbnail = initialImg;
+      data.thumbnail = initialImg
     }
+    setLoading(false)
     const token = localStorage.getItem("accessToken");
+    const is_active = data.is_active === "true";
+    const is_deleted = data.is_deleted === "true";
+    const is_required_premium = data.is_required_premium === "true";
+    data.is_active = is_active;
+    data.is_deleted = is_deleted;
     data.description = description;
+    data.is_required_premium = is_required_premium;
+    data.updated_at = new Date();
     data.categoryIds = currentGenre.map((genre) => {
       return genre.id;
     });
     axios
-      .put(`${API_URL}.film/${movie.id}`, data, {
+      .post(`${API_URL}.film`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
         console.log(res);
-        setLoading(false)
         Swal.fire({
           title: "Success",
-          text: "Film updated successfully",
+          text: "Film created successfully",
           icon: "success",
-        });
+        })
+        setTimeout(() => {
+          window.location.href = "/movies"
+        },2500)
       })
       .catch((err) => {
         console.log(err);
@@ -88,9 +97,10 @@ function MovieDetail() {
           title: "Error",
           text: err.response.data.message,
           icon: "error",
-        });
+        })
       });
   };
+
   function addGenre() {
     const newGenreId = addGenreRef.current.value;
     const [selectedGenre] = allGenre.filter((genre) => {
@@ -130,6 +140,7 @@ function MovieDetail() {
       })
       .then((res) => {
         setAllGenres(res.data.data);
+        console.log(res.data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -137,7 +148,7 @@ function MovieDetail() {
   }, []);
   return (
     <div className="w-full">
-      <h1 className="text-2xl font-bold pl-2">{movie.title}</h1>
+      <h1 className="text-2xl font-bold pl-2">Create new Film</h1>
       <form
         action=""
         className="flex justify-between"
@@ -149,7 +160,8 @@ function MovieDetail() {
           <input
             type="file"
             multiple={false}
-            {...register("thumbnail", { onChange: handleFileChange })}
+            {...register("thumbnail",{onChange: handleFileChange})}
+           
           />
         </div>
         {/* right side */}
@@ -163,7 +175,6 @@ function MovieDetail() {
                 name="title"
                 className="rounded p-2 border border-gray-600  max-w-[250px]"
                 {...register("title")}
-                defaultValue={movie.title}
               />
             </div>
             <div className="flex flex-col">
@@ -173,7 +184,6 @@ function MovieDetail() {
                 name="title_search"
                 className="rounded p-2 border border-gray-600 max-w-[250px]"
                 {...register("title_search")}
-                defaultValue={movie.title_search}
               />
             </div>
             <div className="flex flex-col">
@@ -183,7 +193,6 @@ function MovieDetail() {
                 name="director"
                 className="rounded p-2 border border-gray-600 max-w-[250px]"
                 {...register("director")}
-                defaultValue={movie.director}
               />
             </div>
             <div className="flex flex-col">
@@ -193,14 +202,13 @@ function MovieDetail() {
                 name="location"
                 className="rounded p-2 border border-gray-600 max-w-[250px]"
                 {...register("location")}
-                defaultValue={movie.location}
               />
             </div>
 
             <div className="flex flex-col">
               <label htmlFor="title">View:</label>
               <p className="rounded p-2 border border-gray-600  max-w-[250px]">
-                {movie.view}
+                0
               </p>
             </div>
             <div className="flex flex-col">
@@ -211,8 +219,8 @@ function MovieDetail() {
                 className="rounded p-2 border border-gray-600 max-w-[250px]"
                 {...register("is_required_premium")}
               >
-                <option value="false">False</option>
                 <option value="true">True</option>
+                <option value="false">False</option>
               </select>
             </div>
             <div className="flex flex-col">
@@ -289,8 +297,14 @@ function MovieDetail() {
           </div>
           <div className="flex flex-col">
             <label htmlFor="description">Description:</label>
-            <SunEditor
+            {/* <textarea
+              name="description"
+              id=""
+              className="rounded p-2 border border-gray-600 w-full"
               defaultValue={movie.description}
+              {...register("description")}
+            /> */}
+            <SunEditor
               setContents={description}
               onChange={(content) => setDescription(content)}
             />
@@ -303,7 +317,6 @@ function MovieDetail() {
                 name="is_active"
                 id=""
                 className="rounded p-2 border border-gray-600  max-w-[250px]"
-                defaultValue={movie.is_active}
                 {...register("is_active")}
               >
                 <option value="true">True</option>
@@ -316,7 +329,6 @@ function MovieDetail() {
                 name="is_deleted"
                 id=""
                 className="rounded p-2 border border-gray-600  max-w-[250px]"
-                defaultValue={movie.is_deleted}
                 {...register("is_deleted")}
               >
                 <option value="false">False</option>
@@ -330,7 +342,6 @@ function MovieDetail() {
                 name="created_at"
                 className="rounded p-2 border border-gray-600  max-w-[250px]"
                 readOnly
-                defaultValue={movie.created_at}
               />
             </div>
             <div className="flex flex-col">
@@ -340,7 +351,6 @@ function MovieDetail() {
                 name="updated_at"
                 className="rounded p-2 border border-gray-600  max-w-[250px]"
                 readOnly
-                defaultValue={movie.updated_at}
                 {...register("updated_at")}
               />
             </div>
@@ -356,7 +366,9 @@ function MovieDetail() {
               disabled={loading} // Use disabled prop for accessibility
             >
               {loading ? (
-                <span className="animate-spin mr-2">Updating...</span>
+                <span className="animate-spin mr-2">
+                  Uploading Image...
+                </span>
               ) : (
                 "Save"
               )}
@@ -374,4 +386,4 @@ function MovieDetail() {
   );
 }
 
-export default MovieDetail;
+export default MovieCreate;

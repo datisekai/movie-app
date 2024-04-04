@@ -1,6 +1,8 @@
 import ReactPaginate from "react-paginate";
-import { useLocation, useNavigate,Link } from "react-router-dom";
-import { useState } from "react";
+import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import API_URL from "../url";
 const dummy = [
   {
     id: 1,
@@ -47,6 +49,7 @@ function Users() {
   const [itemOffset, setItemOffset] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
 
   // Simulate fetching items from another resources.
   // (This could be items from props; or items loaded in a local state
@@ -64,9 +67,26 @@ function Users() {
     );
     setItemOffset(newOffset);
   };
+  useEffect(() => {
+    axios
+      .get(`${API_URL}.user`)
+      .then((res) => {
+        setUsers(res.data.data);
+        console.log("data", res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   return (
-    <div className="relative overflow-x-auto">
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <div className=" overflow-x-auto">
+      <button
+        className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+        to={`/users/create`}
+      >
+        <Link to={"create"}>Create new user</Link>
+      </button>
+      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-5">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
             <th scope="col" className="px-6 py-3">
@@ -84,32 +104,31 @@ function Users() {
             <th scope="col" className="px-6 py-3">
               Action
             </th>
-            
           </tr>
         </thead>
         <tbody>
-          {dummy.map((user) => (
+          {users.map((user) => (
             <tr key={user.id} className="">
               <td className="px-6 py-4">{user.id}</td>
               <td className="px-6 py-4">{user.email}</td>
               <td className="px-6 py-4">{user.fullname}</td>
               <td className="px-6 py-4">{user.is_active.toString()}</td>
               <td className="space-x-2 flex justify-start">
-                  <Link
-                    type="button"
-                    className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
-                    to={`/users/${user.id}`}
-                    state={user}
-                  >
-                    Details
-                  </Link>
-                  <button
-                    type="button"
-                    className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                  >
-                    Delete
-                  </button>
-                </td>
+                <Link
+                  type="button"
+                  className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+                  to={`/users/${user.id}`}
+                  state={user}
+                >
+                  Details
+                </Link>
+                <button
+                  type="button"
+                  className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
