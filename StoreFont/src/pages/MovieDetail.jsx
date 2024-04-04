@@ -35,8 +35,8 @@ function MovieDetail() {
 
   // Handle form submission
   const onSubmit = async (data) => {
+    setLoading(true);
     if (imgUrl != initialImg) {
-      setLoading(true);
       const res = await axios.post(
         `${API_URL}.upload/image`,
         {
@@ -75,6 +75,7 @@ function MovieDetail() {
       })
       .then((res) => {
         console.log(res);
+        setLoading(false)
         Swal.fire({
           title: "Success",
           text: "Film updated successfully",
@@ -355,7 +356,7 @@ function MovieDetail() {
               disabled={loading} // Use disabled prop for accessibility
             >
               {loading ? (
-                <span className="animate-spin mr-2">Uploading Image...</span>
+                <span className="animate-spin mr-2">Updating...</span>
               ) : (
                 "Save"
               )}

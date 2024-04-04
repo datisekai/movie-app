@@ -1,20 +1,110 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import SunEditor from "suneditor-react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import API_URL from "../url";
 import "suneditor/dist/css/suneditor.min.css";
+import videojs from "video.js";
+import Video from "../components/Video";
 function EpisodeDetail() {
-  const { register, handleSubmit, control, setValue, getValues } = useForm();
+  const [loading, setLoading] = useState(false);
+  const { register, handleSubmit } = useForm();
   const location = useLocation();
+  const playerRef = useRef(null);
   const episode = location.state;
+  const initialImg = episode.thumbnail; // Initial image
+  const initialVid = episode.url;
   const [description, setDescription] = useState(episode.description);
+  const [videoUrl, setVideoUrl] = useState(initialVid);
+  const [imgUrl, setImgUrl] = useState(initialImg);
+  const navigate = useNavigate();
+  const videoJSOptions = {
+    autoplay: false,
+    controls: true,
+    responsive: true,
+    fluid: true,
+    userActions: { hotkeys: true },
+    playbackRates: [0.5, 1, 1.5, 2],
+    sources: [
+      {
+        src: videoUrl,
+        type: "video/mp4",
+      },
+    ],
+  };
+  const handlePlayerReady = (player) => {
+    playerRef.current = player;
+    // You can handle player events here, for example:
+    player.on("waiting", () => {
+      videojs.log("player is waiting");
+    });
 
+    player.on("dispose", () => {
+      videojs.log("player will dispose");
+    });
+  };
   // Handle form submission
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    // Upload img
+    setLoading(true);
+    if (imgUrl != initialImg) {
+      const res = await axios.post(
+        `${API_URL}.upload/image`,
+        {
+          file: data.thumbnail[0],
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      if (res.status == 201) {
+        data.thumbnail = res.data.url;
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: res,
+          icon: "error",
+        });
+        return;
+      }
+    } else {
+      data.thumbnail = initialImg;
+    }
+    // upload video
+    if (videoUrl != initialVid) {
+      const res = await axios.post(
+        `${API_URL}.upload/video`,
+        {
+          file: data.videoFile[0],
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      if (res.status == 201) {
+        data.url = res.data.url;
+        setVideoUrl(res.data.url)
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: res,
+          icon: "error",
+        });
+        return;
+      }
+    } 
+    else{
+      data.url = initialVid
+    }
     const token = localStorage.getItem("accessToken");
     data.description = description;
     data.film_id = parseInt(location.state);
@@ -24,13 +114,10 @@ function EpisodeDetail() {
     data.is_deleted = is_deleted;
     data.position = parseInt(data.position);
     data.updated_at = new Date();
-    data.thumbnail = "url";
-    if(!data.url){
-      data.url = "url"
+    if (!data.duration) {
+      data.duration = "100";
     }
-    if(!data.duration){
-      data.duration = "100"
-    }
+    console.log(data.url);
     axios
       .put(`${API_URL}.episode/${episode.id}`, data, {
         headers: {
@@ -44,15 +131,41 @@ function EpisodeDetail() {
           text: "Episode updated successfully",
           icon: "success",
         });
+        setLoading(false);
+
+        // setTimeout(() => {
+        //   navigate(-1);
+        // }, 2500);
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
         Swal.fire({
           title: "Error",
           text: err.response.data.message,
           icon: "error",
         });
       });
+  };
+  const handleFileChange = (event) => {
+    const newImage = event.target.files[0];
+
+    if (newImage && newImage.type.match(/^image\//)) {
+      // Check if the selected file is an image
+      const reader = new FileReader();
+
+      reader.onload = (e) => setImgUrl(e.target.result); // Update image src on read
+      reader.readAsDataURL(newImage);
+    } else {
+      // Handle non-image files (optional)
+      console.warn("Please select an image file.");
+    }
+  };
+
+  const handleVideoFileChange = (event) => {
+    const newFile = event.target.files[0];
+    const blobURL = URL.createObjectURL(newFile);
+    setVideoUrl(blobURL);
   };
   return (
     <div className="w-full">
@@ -65,13 +178,15 @@ function EpisodeDetail() {
         {/* left side */}
         <div className="p-2 space-y-2 w-1/3">
           <img
-            src={
-              "https://image.tmdb.org/t/p/w500//A4j8S6moJS2zNtRR8oWF08gRnL5.jpg"
-            }
-            alt={`${episode} thumbnail`}
-            className="w-full h-full"
+            src={imgUrl}
+            alt={`film_poster`}
+            className="w-full h-full object-cover"
           />
-          <input type="file" name="" id="" />
+          <input
+            type="file"
+            multiple={false}
+            {...register("thumbnail", { onChange: handleFileChange })}
+          />
         </div>
         {/* right side */}
         <div className="p-2 w-2/3 flex flex-col gap-3">
@@ -124,18 +239,6 @@ function EpisodeDetail() {
                 {episode.view}
               </p>
             </div>
-            <div className="flex flex-col">
-              <label htmlFor="url">URL:</label>
-              <input
-                name="url"
-                type="text"
-                className="rounded p-2 border border-gray-600  max-w-[250px]"
-                defaultValue={episode.url}
-                {...register("url")}
-              >
-        
-              </input>
-            </div>
           </div>
           <div className="flex flex-col">
             <label htmlFor="description">Description:</label>
@@ -145,6 +248,16 @@ function EpisodeDetail() {
               onChange={(content) => setDescription(content)}
               defaultValue={episode.description}
             />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="description">Video:</label>
+            <Video options={videoJSOptions} onReady={handlePlayerReady} />
+            <input
+              type="file"
+              multiple={false}
+              {...register("videoFile", { onChange: handleVideoFileChange })}
+            />
+            <input type="hidden"  {...register("url")}/>
           </div>
           {/* grid */}
           <div className="grid grid-cols-2">
@@ -170,8 +283,8 @@ function EpisodeDetail() {
                 defaultValue={episode.is_deleted}
                 {...register("is_deleted")}
               >
-                <option value="true">True</option>
                 <option value="false">False</option>
+                <option value="true">True</option>
               </select>
             </div>
             <div className="flex flex-col">
@@ -201,9 +314,16 @@ function EpisodeDetail() {
           <div className="flex">
             <button
               type="submit"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 ${
+                loading ? "disabled opacity-50 cursor-not-allowed" : ""
+              }`} // Conditional classNames for loading state
+              disabled={loading} // Use disabled prop for accessibility
             >
-              Save
+              {loading ? (
+                <span className="animate-spin mr-2">Uploading...</span>
+              ) : (
+                "Save"
+              )}
             </button>
           </div>
         </div>

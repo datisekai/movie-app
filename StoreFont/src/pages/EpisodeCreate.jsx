@@ -1,20 +1,44 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import axios from "axios";
 import API_URL from "../url";
 import Swal from "sweetalert2";
+import Video from "../components/Video";
+import videojs from "video.js";
+
+const initialImg =
+  "https://image.tmdb.org/t/p/w500//A4j8S6moJS2zNtRR8oWF08gRnL5.jpg"; // Initial image
+const initialVid =
+  "https://videos.pexels.com/video-files/20576968/20576968-hd_1920_1080_25fps.mp4";
+
 function EpisodeCreate() {
   const [loading, setLoading] = useState(false);
+  const playerRef = useRef(null);
   const navigate = useNavigate();
-  const { register, handleSubmit, control, setValue, getValues } = useForm();
+  const { register, handleSubmit} = useForm();
   const location = useLocation();
   const [description, setDescription] = useState("");
-  const initialImg =
-    "https://image.tmdb.org/t/p/w500//A4j8S6moJS2zNtRR8oWF08gRnL5.jpg"; // Initial image
+
   const [imgUrl, setImgUrl] = useState(initialImg);
+  const [videoUrl, setVideoUrl] = useState(initialVid);
+
+  const videoJSOptions = {
+    autoplay: false,
+    controls: true,
+    responsive: true,
+    fluid: true,
+    userActions: { hotkeys: true },
+    playbackRates: [0.5, 1, 1.5, 2],
+    sources: [
+      {
+        src: videoUrl,
+        type: "video/mp4",
+      }
+    ]
+  };
 
   const handleFileChange = (event) => {
     const newImage = event.target.files[0];
@@ -31,10 +55,19 @@ function EpisodeCreate() {
     }
   };
 
+  const handleVideoFileChange = (event) => {
+    const newFile = event.target.files[0];
+    const blobURL = URL.createObjectURL(newFile);
+    setVideoUrl(blobURL);
+    
+  };
+
   // Handle form submission
-  const onSubmit = async(data) => {
+  const onSubmit = async (data) => {
+    // Upload img
+    setLoading(true);
     if (imgUrl != initialImg) {
-      setLoading(true)
+      
       const res = await axios.post(
         `${API_URL}.upload/image`,
         {
@@ -54,10 +87,45 @@ function EpisodeCreate() {
           title: "Error",
           text: res,
           icon: "error",
+          
         });
+        return
       }
     }
-    setLoading(false)
+    else{
+      data.thumbnail = initialImg
+    }
+    if (videoUrl != initialVid) {
+      const res = await axios.post(
+        `${API_URL}.upload/video`,
+        {
+          file: data.url[0],
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      if (res.status == 201) {
+        console.log(res);
+        data.url = res.data.url;
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: res,
+          icon: "error",
+        });
+        return
+      }
+
+    }
+    else{
+      data.url = initialVid
+    }
+
+    setLoading(false);
     const token = localStorage.getItem("accessToken");
     data.description = description;
     data.film_id = parseInt(location.state);
@@ -67,9 +135,6 @@ function EpisodeCreate() {
     data.is_deleted = is_deleted;
     data.position = parseInt(data.position);
     data.updated_at = new Date();
-    if (!data.url) {
-      data.url = "url";
-    }
     if (!data.duration) {
       data.duration = "100";
     }
@@ -100,6 +165,17 @@ function EpisodeCreate() {
       });
   };
 
+  const handlePlayerReady = (player) => {
+    playerRef.current = player;
+    // You can handle player events here, for example:
+    player.on('waiting', () => {
+      videojs.log('player is waiting');
+    });
+
+    player.on('dispose', () => {
+      videojs.log('player will dispose');
+    });
+  };
   return (
     <div className="w-full">
       <h1 className="text-2xl font-bold pl-2">Create new Episode</h1>
@@ -110,7 +186,11 @@ function EpisodeCreate() {
       >
         {/* left side */}
         <div className="p-2 space-y-2 w-1/3">
-          <img src={imgUrl} alt={`film_poster`} className="w-full h-full" />
+          <img
+            src={imgUrl}
+            alt={`film_poster`}
+            className="w-full h-full object-cover"
+          />
           <input
             type="file"
             multiple={false}
@@ -127,7 +207,7 @@ function EpisodeCreate() {
                 type="text"
                 name="title"
                 className="rounded p-2 border border-gray-600  max-w-[250px]"
-                {...register("title")}
+                {...register("title",{required: true})}
               />
             </div>
             <div className="flex flex-col">
@@ -154,16 +234,7 @@ function EpisodeCreate() {
                 type="number"
                 name="position"
                 className="rounded p-2 border border-gray-600 max-w-[250px]"
-                {...register("position")}
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="url">URL:</label>
-              <input
-                name="url"
-                type="text"
-                className="rounded p-2 border border-gray-600  max-w-[250px]"
-                {...register("url")}
+                {...register("position",{required: true})}
               />
             </div>
           </div>
@@ -173,6 +244,17 @@ function EpisodeCreate() {
               name="description"
               setContents={description}
               onChange={(content) => setDescription(content)}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="description">Video:</label>
+            <Video
+              options={videoJSOptions} onReady={handlePlayerReady} 
+            />
+            <input
+              type="file"
+              multiple={false}
+              {...register("url", { onChange: handleVideoFileChange })}
             />
           </div>
           {/* grid */}
@@ -232,7 +314,7 @@ function EpisodeCreate() {
               disabled={loading} // Use disabled prop for accessibility
             >
               {loading ? (
-                <span className="animate-spin mr-2">Uploading Image...</span>
+                <span className="animate-spin mr-2">Uploading...</span>
               ) : (
                 "Save"
               )}
