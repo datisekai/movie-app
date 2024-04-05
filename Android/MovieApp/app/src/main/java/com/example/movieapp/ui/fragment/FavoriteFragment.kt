@@ -6,11 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.GridSpacingItemDecoration
 import com.example.movieapp.R
 import com.example.movieapp.adapter.model.Movie
+import com.example.movieapp.service.FavoriteViewModel
+import com.example.movieapp.service.GenreMovieViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,20 +31,9 @@ class FavoriteFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private fun generateDataList(): List<Movie> {
-        val dataList: MutableList<Movie> = ArrayList()
-        dataList.add(Movie(0,R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(Movie(0,R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(Movie(0,R.drawable.anime3, "abc 3", "2024"))
-        dataList.add(Movie(0,R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(Movie(0,R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(Movie(0,R.drawable.anime3, "abc 3", "2024"))
-        dataList.add(Movie(0,R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(Movie(0,R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(Movie(0,R.drawable.anime3, "abc 3", "2024"))
-        // Thêm các phần tử khác vào danh sách dữ liệu
-        return dataList
-    }
+    private var currentPage = 1
+    private var totalEntries = 0
+    private var dataList: MutableList<Movie> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +50,11 @@ class FavoriteFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_favorite, container, false)
 
+        dataList.clear()
+
+        val progressbar: ProgressBar = view.findViewById(R.id.progressBar)
+        val viewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
 //        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -65,11 +63,34 @@ class FavoriteFragment : Fragment() {
 
         recyclerView.layoutManager = GridLayoutManager(view.context, 2)
 
-        val dataList: List<Movie>? = generateDataList() // Tạo danh sách dữ liệu
+        callAPI(viewModel,  progressbar, recyclerView)
 
-        val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) } ?: CustomAdapter(emptyList(),
-            R.layout.card, 480, 480, true)
-        recyclerView.adapter = adapter
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                val itemsPerPage = 10
+
+                val totalPages = totalEntries / itemsPerPage + if (totalEntries % itemsPerPage == 0) 0 else 1
+                val isLastPage = currentPage == totalPages
+
+                if (isLastPage) {
+                    return
+                }
+
+                // Kiểm tra nếu người dùng đang cuộn xuống dưới (dy > 0)
+                if (dy > 0 && visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
+                    // Đã cuộn đến cuối danh sách, gọi hàm loadMoreData để tải dữ liệu trang tiếp theo
+                    currentPage++
+                    callAPI(viewModel,  progressbar, recyclerView)
+                }
+            }
+        })
 
         return view
     }
@@ -92,5 +113,20 @@ class FavoriteFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+    fun callAPI(viewModel: FavoriteViewModel, progressbar: ProgressBar, recyclerView: RecyclerView){
+        viewModel.getListGenreMovie(currentPage).observe(viewLifecycleOwner) { films ->
+
+            totalEntries= films.totalEntries
+
+            for (o in films.data){
+                dataList.add(Movie(o.id, R.drawable.anime1, o.title, o.description.toString()))
+            }
+
+            progressbar.visibility = View.GONE
+
+            val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }
+            recyclerView.adapter = adapter
+        }
     }
 }
