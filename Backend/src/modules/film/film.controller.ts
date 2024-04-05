@@ -29,10 +29,15 @@ export class FilmController {
   @Get()
   @ApiOperation({
     summary: 'Get List Film',
-    description: 'Query with title, is_active',
+    description: 'Query with title, is_active, category_id',
   })
   async getMany(@Query() query) {
-    return await this.filmService.getMany(query);
+    try {
+      const films = await this.filmService.getMany(query);
+      return films;
+    } catch (error) {
+      return [];
+    }
   }
 
   @Get(':id')
