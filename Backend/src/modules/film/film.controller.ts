@@ -36,7 +36,7 @@ export class FilmController {
       const films = await this.filmService.getMany(query);
       return films;
     } catch (error) {
-      return [];
+      return { data: [] };
     }
   }
 
