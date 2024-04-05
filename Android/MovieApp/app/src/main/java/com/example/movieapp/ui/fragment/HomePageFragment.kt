@@ -87,7 +87,7 @@ class HomePageFragment : Fragment() {
         tmp.addAll(filmData.listFilm)
         Log.e("SIZE",tmp.size.toString())
         for (o in tmp){
-            dataList.add(Movie(o.id ,R.drawable.anime1, o.title.toString(), Html.fromHtml(o.description.toString()).toString()))
+            dataList.add(Movie(o.id ,R.drawable.anime1, o.title.toString(), o.description.toString()))
         }
 
         return dataList

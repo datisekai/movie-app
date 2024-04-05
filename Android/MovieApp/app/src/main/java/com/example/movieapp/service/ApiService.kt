@@ -33,6 +33,9 @@ interface ApiService {
     @GET("api.film")
     fun getListFilmSearch(@Query("title") title: String, @Query("page") page: Int) : Call<Film1>
 
+    @GET("api.film")
+    fun getListFilmGenre(@Query("category_id") title: String, @Query("page") page: Int) : Call<Film1>
+
     @GET("api.order/me")
     fun getListPayment(@Query("page") page: Int) : Call<Payment>
 

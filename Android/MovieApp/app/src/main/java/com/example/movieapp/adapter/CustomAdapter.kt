@@ -52,7 +52,7 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                     val movieItem = data as Movie
                     image.setImageResource(movieItem.imageResId)
                     title.text = movieItem.title
-                    textView2.text = movieItem.description
+                    textView2.text = Html.fromHtml(movieItem.description)
                     //Custom
                     val layoutParams = image.layoutParams
                     layoutParams.width = widthCard
