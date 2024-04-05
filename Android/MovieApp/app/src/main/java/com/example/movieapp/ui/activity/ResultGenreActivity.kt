@@ -21,6 +21,7 @@ class ResultGenreActivity : AppCompatActivity() {
     private var currentPage = 1
     private var totalEntries = 0
     private var dataList: MutableList<Movie> = ArrayList()
+    private lateinit var adapter: CustomAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result_genre)
@@ -79,7 +80,8 @@ class ResultGenreActivity : AppCompatActivity() {
 
         }
 
-
+        adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }!!
+        recyclerView.adapter = adapter
         val imageView = findViewById<ImageView>(R.id.back)
 
         imageView.setOnClickListener {
@@ -97,8 +99,7 @@ class ResultGenreActivity : AppCompatActivity() {
 
             progressbar.visibility = View.GONE
 
-            val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }
-            recyclerView.adapter = adapter
+            adapter?.notifyDataSetChanged()
         }
     }
 }

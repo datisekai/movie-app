@@ -34,6 +34,7 @@ class FavoriteFragment : Fragment() {
     private var currentPage = 1
     private var totalEntries = 0
     private var dataList: MutableList<Movie> = ArrayList()
+    private lateinit var adapter: CustomAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,6 +93,10 @@ class FavoriteFragment : Fragment() {
             }
         })
 
+
+        adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }!!
+        recyclerView.adapter = adapter
+
         return view
     }
 
@@ -125,8 +130,7 @@ class FavoriteFragment : Fragment() {
 
             progressbar.visibility = View.GONE
 
-            val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }
-            recyclerView.adapter = adapter
+            adapter?.notifyDataSetChanged()
         }
     }
 }

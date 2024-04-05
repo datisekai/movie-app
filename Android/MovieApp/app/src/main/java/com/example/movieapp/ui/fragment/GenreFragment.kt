@@ -35,21 +35,7 @@ class GenreFragment : Fragment() {
     private var currentPage = 1
     private var totalEntries = 0
     private var dataList: MutableList<Genre> = ArrayList()
-
-    private fun generateDataList(): List<Genre> {
-        val dataList: MutableList<Genre> = ArrayList()
-        dataList.add(Genre(1, "hành động"))
-        dataList.add(Genre(2, "tình cảm"))
-        dataList.add(Genre(3, "hành động tình cảm"))
-        dataList.add(Genre(4, "hành động"))
-        dataList.add(Genre(5, "hành động"))
-        dataList.add(Genre(6, "hành động"))
-        dataList.add(Genre(7, "hành động"))
-        dataList.add(Genre(8, "hành động"))
-        dataList.add(Genre(9, "hành động"))
-        // Thêm các phần tử khác vào danh sách dữ liệu
-        return dataList
-    }
+    private lateinit var adapter: CustomAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,6 +91,10 @@ class GenreFragment : Fragment() {
             }
         })
 
+
+        adapter = dataList?.let { CustomAdapter(it, R.layout.genre, 0, 0, true) }!!
+        recyclerView.adapter = adapter
+
         return view
         // Inflate the layout for this fragment
     }
@@ -139,8 +129,7 @@ class GenreFragment : Fragment() {
 
             progressbar.visibility = View.GONE
 
-            val adapter = dataList?.let { CustomAdapter(it, R.layout.genre, 0, 0, true) }
-            recyclerView.adapter = adapter
+            adapter?.notifyDataSetChanged()
         }
     }
 }

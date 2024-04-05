@@ -36,6 +36,7 @@ class PaymentHistoryFragment : Fragment() {
     private var currentPage = 1
     private var totalEntries = 0
     private var dataList: MutableList<PaymentHistory> = ArrayList()
+    private lateinit var adapter: CustomAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -93,6 +94,9 @@ class PaymentHistoryFragment : Fragment() {
             }
         })
 
+        adapter = dataList?.let { CustomAdapter(it, R.layout.payment_history, 0, 0, true) }!!
+        recyclerView.adapter = adapter
+
         return view
     }
 
@@ -126,8 +130,7 @@ class PaymentHistoryFragment : Fragment() {
 
             progressbar.visibility = View.GONE
 
-            val adapter = dataList?.let { CustomAdapter(it, R.layout.payment_history, 0, 0, true) }
-            recyclerView.adapter = adapter
+            adapter?.notifyDataSetChanged()
         }
     }
 }

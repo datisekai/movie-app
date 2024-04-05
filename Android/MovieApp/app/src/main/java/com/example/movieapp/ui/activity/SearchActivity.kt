@@ -30,6 +30,7 @@ class SearchActivity : AppCompatActivity() {
     private var currentPage = 1
     private var totalEntries = 0
     private var dataList: MutableList<Movie> = ArrayList()
+    private lateinit var adapter: CustomAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -82,6 +83,10 @@ class SearchActivity : AppCompatActivity() {
             }
         })
 
+
+        adapter = CustomAdapter(dataList, R.layout.card, 480, 480, true)
+        recyclerView.adapter = adapter
+
         textSearch.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE ||
                 (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
@@ -112,8 +117,7 @@ class SearchActivity : AppCompatActivity() {
 
             progressbar.visibility = View.GONE
 
-            val adapter = CustomAdapter(dataList, R.layout.card, 480, 480, true)
-            recyclerView.adapter = adapter
+            adapter?.notifyDataSetChanged()
         }
     }
 }
