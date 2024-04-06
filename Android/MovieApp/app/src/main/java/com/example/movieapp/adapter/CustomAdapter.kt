@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,7 @@ import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.ui.activity.DetailFilmActivity
 import com.example.movieapp.ui.activity.ResultGenreActivity
 import com.makeramen.roundedimageview.RoundedImageView
+import com.squareup.picasso.Picasso
 import java.text.NumberFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -49,10 +51,21 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                     val image: RoundedImageView = itemView.findViewById(R.id.imageCard)
                     val title: TextView = itemView.findViewById(R.id.title)
                     val textView2: TextView = itemView.findViewById(R.id.textView2)
+                    val iconPremium: ImageView= itemView.findViewById(R.id.icon_premium)
                     val movieItem = data as Movie
-                    image.setImageResource(movieItem.imageResId)
+
                     title.text = movieItem.title
                     textView2.text = Html.fromHtml(movieItem.description)
+
+
+                    if(movieItem.imageResId.startsWith("https://image.tmdb.org/")){
+                        Log.e("DATA1",movieItem.imageResId)
+                        Picasso.get().load(movieItem.imageResId).into(image);
+                    }else{
+                        val noImage="https://image.tmdb.org/t/p/w500//A4j8S6moJS2zNtRR8oWF08gRnL5.jpg"
+                        Picasso.get().load(noImage).into(image);
+                    }
+
                     //Custom
                     val layoutParams = image.layoutParams
                     layoutParams.width = widthCard
@@ -73,6 +86,12 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                     if(isBorderImage){
                         val cornerRadius = itemView.context.resources.getDimensionPixelSize(R.dimen.corner_radius)
                         image.cornerRadius = cornerRadius.toFloat()
+                    }
+
+                    if(movieItem.is_required_premium){
+                        iconPremium.visibility = View.GONE
+                    }else{
+                        iconPremium.visibility = View.VISIBLE
                     }
 
                     container.setOnClickListener{

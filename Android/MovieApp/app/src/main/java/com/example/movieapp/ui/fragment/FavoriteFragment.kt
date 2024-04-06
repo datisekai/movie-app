@@ -125,7 +125,7 @@ class FavoriteFragment : Fragment() {
             totalEntries= films.totalEntries
 
             for (o in films.data){
-                dataList.add(Movie(o.id, R.drawable.anime1, o.title, o.description.toString()))
+                dataList.add(Movie(o.id, o.thumbnail, o.title, o.description.toString(), o.isRequiredPremium))
             }
 
             progressbar.visibility = View.GONE

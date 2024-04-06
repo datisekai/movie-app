@@ -112,7 +112,7 @@ class SearchActivity : AppCompatActivity() {
             totalEntries= films.totalEntries
 
             for (o in films.data){
-                dataList.add(Movie(o.id ,R.drawable.anime1, o.title.toString(), Html.fromHtml(o.description.toString()).toString()))
+                dataList.add(Movie(o.id ,o.thumbnail, o.title.toString(), o.description.toString(), o.isRequiredPremium))
             }
 
             progressbar.visibility = View.GONE

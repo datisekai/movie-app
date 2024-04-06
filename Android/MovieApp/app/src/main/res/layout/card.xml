@@ -1,16 +1,13 @@
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="wrap_content"-->
-<!--    android:layout_margin="16dp"-->
-<!--    android:orientation="vertical">-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:id="@+id/containerCard">
 
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:id="@+id/containerCard">
+        android:layout_height="wrap_content">
 
         <com.makeramen.roundedimageview.RoundedImageView
             android:layout_width="wrap_content"
@@ -18,28 +15,38 @@
             android:scaleType="centerCrop"
             android:id="@+id/imageCard"/>
 
-        <TextView
+        <ImageView
+            android:id="@+id/icon_premium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:layout_marginVertical="8dp"
-            android:textColor="#FFFFFF"
-            android:gravity="center_horizontal"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:id="@+id/title"/>
+            android:background="@drawable/baseline_diamond_24"
+            android:layout_below="@id/imageCard"
+            android:layout_alignEnd="@id/imageCard"
+            android:layout_marginTop="-40dp"
+            android:layout_marginEnd="8dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:layout_marginVertical="8dp"
+        android:textColor="#FFFFFF"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
 
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:textColor="#FFFFFF"
-            android:id="@+id/textView2"/>
+        android:textSize="20sp"
+        android:id="@+id/title"/>
 
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
 
-<!--</LinearLayout>-->
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textColor="#FFFFFF"
+        android:id="@+id/textView2"/>
+
+</LinearLayout>

@@ -67,15 +67,15 @@ class HomePageFragment : Fragment() {
     }
     private fun generateDataListMovie(): List<Movie> {
         val dataList: MutableList<Movie> = ArrayList()
-        dataList.add(Movie(0, R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(Movie(0, R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(Movie(0, R.drawable.anime3, "abc 3", "2024"))
-        dataList.add(Movie(0, R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(Movie(0, R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(Movie(0, R.drawable.anime3, "abc 3", "2024"))
-        dataList.add(Movie(0, R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(Movie(0, R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(Movie(0, R.drawable.anime3, "abc 3", "2024"))
+        dataList.add(Movie(0, "", "Chú thuật hồi chiến", "2022", true))
+        dataList.add(Movie(0, "", "abc 2", "2023", true))
+        dataList.add(Movie(0, "", "abc 3", "2024", true))
+        dataList.add(Movie(0, "", "Chú thuật hồi chiến", "2022", true))
+        dataList.add(Movie(0, "", "abc 2", "2023", true))
+        dataList.add(Movie(0, "", "abc 3", "2024", true))
+        dataList.add(Movie(0, "", "Chú thuật hồi chiến", "2022", true))
+        dataList.add(Movie(0, "", "abc 2", "2023", true))
+        dataList.add(Movie(0, "", "abc 3", "2024", true))
         // Thêm các phần tử khác vào danh sách dữ liệu
         return dataList
     }
@@ -87,7 +87,7 @@ class HomePageFragment : Fragment() {
         tmp.addAll(filmData.listFilm)
         Log.e("SIZE",tmp.size.toString())
         for (o in tmp){
-            dataList.add(Movie(o.id ,R.drawable.anime1, o.title.toString(), o.description.toString()))
+            dataList.add(Movie(o.id ,o.thumbnail, o.title.toString(), o.description.toString(), o.isRequiredPremium))
         }
 
         return dataList
@@ -100,8 +100,11 @@ class HomePageFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home_page, container, false)
+
         filmData.listFilm.clear()
+
         progressbar = view.findViewById(R.id.progressBar)
+
         view.findViewById<TextView?>(R.id.txtMoveGroup_1).setText("Popular Movie1")
         view.findViewById<TextView?>(R.id.txtMoveGroup_2).setText("Popular Movie2")
         view.findViewById<TextView?>(R.id.txtMoveGroup_3).setText("Popular Movie3")
@@ -139,20 +142,6 @@ class HomePageFragment : Fragment() {
                 recyclerView1.adapter = adapter
             }
         }
-
-//        val spacing = 24
-//        for (data in generateDataList()){
-//            val recyclerView1 = view.findViewById<RecyclerView>(data.view)
-//            recyclerView1.addItemDecoration(GridSpacingItemDecoration(data.movieItem.size, spacing, false))
-//            recyclerView1.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
-//
-//            val dataList: List<Movie>? = data.movieItem // Tạo danh sách dữ liệu
-//
-//            val adapter = dataList?.let { CustomAdapter(it,
-//                R.layout.card, data.widthCard, data.heightCard, data.isBorderImage) } ?: CustomAdapter(emptyList(),
-//                R.layout.card, data.widthCard, data.heightCard, data.isBorderImage)
-//            recyclerView1.adapter = adapter
-//        }
 
         val editText = view.findViewById<EditText>(R.id.editTextSearch)
         editText.setOnEditorActionListener { _, actionId, event ->
