@@ -30,8 +30,6 @@ class LoginDataSource {
                 var emailData = username
                 var passwordData = password
 
-                emailData = "datly030102@gmail.com"
-                passwordData = "datisekai"
                 val login = LoginDTO(emailData, passwordData)
                 val result = ServiceBuilder().apiService.login(login).execute()
                 if (result.isSuccessful) {

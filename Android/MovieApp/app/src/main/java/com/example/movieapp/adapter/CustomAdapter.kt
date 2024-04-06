@@ -108,7 +108,6 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                     buttonGenre.text=genreItem.name
                     buttonGenre.tooltipText= genreItem.name
                     buttonGenre.setOnClickListener{
-                        Log.d("TAG", ClassToken.FULLNAME)
                         val intent = Intent(itemView.context, ResultGenreActivity::class.java)
                         val bundle = Bundle()
                         bundle.putInt("id", genreItem.id)

@@ -3,33 +3,26 @@ package com.example.movieapp.ui.fragment
 import com.example.movieapp.adapter.CustomAdapter
 import android.content.Intent
 import android.os.Bundle
-import android.text.Html
-import android.util.Log
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.loader.app.LoaderManager
-import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.movieapp.Api.MyViewModel
 import com.example.movieapp.GridSpacingItemDecoration
 import com.example.movieapp.R
 import com.example.movieapp.adapter.model.CardHome
 import com.example.movieapp.adapter.model.Movie
-import com.example.movieapp.data.model.Film
-import com.example.movieapp.data.model.Film1
-import com.example.movieapp.data.model.FilmDTO
-import com.example.movieapp.ui.activity.HomePage_Activity
+import com.example.movieapp.service.GenreMovieViewModel
+import com.example.movieapp.service.GenreViewModel
+import com.example.movieapp.ui.activity.ResultGenreActivity
 import com.example.movieapp.ui.activity.SearchActivity
 
 // TODO: Rename parameter arguments, choose names that match
@@ -48,7 +41,10 @@ class HomePageFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var progressbar : ProgressBar
+    private lateinit var progressbar1 : ProgressBar
+    private lateinit var progressbar2 : ProgressBar
+    private lateinit var progressbar3 : ProgressBar
+    private lateinit var progressbar4 : ProgressBar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -56,43 +52,6 @@ class HomePageFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
-    private fun generateDataList(): List<CardHome> {
-        val dataList: MutableList<CardHome> = ArrayList()
-        dataList.add(CardHome(R.id.recycler_view1,480, 480, false, generateDataListMovie1()))
-        dataList.add(CardHome(R.id.recycler_view2,640, 320, false, generateDataListMovie()))
-        dataList.add(CardHome(R.id.recycler_view3, 480, 720, false, generateDataListMovie()))
-        dataList.add(CardHome(R.id.recycler_view4, 480, 480, true , generateDataListMovie()))
-        // Thêm các phần tử khác vào danh sách dữ liệu
-        return dataList
-    }
-    private fun generateDataListMovie(): List<Movie> {
-        val dataList: MutableList<Movie> = ArrayList()
-        dataList.add(Movie(0, "", "Chú thuật hồi chiến", "2022", true))
-        dataList.add(Movie(0, "", "abc 2", "2023", true))
-        dataList.add(Movie(0, "", "abc 3", "2024", true))
-        dataList.add(Movie(0, "", "Chú thuật hồi chiến", "2022", true))
-        dataList.add(Movie(0, "", "abc 2", "2023", true))
-        dataList.add(Movie(0, "", "abc 3", "2024", true))
-        dataList.add(Movie(0, "", "Chú thuật hồi chiến", "2022", true))
-        dataList.add(Movie(0, "", "abc 2", "2023", true))
-        dataList.add(Movie(0, "", "abc 3", "2024", true))
-        // Thêm các phần tử khác vào danh sách dữ liệu
-        return dataList
-    }
-
-    private fun generateDataListMovie1() : List<Movie>{
-        Log.e("DATA","run")
-        val dataList: MutableList<Movie> = ArrayList()
-        val tmp :  MutableList<FilmDTO> = mutableListOf()
-        tmp.addAll(filmData.listFilm)
-        Log.e("SIZE",tmp.size.toString())
-        for (o in tmp){
-            dataList.add(Movie(o.id ,o.thumbnail, o.title.toString(), o.description.toString(), o.isRequiredPremium))
-        }
-
-        return dataList
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -101,47 +60,26 @@ class HomePageFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home_page, container, false)
 
-        filmData.listFilm.clear()
+        val viewModelGenre = ViewModelProvider(this).get(GenreViewModel::class.java)
+        viewModelGenre.getListGenre(1).observe(viewLifecycleOwner){genre->
 
-        progressbar = view.findViewById(R.id.progressBar)
+            val dataList: MutableList<CardHome> = ArrayList()
 
-        view.findViewById<TextView?>(R.id.txtMoveGroup_1).setText("Popular Movie1")
-        view.findViewById<TextView?>(R.id.txtMoveGroup_2).setText("Popular Movie2")
-        view.findViewById<TextView?>(R.id.txtMoveGroup_3).setText("Popular Movie3")
-        view.findViewById<TextView?>(R.id.txtMoveGroup_4).setText("Popular Movie4")
-        // viewModel
-        val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
-        viewModel.getListFilm().observe(viewLifecycleOwner) { films ->
-            filmData.listFilm.addAll(films.data)
-            progressbar.visibility = View.GONE
+            dataList.add(CardHome(genre.data[0].id, genre.data[0].title,R.id.recycler_view1,480, 480, false, R.id.progressBar1, R.id.viewAllList1, R.id.txtMoveGroup_1))
+            dataList.add(CardHome(genre.data[1].id, genre.data[1].title,R.id.recycler_view2,640, 320, false, R.id.progressBar, R.id.viewAllList2, R.id.txtMoveGroup_2))
+            dataList.add(CardHome(genre.data[2].id, genre.data[2].title,R.id.recycler_view3,480, 720, false, R.id.progressBar3, R.id.viewAllList3, R.id.txtMoveGroup_3))
+            dataList.add(CardHome(genre.data[3].id, genre.data[3].title,R.id.recycler_view4,480, 480, true , R.id.progressBar4, R.id.viewAllList4, R.id.txtMoveGroup_4))
 
-            val spacing = 24
-            for (data in generateDataList()) {
-                val recyclerView1 = view.findViewById<RecyclerView>(data.view)
-                recyclerView1.addItemDecoration(
-                    GridSpacingItemDecoration(
-                        data.movieItem.size,
-                        spacing,
-                        false
-                    )
-                )
-                recyclerView1.layoutManager =
-                    LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
-
-                val dataList: List<Movie>? = data.movieItem // Tạo danh sách dữ liệu
-
-                val adapter = dataList?.let {
-                    CustomAdapter(
-                        it,
-                        R.layout.card, data.widthCard, data.heightCard, data.isBorderImage
-                    )
-                } ?: CustomAdapter(
-                    emptyList(),
-                    R.layout.card, data.widthCard, data.heightCard, data.isBorderImage
-                )
-                recyclerView1.adapter = adapter
+            for(item in dataList){
+                view.findViewById<TextView?>(item.titleGenreId).setText(item.title)
+                view.findViewById<Button?>(item.viewAllId).setOnClickListener{
+                    handleSubmit(view, item.id, item.title)
+                }
             }
+            callApi(view, dataList)
+
         }
+
 
         val editText = view.findViewById<EditText>(R.id.editTextSearch)
         editText.setOnEditorActionListener { _, actionId, event ->
@@ -177,12 +115,52 @@ class HomePageFragment : Fragment() {
                 }
             }
     }
+    fun handleSubmit(view: View,id: Int, title: String){
+        val intent = Intent(view.context, ResultGenreActivity::class.java)
+        val bundle = Bundle()
+        bundle.putInt("id", id)
+        bundle.putString("name", title)
+        intent.putExtras(bundle)
+        view.context.startActivity(intent)
+    }
+    fun callApi(view: View, dataList: MutableList<CardHome>){
+        val spacing = 24
+            for (data in dataList) {
+                val viewModel = ViewModelProvider(this).get(GenreMovieViewModel::class.java)
+                viewModel.getListGenreMovie(data.id,1).observe(viewLifecycleOwner) { films ->
 
-    public class filmData(){
-        companion object{
-            val listFilm : MutableList<FilmDTO> = mutableListOf()
-        }
+                    val dataListMovie: MutableList<Movie> = ArrayList()
+                    for (o in films.data){
+                        dataListMovie.add(Movie(o.id ,o.thumbnail, o.title.toString(), o.description.toString(), o.isRequiredPremium))
+                    }
 
+                    val progressbar: ProgressBar = view.findViewById(data.progressbarId)
+                    progressbar.visibility = View.GONE
+
+                    val recyclerView1 = view.findViewById<RecyclerView>(data.view)
+                    if(dataListMovie.isNotEmpty()){
+                        recyclerView1.addItemDecoration(
+                            GridSpacingItemDecoration(
+                                dataListMovie.size,
+                                spacing,
+                                false
+                            )
+                        )
+                    }
+
+                    recyclerView1.layoutManager =
+                        LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
+
+
+                    val adapter = dataListMovie?.let {
+                        CustomAdapter(
+                            it,
+                            R.layout.card, data.widthCard, data.heightCard, data.isBorderImage
+                        )
+                    }
+                    recyclerView1.adapter = adapter
+                }
+            }
     }
 
 }

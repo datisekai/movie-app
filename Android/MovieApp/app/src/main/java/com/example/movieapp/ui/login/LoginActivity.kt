@@ -62,12 +62,10 @@ class LoginActivity : AppCompatActivity() {
             val email = Helper.TokenManager.getEmail(this)
             val fullname = Helper.TokenManager.getFullName(this)
             val isActive = Helper.TokenManager.getIsActive(this)
-            Log.e("TOKEN", token.toString())
-            Log.e("TOKEN", fullname.toString())
-            Log.e("TOKEN", id.toString())
-            Log.e("TOKEN", isActive.toString())
             if (token != null && !isTokenExpired(token)) {
+                Log.e("TOKEN1", ClassToken.MY_TOKEN)
                 ClassToken.MY_TOKEN= token.toString()
+                Log.e("TOKEN2", ClassToken.MY_TOKEN)
                 ClassToken.ID= id?: 0
                 ClassToken.EMAIL= email.toString()
                 ClassToken.FULLNAME= fullname.toString()

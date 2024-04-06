@@ -75,17 +75,18 @@
                             app:iconGravity="end"
                             app:iconPadding="0dp"/>
                     </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progressBar1"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
 
-                    <ProgressBar
-                        android:id="@+id/progressBar"
-                        style="?android:attr/progressBarStyle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"/>
 
                 </LinearLayout>
                 <LinearLayout
@@ -126,6 +127,13 @@
                             app:iconPadding="0dp"/>
 
                     </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progressBar2"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view2"
                         android:layout_width="match_parent"
@@ -170,6 +178,13 @@
                             app:iconPadding="0dp"/>
 
                     </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progressBar3"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view3"
                         android:layout_width="match_parent"
@@ -214,6 +229,12 @@
                             app:iconPadding="0dp"/>
 
                     </LinearLayout>
+                    <ProgressBar
+                        android:id="@+id/progressBar4"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view4"
                         android:layout_width="match_parent"
