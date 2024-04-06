@@ -62,9 +62,6 @@ class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCa
         //set onclick for profile to detail
         val buttonclickProfile: RelativeLayout = view.findViewById(R.id.fragment_profile_click_details)
         buttonclickProfile.setOnClickListener(this)
-        //set onclick from profile to history
-        val buttonclickHistory: RelativeLayout = view.findViewById(R.id.fragment_profile_click_history)
-        buttonclickHistory.setOnClickListener(this)
 
         progressBar = view.findViewById(R.id.fragment_profile_name_progressBar)
         tvFullname = view.findViewById(R.id.profile_username_textview)
@@ -87,9 +84,6 @@ class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCa
             R.id.fragment_profile_click_details -> {
                 val intent = Intent(requireContext(),ProfileDetailsActivity::class.java)
                 startActivity(intent)
-            }
-
-            R.id.fragment_profile_click_history ->{
             }
 
         }

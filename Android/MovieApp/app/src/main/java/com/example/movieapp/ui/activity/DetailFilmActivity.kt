@@ -1,5 +1,6 @@
 package com.example.movieapp.ui.activity
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -25,6 +26,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.movieapp.Api.MyViewModel
+import com.example.movieapp.DBHelper
+import com.example.movieapp.Helper
 import com.example.movieapp.adapter.CommentAdapter
 import com.example.movieapp.adapter.EsopideAdapter
 import com.example.movieapp.data.model.ClassToken
@@ -88,6 +91,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
     }
 
     public fun clickWatch(view:View){
+        addHistory(data)
         val intent : Intent =  Intent(this,
             PlayerActivity::class.java);
         val bundle = Bundle()
@@ -95,6 +99,34 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
         intent.putExtra("videoUrl",bundle)
         startActivity(intent);
 
+    }
+
+    private fun addHistory(data: MutableList<EsopideDTO>){
+        val userId = Helper.TokenManager.getId(this)
+
+        val dbHelper = DBHelper(this)
+
+        if(userId != null){
+           var idRow = dbHelper.getUserID(userId)
+
+            if(idRow == -1L){
+                val userRowId = dbHelper.addUser(userId.toInt())
+                idRow = userRowId
+            }
+
+           val resultAddItem = dbHelper.insert(userId, data.get(0).id)
+           if(resultAddItem != -1L){
+               Log.e("Insert Database ","Successfully")
+           }
+           else{
+               Log.e("Insert Database ","Fail")
+           }
+            val resultCurrent = dbHelper.getListId(userId)
+            for (id in resultCurrent){
+                Log.e("listId",id.toString())
+            }
+            Log.e("Insert Database ",userId.toString())
+       }
     }
 
     public fun clickBtnFavotite(){

@@ -109,9 +109,4 @@ dependencies {
     //zalo pay
     implementation(files("libs/zpdk-release-v3.1.aar"))
     implementation("commons-codec:commons-codec:1.14")
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 3972a0df9bfb51ee9d32ae3cd37a83185560b816
 }

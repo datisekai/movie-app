@@ -25,6 +25,7 @@ import com.example.movieapp.data.model.TokenDTO
 import com.example.movieapp.data.model.User
 import com.example.movieapp.data.model.UserDTO
 import com.example.movieapp.data.model.Register
+import com.example.movieapp.ui.fragment.EpisodeIdsWrapper
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -126,5 +127,7 @@ interface ApiService {
 
     //History
     @POST("api.episode/history")
-    fun getHistory() : Call<List<EpisodeHistoryDTO>>
+    fun getHistory(
+        @Body episode_ids: EpisodeIdsWrapper
+    ) : Call<List<EpisodeHistoryDTO>>
 }

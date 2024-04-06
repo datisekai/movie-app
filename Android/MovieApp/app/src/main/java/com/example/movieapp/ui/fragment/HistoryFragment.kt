@@ -2,6 +2,7 @@ package com.example.movieapp.ui.fragment
 
 import com.example.movieapp.adapter.CustomAdapter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +11,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.movieapp.DBHelper
 import com.example.movieapp.GridSpacingItemDecoration
+import com.example.movieapp.Helper
 import com.example.movieapp.R
 import com.example.movieapp.adapter.model.Movie
+import com.example.movieapp.data.model.EpisodeHistoryDTO
 import com.example.movieapp.data.model.Film1
 import com.example.movieapp.data.model.FilmDTO
 import com.example.movieapp.service.FavoriteViewModel
+import com.example.movieapp.service.ServiceBuilder
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -39,15 +47,7 @@ class HistoryFragment : Fragment() {
     private var dataList: MutableList<Movie> = ArrayList()
     private lateinit var adapter: CustomAdapter
 
-    private fun generateDataList(): List<Movie> {
-        val dataList: MutableList<Movie> = ArrayList()
-
-        dataList.add(Movie(0,"", "Chú thuật hồi chiến", "2022", true))
-        dataList.add(Movie(0,"", "abc 2", "2023", false))
-//        dataList.add(MovieItem(R.drawable.anime3, "abc 3", "2024"))
-        // Thêm các phần tử khác vào danh sách dữ liệu
-        return dataList
-    }
+    private var ListFilmHistory: MutableList<FilmDTO> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +75,7 @@ class HistoryFragment : Fragment() {
         recyclerView.addItemDecoration(GridSpacingItemDecoration(2, spacing, false))
 
         recyclerView.layoutManager = GridLayoutManager(view.context, 2)
+
 
         callAPI(progressbar)
 
@@ -106,67 +107,67 @@ class HistoryFragment : Fragment() {
             }
     }
     fun callAPI( progressbar: ProgressBar){
-
-            for (o in initData()){
+            Log.e("CALL HISTORY API12",ListFilmHistory.toString())
+            initData()
+            Log.e("CALL HISTORY API12",ListFilmHistory.toString())
+            for (o in ListFilmHistory){
                 dataList.add(Movie(o.id, o.thumbnail, o.title, o.description.toString(), o.isRequiredPremium))
             }
 
             progressbar.visibility = View.GONE
 
     }
-    fun initData() : List<FilmDTO>{
-        val dataList: MutableList<FilmDTO> = ArrayList()
-        dataList.add(
-            FilmDTO(
-                1,
-                "film-1",
-                "Film 1",
-                "Film 1",
-                "Description 1",
-                100,
-                "thumbnail-1.jpg",
-                "Action",
-                "Released",
-                false,
-                "Director 1",
-                "Location 1",
-                true
-            )
-        )
-        dataList.add(
-            FilmDTO(
-                2,
-                "film-2",
-                "Film 2",
-                "Film 2",
-                "Description 2",
-                200,
-                "thumbnail-2.jpg",
-                "Drama",
-                "Released",
-                true,
-                "Director 2",
-                "Location 2",
-                true
-            )
-        )
-        dataList.add(
-            FilmDTO(
-                3,
-                "film-3",
-                "Film 3",
-                "Film 3",
-                "Description 3",
-                150,
-                "thumbnail-3.jpg",
-                "Comedy",
-                "Released",
-                false,
-                "Director 3",
-                "Location 3",
-                false
-            )
-        )
-        return dataList
+    fun initData(){
+        val userId = Helper.TokenManager.getId(requireContext())
+        val db =  DBHelper(requireContext())
+
+        if(userId != null){
+            val listId = db.getListId(userId)
+            for (id in listId){
+                Log.e("listId",id.toString())
+            }
+            val call = ServiceBuilder().apiService.getHistory(EpisodeIdsWrapper(listId))
+            call.enqueue(object : Callback<List<EpisodeHistoryDTO>>{
+                override fun onResponse(
+                    call: Call<List<EpisodeHistoryDTO>>?,
+                    response: Response<List<EpisodeHistoryDTO>>?
+                ) {
+                    if(response != null){
+                        if(response.isSuccessful){
+                            var temp = ListFilmHistory
+                            val result = response.body()
+                            if(result!= null && result.isNotEmpty()){
+                                for(ep in result){
+                                    if(temp.isEmpty()){
+                                        temp.add(ep.film)
+                                        Log.e("CALL HISTORY API",temp.toString())
+                                    }
+                                    else{
+                                        for(film in temp){
+                                            if(film.id != ep.film.id){
+                                                temp.add(ep.film)
+                                                Log.e("CALL HISTORY API",temp.toString())
+                                            }
+                                        }
+                                    }
+                                }
+                                ListFilmHistory = temp
+                                Log.e("CALL HISTORY API1",ListFilmHistory.toString())
+                            }else{
+                                Log.e("CALL HISTORY API","EMPTY")
+                            }
+                        }else{
+                            Log.e("CALL HISTORY API","FAIL")
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<List<EpisodeHistoryDTO>>?, t: Throwable?) {
+                    t?.printStackTrace()
+                }
+
+            })
+        }
     }
 }
+data class EpisodeIdsWrapper(val episode_ids: List<Int>)

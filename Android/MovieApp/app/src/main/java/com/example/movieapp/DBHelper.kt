@@ -17,7 +17,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        val createTableQuery = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_USERNAME TEXT NOT NULL, $COLUMN_ITEM_ID INTEGER);"
+        val createTableQuery = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_USERNAME INTEGER NOT NULL, $COLUMN_ITEM_ID INTEGER);"
         db.execSQL(createTableQuery)
     }
 
@@ -26,7 +26,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
         onCreate(db)
     }
 
-    fun addUser(username: String): Long {
+    fun addUser(username: Int): Long {
         val values = ContentValues()
         values.put(COLUMN_USERNAME, username)
 
@@ -47,12 +47,34 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
 
         return rowsAffected
     }
+    //return -1 if fail
+    fun insert(userId: Int, itemId: Int): Long {
+        val db = this.writableDatabase
 
-    fun getListId(userID: Long): List<Int> {
+        //Check Duplicate
+        val selection = "$COLUMN_USERNAME=? AND $COLUMN_ITEM_ID=?"
+        val selectionArgs = arrayOf(userId.toString(), itemId.toString())
+        val cursor = db.query(TABLE_NAME, null, selection, selectionArgs, null, null, null)
+        if (cursor != null && cursor.count > 0) {
+            // Bản ghi đã tồn tại, không thêm vào cơ sở dữ liệu
+            cursor.close()
+            return -1
+        }
+
+        val values = ContentValues().apply {
+            put(COLUMN_USERNAME, userId)
+            put(COLUMN_ITEM_ID, itemId)
+        }
+        val insertedRowId = db.insert(TABLE_NAME, null, values)
+        db.close()
+        return insertedRowId
+    }
+
+    fun getListId(userID: Int): List<Int> {
         val listId = mutableListOf<Int>()
 
         val db = this.readableDatabase
-        val cursor = db.rawQuery("SELECT $COLUMN_ITEM_ID FROM $TABLE_NAME WHERE $COLUMN_ID=?", arrayOf(userID.toString()))
+        val cursor = db.rawQuery("SELECT $COLUMN_ITEM_ID FROM $TABLE_NAME WHERE $COLUMN_USERNAME=?", arrayOf(userID.toString()))
 
         if (cursor != null) {
             while (cursor.moveToNext()) {
@@ -65,9 +87,9 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
         return listId
     }
 
-    fun getUserID(username: String): Long {
+    fun getUserID(username: Int): Long {
         val db = this.readableDatabase
-        val cursor = db.rawQuery("SELECT $COLUMN_ID FROM $TABLE_NAME WHERE $COLUMN_USERNAME=?", arrayOf(username))
+        val cursor = db.rawQuery("SELECT $COLUMN_ID FROM $TABLE_NAME WHERE $COLUMN_USERNAME=?", arrayOf(username.toString()))
 
         var userID: Long = -1
         if (cursor != null && cursor.moveToFirst()) {
@@ -78,10 +100,10 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
         return userID
     }
 
-    fun deleteItemID(userID: Long, id: Int): Boolean {
+    fun deleteItemID(userID: Int, id: Int): Boolean {
         val db = this.writableDatabase
 
-        val whereClause = "$COLUMN_ID=? AND $COLUMN_ITEM_ID=?"
+        val whereClause = "$COLUMN_USERNAME=? AND $COLUMN_ITEM_ID=?"
         val whereArgs = arrayOf(userID.toString(), id.toString())
 
         val deletedRows = db.delete(TABLE_NAME, whereClause, whereArgs)
@@ -99,6 +121,12 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
         cursor?.close()
 
         return itemExists
+    }
+    fun deleteAll(): Int {
+        val db = this.writableDatabase
+        val deletedRows = db.delete(TABLE_NAME, null, null)
+        db.close()
+        return deletedRows
     }
 
 }
