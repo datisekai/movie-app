@@ -73,6 +73,10 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
 
                     container.setOnClickListener{
                         val intent : Intent =  Intent(itemView.context, DetailFilmActivity::class.java)
+                        val bundle = Bundle()
+                        val movie = data as Movie
+                        bundle.putInt("ID",movie.id)
+                        intent.putExtra("DataID",bundle)
                         itemView.context.startActivity(intent);
                     }
                 }

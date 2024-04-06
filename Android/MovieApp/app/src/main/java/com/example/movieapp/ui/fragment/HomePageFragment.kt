@@ -1,35 +1,33 @@
 package com.example.movieapp.ui.fragment
 
-import com.example.movieapp.adapter.CustomAdapter
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethod
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.getSystemService
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.loader.app.LoaderManager
-import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.Api.MyViewModel
 import com.example.movieapp.GridSpacingItemDecoration
 import com.example.movieapp.R
-import com.example.movieapp.ui.activity.SearchActivity
+import com.example.movieapp.adapter.CustomAdapter
 import com.example.movieapp.adapter.model.CardHome
 import com.example.movieapp.adapter.model.Movie
-import com.example.movieapp.data.model.Film
-import com.example.movieapp.data.model.Film1
 import com.example.movieapp.data.model.FilmDTO
-import com.example.movieapp.ui.activity.HomePage_Activity
+import com.example.movieapp.ui.activity.SearchActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -70,15 +68,15 @@ class HomePageFragment : Fragment() {
     }
     private fun generateDataListMovie(): List<Movie> {
         val dataList: MutableList<Movie> = ArrayList()
-        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024"))
-        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024"))
-        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024"))
+        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022",1))
+        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023",1))
+        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024",1))
+        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022",1))
+        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023",1))
+        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024",1))
+        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022",1))
+        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023",1))
+        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024",1))
         // Thêm các phần tử khác vào danh sách dữ liệu
         return dataList
     }
@@ -91,7 +89,7 @@ class HomePageFragment : Fragment() {
         Log.e("SIZE",tmp.size.toString())
         for (o in tmp){
             Log.e("DATA",o.title.toString())
-            dataList.add(Movie(R.drawable.anime1, o.title.toString(),"2023"))
+            dataList.add(Movie(R.drawable.anime1, o.title.toString(),"2023",o.id))
         }
 
         return dataList
@@ -113,7 +111,6 @@ class HomePageFragment : Fragment() {
         // viewModel
         val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
         viewModel.getListFilm().observe(viewLifecycleOwner) { films ->
-            Log.e("DATA", films.data.get(0).title)
             filmData.listFilm.addAll(films.data)
             progressbar.visibility = View.GONE
             titleMovie1.setText("Popular Movie1")
@@ -165,8 +162,12 @@ class HomePageFragment : Fragment() {
         val editText = view.findViewById<EditText>(R.id.editTextSearch)
         editText.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE ||
-                (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
+                (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) ||
+                (actionId == EditorInfo.IME_ACTION_DONE)
             ) {
+                val inputManager : InputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE)
+                        as InputMethodManager
+                inputManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
                 val intent = Intent(view.context, SearchActivity::class.java)
                 intent.putExtra("q", editText.text.toString())
                 startActivity(intent)

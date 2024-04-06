@@ -104,4 +104,9 @@ dependencies {
 
     implementation("androidx.fragment:fragment-ktx:1.4.0")
 
+    //zalo pay
+    implementation(files("libs/zpdk-release-v3.1.aar"))
+    implementation("commons-codec:commons-codec:1.14")
+
+
 }

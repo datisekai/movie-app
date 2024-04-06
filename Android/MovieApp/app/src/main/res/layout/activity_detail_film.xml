@@ -37,26 +37,13 @@
             android:id="@+id/imageView3"
             android:layout_width="125dp"
             android:layout_height="175dp"
-            android:layout_marginEnd="284dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="-50dp"
             android:scaleType="centerCrop"
-            android:paddingLeft="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-            app:layout_constraintEnd_toEndOf="@+id/imageView2"
-            app:srcCompat="@drawable/poster_test"
-            tools:ignore="MissingConstraints"
-            android:layout_marginBottom="-50dp"/>
-
-        <TextView
-            android:id="@+id/txtTitleFilm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imagePoster" />
+            app:srcCompat="@drawable/poster_test"
+            tools:ignore="MissingConstraints" />
 
         <ImageButton
             android:id="@+id/imageButton2"
@@ -70,6 +57,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/txtTitleFilm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:text="Film"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -142,26 +141,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="lượt xem"/>
-                <TextView
-                    android:id="@+id/txtRating"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="15dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="4.9"
-                    android:textStyle="bold"
-                    android:textSize="16sp"/>
-
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    style="?android:ratingBarStyleSmall"
-                    android:layout_gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:rating="5"
-                    android:stepSize="1"
-                    android:progressTint="#FFC107"/>
             </LinearLayout>
 
             <Button
@@ -173,9 +152,10 @@
                 android:textColor="@color/black"
                 android:drawablePadding="10dp"
                 android:drawableTint="@color/black"
-                android:backgroundTint="#E8E1E1"
+                android:backgroundTint="#F3EFEF"
                 android:onClick="clickWatch"/>
             <TextView
+                android:layout_marginTop="5dp"
                 android:id="@+id/txtDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -224,8 +204,7 @@
                 android:layout_marginTop="10dp"
                 android:id="@+id/recyclerEsopide"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"/>
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_marginTop="10dp"
@@ -249,10 +228,13 @@
                     app:riv_oval="true"/>
 
                 <EditText
+                    android:id="@+id/edtComment"
                     android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Thêm bình luận" />
+                    android:hint="Thêm bình luận"
+                    android:inputType="text"
+                    android:imeOptions="actionDone"/>
 
             </LinearLayout>
 

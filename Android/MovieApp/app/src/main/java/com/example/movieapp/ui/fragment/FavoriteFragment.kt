@@ -29,15 +29,15 @@ class FavoriteFragment : Fragment() {
 
     private fun generateDataList(): List<Movie> {
         val dataList: MutableList<Movie> = ArrayList()
-        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024"))
-        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024"))
-        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022"))
-        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023"))
-        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024"))
+        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022",1))
+        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023",1))
+        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024",1))
+        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022",1))
+        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023",1))
+        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024",1))
+        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022",1))
+        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023",1))
+        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024",1))
         // Thêm các phần tử khác vào danh sách dữ liệu
         return dataList
     }
