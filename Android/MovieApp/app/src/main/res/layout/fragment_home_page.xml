@@ -35,7 +35,9 @@
                         android:textColorHint="#80FFFFFF"
                         android:paddingHorizontal="16dp"
                         android:background="@drawable/image_border"
-                        android:id="@+id/editTextSearch"/>
+                        android:id="@+id/editTextSearch"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"/>
                 </LinearLayout>
 
                 <LinearLayout

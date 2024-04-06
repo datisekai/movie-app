@@ -2,8 +2,7 @@ package com.example.movieapp.data.model
 
 import com.google.gson.annotations.SerializedName
 
-class FilmDTO {
-
+class EsopideDTO {
     @SerializedName("id")
     var id: Int = 0
 
@@ -23,46 +22,32 @@ class FilmDTO {
     var view: Int = 0
 
     @SerializedName("thumbnail")
-    var thumbnail: String = ""
+    var thumbnail: String? = ""
 
-    @SerializedName("type")
-    var type: String = ""
+    @SerializedName("url")
+    var url: String = ""
 
-    @SerializedName("status")
-    var status: String = ""
+    @SerializedName("duration")
+    var duration: String = ""
 
-    @SerializedName("is_required_premium")
-    var isRequiredPremium: Boolean = false
-
-    @SerializedName("director")
-    var director: String? = ""
-
-    @SerializedName("location")
-    var location: String? = ""
+    @SerializedName("position")
+    var position: Int = 0
 
     @SerializedName("is_active")
     var isActive: Boolean = false
 
-    @SerializedName("created_at")
-    var createAt : String = ""
-
-
-
-    constructor(){}
     constructor(
         id: Int,
         slug: String,
         title: String,
         titleSearch: String,
-        description: String,
+        description: String?,
         view: Int,
         thumbnail: String,
-        type: String,
-        status: String,
-        isRequiredPremium: Boolean,
-        director: String,
-        location: String,
-        isActive: Boolean,
+        url: String,
+        duration: String,
+        position: Int,
+        isActive: Boolean
     ) {
         this.id = id
         this.slug = slug
@@ -71,11 +56,9 @@ class FilmDTO {
         this.description = description
         this.view = view
         this.thumbnail = thumbnail
-        this.type = type
-        this.status = status
-        this.isRequiredPremium = isRequiredPremium
-        this.director = director
-        this.location = location
+        this.url = url
+        this.duration = duration
+        this.position = position
         this.isActive = isActive
     }
 }

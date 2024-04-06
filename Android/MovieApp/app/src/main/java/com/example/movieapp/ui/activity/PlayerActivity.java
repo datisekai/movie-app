@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -15,7 +16,7 @@ import com.google.android.exoplayer2.ui.PlayerView;
 public class PlayerActivity extends AppCompatActivity {
     private PlayerView playerView;
     private ExoPlayer simpleExoPlayer;
-    private String VIDEO_URl="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+    private String VIDEO_URl;
     private String VIDEO_TITLE;
 
 
@@ -35,6 +36,8 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Intent intent = getIntent();
+        VIDEO_URl = intent.getBundleExtra("videoUrl").getString("URL");
         playerView = findViewById(R.id.video_player);
         simpleExoPlayer = new ExoPlayer.Builder(PlayerActivity.this).build();
         playerView.setPlayer(simpleExoPlayer);
