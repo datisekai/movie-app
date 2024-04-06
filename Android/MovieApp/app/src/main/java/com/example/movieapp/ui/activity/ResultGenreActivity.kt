@@ -49,7 +49,7 @@ class ResultGenreActivity : AppCompatActivity() {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         if(id !== -1){
-            callAPI(viewModel, id,  progressbar, recyclerView)
+            callAPI(viewModel, id,  progressbar)
 
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -73,7 +73,7 @@ class ResultGenreActivity : AppCompatActivity() {
                     if (dy > 0 && visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
                         // Đã cuộn đến cuối danh sách, gọi hàm loadMoreData để tải dữ liệu trang tiếp theo
                         currentPage++
-                        callAPI(viewModel,id,  progressbar, recyclerView)
+                        callAPI(viewModel,id,  progressbar)
                     }
                 }
             })
@@ -88,7 +88,7 @@ class ResultGenreActivity : AppCompatActivity() {
             finish()
         }
     }
-    fun callAPI(viewModel: GenreMovieViewModel, genreId: Int , progressbar: ProgressBar, recyclerView: RecyclerView){
+    fun callAPI(viewModel: GenreMovieViewModel, genreId: Int , progressbar: ProgressBar){
         viewModel.getListGenreMovie(genreId, currentPage).observe(this) { films ->
 
             totalEntries= films.totalEntries

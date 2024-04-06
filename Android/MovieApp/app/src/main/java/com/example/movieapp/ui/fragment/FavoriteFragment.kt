@@ -64,7 +64,7 @@ class FavoriteFragment : Fragment() {
 
         recyclerView.layoutManager = GridLayoutManager(view.context, 2)
 
-        callAPI(viewModel,  progressbar, recyclerView)
+        callAPI(viewModel,  progressbar)
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -88,7 +88,7 @@ class FavoriteFragment : Fragment() {
                 if (dy > 0 && visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
                     // Đã cuộn đến cuối danh sách, gọi hàm loadMoreData để tải dữ liệu trang tiếp theo
                     currentPage++
-                    callAPI(viewModel,  progressbar, recyclerView)
+                    callAPI(viewModel,  progressbar)
                 }
             }
         })
@@ -119,7 +119,7 @@ class FavoriteFragment : Fragment() {
                 }
             }
     }
-    fun callAPI(viewModel: FavoriteViewModel, progressbar: ProgressBar, recyclerView: RecyclerView){
+    fun callAPI(viewModel: FavoriteViewModel, progressbar: ProgressBar){
         viewModel.getListGenreMovie(currentPage).observe(viewLifecycleOwner) { films ->
 
             totalEntries= films.totalEntries

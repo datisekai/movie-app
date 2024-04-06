@@ -5,12 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.GridSpacingItemDecoration
 import com.example.movieapp.R
 import com.example.movieapp.adapter.model.Movie
+import com.example.movieapp.data.model.Film1
+import com.example.movieapp.data.model.FilmDTO
+import com.example.movieapp.service.FavoriteViewModel
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -28,6 +33,11 @@ class HistoryFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private var currentPage = 1
+    private var totalEntries = 0
+    private var dataList: MutableList<Movie> = ArrayList()
+    private lateinit var adapter: CustomAdapter
 
     private fun generateDataList(): List<Movie> {
         val dataList: MutableList<Movie> = ArrayList()
@@ -53,6 +63,10 @@ class HistoryFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_history, container, false)
 
+        dataList.clear()
+
+        val progressbar: ProgressBar = view.findViewById(R.id.progressBar)
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
 //        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -61,10 +75,9 @@ class HistoryFragment : Fragment() {
 
         recyclerView.layoutManager = GridLayoutManager(view.context, 2)
 
-        val dataList: List<Movie>? = generateDataList() // Tạo danh sách dữ liệu
+        callAPI(progressbar)
 
-        val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) } ?: CustomAdapter(emptyList(),
-            R.layout.card, 480, 480, true)
+        val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }
         recyclerView.adapter = adapter
 
 
@@ -90,5 +103,69 @@ class HistoryFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+    fun callAPI( progressbar: ProgressBar){
+
+            for (o in initData()){
+                dataList.add(Movie(o.id, o.thumbnail, o.title, o.description.toString(), o.isRequiredPremium))
+            }
+
+            progressbar.visibility = View.GONE
+
+    }
+    fun initData() : List<FilmDTO>{
+        val dataList: MutableList<FilmDTO> = ArrayList()
+        dataList.add(
+            FilmDTO(
+                1,
+                "film-1",
+                "Film 1",
+                "Film 1",
+                "Description 1",
+                100,
+                "thumbnail-1.jpg",
+                "Action",
+                "Released",
+                false,
+                "Director 1",
+                "Location 1",
+                true
+            )
+        )
+        dataList.add(
+            FilmDTO(
+                2,
+                "film-2",
+                "Film 2",
+                "Film 2",
+                "Description 2",
+                200,
+                "thumbnail-2.jpg",
+                "Drama",
+                "Released",
+                true,
+                "Director 2",
+                "Location 2",
+                true
+            )
+        )
+        dataList.add(
+            FilmDTO(
+                3,
+                "film-3",
+                "Film 3",
+                "Film 3",
+                "Description 3",
+                150,
+                "thumbnail-3.jpg",
+                "Comedy",
+                "Released",
+                false,
+                "Director 3",
+                "Location 3",
+                false
+            )
+        )
+        return dataList
     }
 }
