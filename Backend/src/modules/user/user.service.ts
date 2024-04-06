@@ -76,7 +76,11 @@ export class UserService {
       throw new BadRequestException('User already registered with email');
 
     const newUser = this.userRepository.create({
-      ...dto,
+      email: dto.email,
+      roles: dto.roles,
+      fullname: dto.fullname,
+      is_active: dto.is_active,
+      password: dto.password,
       fullname_search: removeVietnameseDiacritics(dto.fullname),
     });
     const user = await this.userRepository.save(newUser);
@@ -97,6 +101,10 @@ export class UserService {
 
     if (dto.is_active != null) {
       user.is_active = dto.is_active;
+    }
+
+    if (dto.password) {
+      user.password = dto.password;
     }
 
     user.roles = dto.roles || user.roles;

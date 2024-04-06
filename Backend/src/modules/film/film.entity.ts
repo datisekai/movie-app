@@ -10,6 +10,8 @@ import {
 } from 'typeorm';
 import { Category } from '../category/category.entity';
 import { Episode as EpisodeEntity } from '../episode/episode.entity';
+import { Comment as CommentEntity } from '../comment/comment.entity';
+import { Favourite as FavouriteEntity } from '../favourite/favourite.entity';
 
 @Entity()
 export class Film {
@@ -67,4 +69,10 @@ export class Film {
 
   @OneToMany(() => EpisodeEntity, (episode) => episode.film)
   episodes!: EpisodeEntity[];
+
+  @OneToMany(() => CommentEntity, (comment) => comment.film)
+  comments!: CommentEntity[];
+
+  @OneToMany(() => FavouriteEntity, (favourite) => favourite.film)
+  favourites!: FavouriteEntity[];
 }
