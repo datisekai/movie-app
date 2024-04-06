@@ -2,12 +2,14 @@ package com.example.movieapp.adapter
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import com.example.movieapp.R
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +20,11 @@ import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.ui.activity.DetailFilmActivity
 import com.example.movieapp.ui.activity.ResultGenreActivity
 import com.makeramen.roundedimageview.RoundedImageView
+import com.squareup.picasso.Picasso
+import java.text.NumberFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class CustomAdapter(private val dataList: List<Any>, private val view: Int, private val widthCard: Int, private val heightCard: Int, private val isBorderImage: Boolean) :
     RecyclerView.Adapter<CustomAdapter.MyViewHolder>() {
@@ -44,10 +51,20 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                     val image: RoundedImageView = itemView.findViewById(R.id.imageCard)
                     val title: TextView = itemView.findViewById(R.id.title)
                     val textView2: TextView = itemView.findViewById(R.id.textView2)
+                    val iconPremium: ImageView= itemView.findViewById(R.id.icon_premium)
                     val movieItem = data as Movie
-                    image.setImageResource(movieItem.imageResId)
+
                     title.text = movieItem.title
-                    textView2.text = movieItem.year
+                    textView2.text = Html.fromHtml(movieItem.description)
+
+
+                    if(movieItem.imageResId.startsWith("https://image.tmdb.org/")){
+                        Log.e("DATA1",movieItem.imageResId)
+                        Picasso.get().load(movieItem.imageResId).into(image);
+                    }else{
+                        val noImage="https://image.tmdb.org/t/p/w500//A4j8S6moJS2zNtRR8oWF08gRnL5.jpg"
+                        Picasso.get().load(noImage).into(image);
+                    }
 
                     //Custom
                     val layoutParams = image.layoutParams
@@ -71,8 +88,17 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                         image.cornerRadius = cornerRadius.toFloat()
                     }
 
+                    if(movieItem.is_required_premium){
+                        iconPremium.visibility = View.GONE
+                    }else{
+                        iconPremium.visibility = View.VISIBLE
+                    }
+
                     container.setOnClickListener{
                         val intent : Intent =  Intent(itemView.context, DetailFilmActivity::class.java)
+                        val bundle = Bundle()
+                        bundle.putInt("id", movieItem.id) // Đặt giá trị vào Bundle
+                        intent.putExtras(bundle)
                         itemView.context.startActivity(intent);
                     }
                 }
@@ -82,7 +108,6 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                     buttonGenre.text=genreItem.name
                     buttonGenre.tooltipText= genreItem.name
                     buttonGenre.setOnClickListener{
-                        Log.d("TAG", ClassToken.FULLNAME)
                         val intent = Intent(itemView.context, ResultGenreActivity::class.java)
                         val bundle = Bundle()
                         bundle.putInt("id", genreItem.id)
@@ -95,10 +120,20 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                     val title: TextView = itemView.findViewById(R.id.textTitle)
                     val date: TextView = itemView.findViewById(R.id.textDate)
                     val money: TextView = itemView.findViewById(R.id.textMoney)
+                    val status: TextView= itemView.findViewById(R.id.textStatus)
                     val paymentHistoryItem = data as PaymentHistory
                     title.text = paymentHistoryItem.title
-                    date.text = paymentHistoryItem.date
-                    money.text = "-" + paymentHistoryItem.money.toString() +"đ"
+
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                    val dateTime: LocalDateTime = LocalDateTime.parse(paymentHistoryItem.date, formatter)
+                    val formattedDateTime: String = dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
+
+                    date.text = formattedDateTime
+
+                    val format = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
+                    val formattedMoney: String = format.format(paymentHistoryItem.money.toLong())
+                    money.text = formattedMoney
+                    status.text = paymentHistoryItem.status
                 }
             }
         }

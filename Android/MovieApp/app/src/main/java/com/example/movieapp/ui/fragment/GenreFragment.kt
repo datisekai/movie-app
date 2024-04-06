@@ -6,11 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.GridSpacingItemDecoration
 import com.example.movieapp.R
 import com.example.movieapp.adapter.model.Genre
+import com.example.movieapp.adapter.model.PaymentHistory
+import com.example.movieapp.service.GenreViewModel
+import com.example.movieapp.service.PaymentViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,20 +32,10 @@ class GenreFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private fun generateDataList(): List<Genre> {
-        val dataList: MutableList<Genre> = ArrayList()
-        dataList.add(Genre(1, "hành động"))
-        dataList.add(Genre(2, "tình cảm"))
-        dataList.add(Genre(3, "hành động tình cảm"))
-        dataList.add(Genre(4, "hành động"))
-        dataList.add(Genre(5, "hành động"))
-        dataList.add(Genre(6, "hành động"))
-        dataList.add(Genre(7, "hành động"))
-        dataList.add(Genre(8, "hành động"))
-        dataList.add(Genre(9, "hành động"))
-        // Thêm các phần tử khác vào danh sách dữ liệu
-        return dataList
-    }
+    private var currentPage = 1
+    private var totalEntries = 0
+    private var dataList: MutableList<Genre> = ArrayList()
+    private lateinit var adapter: CustomAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,16 +51,48 @@ class GenreFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_genre, container, false)
 
+        dataList.clear()
+
+        val progressbar: ProgressBar = view.findViewById(R.id.progressBar)
+        val viewModel = ViewModelProvider(this).get(GenreViewModel::class.java)
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
 
         val spacing = 24
         recyclerView.addItemDecoration(GridSpacingItemDecoration(2, spacing, false))
         recyclerView.layoutManager = GridLayoutManager(view.context, 2)
 
-        val dataList: List<Genre>? = generateDataList() // Tạo danh sách dữ liệu
+        callAPI(viewModel,  progressbar, recyclerView)
 
-        val adapter = dataList?.let { CustomAdapter(it, R.layout.genre, 0, 0, true) } ?: CustomAdapter(emptyList(),
-            R.layout.genre, 0, 0, true)
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                val itemsPerPage = 10
+
+                val totalPages = totalEntries / itemsPerPage + if (totalEntries % itemsPerPage == 0) 0 else 1
+                val isLastPage = currentPage == totalPages
+
+                if (isLastPage) {
+                    return
+                }
+
+                // Kiểm tra nếu người dùng đang cuộn xuống dưới (dy > 0)
+                if (dy > 0 && visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
+                    // Đã cuộn đến cuối danh sách, gọi hàm loadMoreData để tải dữ liệu trang tiếp theo
+                    currentPage++
+                    callAPI(viewModel, progressbar, recyclerView)
+                }
+            }
+        })
+
+
+        adapter = dataList?.let { CustomAdapter(it, R.layout.genre, 0, 0, true) }!!
         recyclerView.adapter = adapter
 
         return view
@@ -90,5 +117,19 @@ class GenreFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+    fun callAPI(viewModel: GenreViewModel, progressbar: ProgressBar, recyclerView: RecyclerView){
+        viewModel.getListGenre(currentPage).observe(viewLifecycleOwner) { payments ->
+
+            totalEntries= payments.totalEntries
+
+            for (o in payments.data){
+                dataList.add(Genre(o.id , o.title))
+            }
+
+            progressbar.visibility = View.GONE
+
+            adapter?.notifyDataSetChanged()
+        }
     }
 }

@@ -33,12 +33,19 @@ export class FilmService {
     const queryBuilder = await this.filmRepository
       .createQueryBuilder('film')
       .where('film.is_deleted = false')
+      .leftJoinAndSelect('film.categories', 'category')
       .take(limit)
       .skip((page - 1) * limit);
 
     if (query.title) {
       queryBuilder.andWhere('film.title_search like :title', {
         title: `%${query.title.toLowerCase()}%`,
+      });
+    }
+
+    if (query.category_id) {
+      queryBuilder.andWhere('category.id = :categoryId', {
+        categoryId: query.category_id,
       });
     }
 
@@ -144,6 +151,7 @@ export class FilmService {
     return await this.filmRepository
       .createQueryBuilder('film')
       .where({ ...data, is_deleted: false })
+      .leftJoinAndSelect('film.categories', 'category')
       .getOne();
   }
 }

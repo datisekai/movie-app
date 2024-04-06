@@ -5,12 +5,17 @@ import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.EditPasswordUserDTO
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
+import com.example.movieapp.data.model.Genre
 import com.example.movieapp.data.model.GetArticle
 import com.example.movieapp.data.model.GetUser
 import com.example.movieapp.data.model.LoginDTO
+import com.example.movieapp.data.model.Payment
+import com.example.movieapp.data.model.PaymentDTO
+import com.example.movieapp.data.model.RegisterDTO
 import com.example.movieapp.data.model.TokenDTO
 import com.example.movieapp.data.model.User
 import com.example.movieapp.data.model.UserDTO
+import com.example.movieapp.data.model.Register
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -29,16 +34,39 @@ interface ApiService {
     @GET("api.film")
     fun getListFilm() : Call<Film1>
 
+    @GET("api.film")
+    fun getListFilmSearch(@Query("title") title: String, @Query("page") page: Int) : Call<Film1>
+
+    @GET("api.film")
+    fun getListFilmGenre(@Query("category_id") title: String, @Query("page") page: Int) : Call<Film1>
+
+    @GET("api.favourite/me")
+    fun getListFilmFavorite(@Query("page") page: Int) : Call<Film1>
+
+    @GET("api.order/me")
+    fun getListPayment(@Query("page") page: Int) : Call<Payment>
+
+    @GET("api.category")
+    fun getListGenre(@Query("page") page: Int) : Call<Genre>
+
     @POST("api.auth/login")
     fun login(
        @Body loginDto : LoginDTO
     ) : Call<TokenDTO>
 
+<<<<<<< HEAD
+    @POST("api.user/register")
+    fun register(
+        @Body registerDto : RegisterDTO
+    ) : Call<Register>
+
+=======
     //User
     @GET("api.user/{id}")
     fun getUserById(
         @Path("id") id: Int
     ) : Call<GetUser>
+>>>>>>> DuongDat
     @PUT("api.user/{id}")
     fun editUser(
         @Path("id") id: Int,

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -60,18 +61,32 @@
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/viewAllList1"
+                            android:text="@string/view_all"
+                            android:textColor="@color/white"
+                            app:strokeColor="@color/white"
+                            app:strokeWidth="2dp"
+                            app:cornerRadius="8dp"
+                            android:backgroundTint="@color/bg1"
+                            app:icon="@drawable/arrow_right_icon"
+                            app:iconGravity="end"
+                            app:iconPadding="0dp"/>
                     </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progressBar1"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
 
-                    <ProgressBar
-                        android:id="@+id/progressBar"
-                        style="?android:attr/progressBarStyle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"/>
 
                 </LinearLayout>
                 <LinearLayout
@@ -97,7 +112,28 @@
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/viewAllList2"
+                            android:text="@string/view_all"
+                            android:textColor="@color/white"
+                            app:strokeColor="@color/white"
+                            app:strokeWidth="2dp"
+                            app:cornerRadius="8dp"
+                            android:backgroundTint="@color/bg1"
+                            app:icon="@drawable/arrow_right_icon"
+                            app:iconGravity="end"
+                            app:iconPadding="0dp"/>
+
                     </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progressBar2"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view2"
                         android:layout_width="match_parent"
@@ -127,7 +163,28 @@
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/viewAllList3"
+                            android:text="@string/view_all"
+                            android:textColor="@color/white"
+                            app:strokeColor="@color/white"
+                            app:strokeWidth="2dp"
+                            app:cornerRadius="8dp"
+                            android:backgroundTint="@color/bg1"
+                            app:icon="@drawable/arrow_right_icon"
+                            app:iconGravity="end"
+                            app:iconPadding="0dp"/>
+
                     </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progressBar3"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view3"
                         android:layout_width="match_parent"
@@ -157,7 +214,27 @@
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/viewAllList4"
+                            android:text="@string/view_all"
+                            android:textColor="@color/white"
+                            app:strokeColor="@color/white"
+                            app:strokeWidth="2dp"
+                            app:cornerRadius="8dp"
+                            android:backgroundTint="@color/bg1"
+                            app:icon="@drawable/arrow_right_icon"
+                            app:iconGravity="end"
+                            app:iconPadding="0dp"/>
+
                     </LinearLayout>
+                    <ProgressBar
+                        android:id="@+id/progressBar4"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view4"
                         android:layout_width="match_parent"

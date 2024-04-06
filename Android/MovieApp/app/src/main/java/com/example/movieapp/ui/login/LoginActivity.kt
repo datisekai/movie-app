@@ -17,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.exceptions.SignatureVerificationException
 import com.auth0.jwt.exceptions.TokenExpiredException
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.example.movieapp.Helper
@@ -41,19 +42,30 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        val contextView= this
+        val bundle = intent.extras
+        if (bundle != null) {
+            val username = bundle.getString("username")
+            val password = bundle.getString("password")
+            Log.e("check1", username.toString())
+            loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
+                .get(LoginViewModel::class.java)
+            loginViewModel.login(
+                username.toString(),
+                password.toString(),
+                this
+            )
+        }
         try {
             val token = Helper.TokenManager.getToken(this)
             val id = Helper.TokenManager.getId(this)
             val email = Helper.TokenManager.getEmail(this)
             val fullname = Helper.TokenManager.getFullName(this)
             val isActive = Helper.TokenManager.getIsActive(this)
-            Log.e("TOKEN", token.toString())
-            Log.e("TOKEN", fullname.toString())
-            Log.e("TOKEN", id.toString())
-            Log.e("TOKEN", isActive.toString())
             if (token != null && !isTokenExpired(token)) {
+                Log.e("TOKEN1", ClassToken.MY_TOKEN)
                 ClassToken.MY_TOKEN= token.toString()
+                Log.e("TOKEN2", ClassToken.MY_TOKEN)
                 ClassToken.ID= id?: 0
                 ClassToken.EMAIL= email.toString()
                 ClassToken.FULLNAME= fullname.toString()
@@ -64,6 +76,7 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
+
         } catch (e: TokenExpiredException) {
             Helper.TokenManager.clearToken(this)
             val intent = Intent(this, LoginActivity::class.java)
@@ -101,15 +114,24 @@ class LoginActivity : AppCompatActivity() {
 
             loading.visibility = View.GONE
             if (loginResult.error != null) {
-                showLoginFailed(loginResult.error)
+                showLoginError(loginResult.error)
+                setResult(Activity.RESULT_OK)
+
+                //Complete and destroy login activity once successful
+                finish()
             }
             if (loginResult.success != null) {
                 updateUiWithUser(loginResult.success)
-            }
-            setResult(Activity.RESULT_OK)
+                setResult(Activity.RESULT_OK)
 
-            //Complete and destroy login activity once successful
-            finish()
+                //Complete and destroy login activity once successful
+                finish()
+            }
+            if(loginResult.fail !== null){
+                Log.e("haiduong","checllls")
+                showLoginFailed(loginResult.fail)
+            }
+
         })
 
         username.afterTextChanged {
@@ -130,10 +152,10 @@ class LoginActivity : AppCompatActivity() {
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->{
-                        performNetWorkRequest(username.text.toString(), password.text.toString())
                         loginViewModel.login(
                             username.text.toString(),
-                            password.text.toString()
+                            password.text.toString(),
+                            contextView
                         )
                     }
 
@@ -143,8 +165,12 @@ class LoginActivity : AppCompatActivity() {
 
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                performNetWorkRequest(username.text.toString(), password.text.toString())
-                loginViewModel.login(username.text.toString(), password.text.toString())
+
+                loginViewModel.login(
+                    username.text.toString(),
+                    password.text.toString(),
+                    contextView
+                )
             }
         }
         val underlinedTextView: TextView = findViewById(R.id.linkRegister)
@@ -155,39 +181,31 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun isTokenExpired(jwtToken: String): Boolean {
-        val algorithm = Algorithm.HMAC256("datisekai")
-        val jwtVerifier = JWT.require(algorithm).build()
-        val decodedJWT: DecodedJWT = jwtVerifier.verify(jwtToken)
+        try {
+            val algorithm = Algorithm.HMAC256("datisekai")
+            val jwtVerifier = JWT.require(algorithm).build()
+            val decodedJWT: DecodedJWT = jwtVerifier.verify(jwtToken)
 
-        val expirationTime: Date? = decodedJWT.expiresAt
-        if (expirationTime != null) {
-            val currentTime = Date()
-            return currentTime.after(expirationTime)
+            val expirationTime: Date? = decodedJWT.expiresAt
+            if (expirationTime != null) {
+                val currentTime = Date()
+                return currentTime.after(expirationTime)
+            }
+        } catch (e: SignatureVerificationException) {
+            if (e is TokenExpiredException) {
+                return true
+            }
+            // Xử lý các ngoại lệ khác nếu cần thiết
+        } catch (e: Exception) {
+            return true
         }
 
         return true
     }
-    private fun performNetWorkRequest(email: String, password: String) {
-        val excutor = Executors.newSingleThreadExecutor()
-        excutor.execute{
-            val login = LoginDTO("datly030102@gmail.com", "datisekai")
-            val result = ServiceBuilder().apiService.login(login).execute()
-            if (result.isSuccessful){
-                val token : String =result.body().data.accessToken
-                val user : UserDTO =result.body().data.user
-                ClassToken.MY_TOKEN= token
-                ClassToken.ID= user.id
-                ClassToken.EMAIL= user.email
-                ClassToken.FULLNAME= user.fullname
-                ClassToken.IS_ACTIVE = user.is_active
-                Helper.TokenManager.saveToken(this, token, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE)
-            }
-        }
-    }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
-        val displayName = model.displayName
+        val displayName = model.fullname
         // TODO : initiate successful logged in experience
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
@@ -198,8 +216,12 @@ class LoginActivity : AppCompatActivity() {
         ).show()
     }
 
+    private fun showLoginError(@StringRes errorString: Int) {
+        Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+    }
 
-    private fun showLoginFailed(@StringRes errorString: Int) {
+
+    private fun showLoginFailed(errorString: String) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 }

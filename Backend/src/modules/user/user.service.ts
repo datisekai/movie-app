@@ -103,6 +103,10 @@ export class UserService {
       user.is_active = dto.is_active;
     }
 
+    if (dto.password) {
+      user.password = dto.password;
+    }
+
     user.roles = dto.roles || user.roles;
 
     return await this.userRepository.save(user);

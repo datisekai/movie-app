@@ -1,5 +1,6 @@
 package com.example.movieapp.service
 
+import android.util.Log
 import com.example.movieapp.data.model.ClassToken
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -15,6 +16,7 @@ class ServiceBuilder {
     var interceptor : Interceptor = Interceptor { chain ->
         val request = chain.request()
         val builder = request.newBuilder()
+        Log.e("TOKEN", ClassToken.MY_TOKEN)
         builder.addHeader("Authorization","Bearer ${ClassToken.MY_TOKEN}")
         return@Interceptor chain.proceed(builder.build())
     }
