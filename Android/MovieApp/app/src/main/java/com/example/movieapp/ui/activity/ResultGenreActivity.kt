@@ -88,6 +88,7 @@ class ResultGenreActivity : AppCompatActivity() {
             finish()
         }
     }
+
     fun callAPI(viewModel: GenreMovieViewModel, genreId: Int , progressbar: ProgressBar, recyclerView: RecyclerView){
         viewModel.getListGenreMovie(genreId, currentPage).observe(this) { films ->
 

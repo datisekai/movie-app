@@ -12,7 +12,8 @@ class Helper {
         private const val KEY_EMAIL = "email"
         private const val KEY_FULLNAME = "fullname"
         private const val KEY_IS_ACTIVE = "is_active"
-        fun saveToken(context: Context, token: String, id: Int, email: String, fullname: String, isActive:Boolean) {
+        private const val KEY_ROLES ="roles"
+        fun saveToken(context: Context, token: String, id: Int, email: String, fullname: String, isActive:Boolean,roles:ArrayList<String>) {
             val sharedPreferences = context.getSharedPreferences(TOKEN_PREFS_NAME, Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
             editor.putString(KEY_TOKEN, token)
@@ -20,6 +21,7 @@ class Helper {
             editor.putString(KEY_EMAIL,email)
             editor.putString(KEY_FULLNAME,fullname)
             editor.putBoolean(KEY_IS_ACTIVE,isActive)
+            editor.putStringSet(KEY_ROLES,roles.toSet())
             editor.apply()
         }
 
@@ -44,6 +46,14 @@ class Helper {
             return sharedPreferences.getBoolean(KEY_IS_ACTIVE, false)
         }
 
+        fun getRoles(context: Context) : ArrayList<String>?{
+            val sharedPreferences = context.getSharedPreferences(KEY_ROLES,Context.MODE_PRIVATE)
+            val tmp = sharedPreferences.getStringSet(KEY_ROLES,null)
+            val result = ArrayList(tmp)
+            return result
+        }
+
+
         fun clearToken(context: Context) {
             val sharedPreferences = context.getSharedPreferences(TOKEN_PREFS_NAME, Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
@@ -52,6 +62,7 @@ class Helper {
             editor.remove(KEY_EMAIL)
             editor.remove(KEY_FULLNAME)
             editor.remove(KEY_IS_ACTIVE)
+            editor.remove(KEY_ROLES)
             editor.apply()
         }
     }

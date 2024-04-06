@@ -15,10 +15,6 @@
         android:theme="@style/Theme.MovieApp"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activity.AllMovieActivity"
-            android:exported="false">
-        </activity>
-        <activity
             android:name=".ui.activity.BlogDetailActivity"
             android:exported="false" />
         <activity
@@ -38,7 +34,17 @@
             android:exported="false" />
         <activity
             android:name=".ui.activity.RegisterPremiumActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:launchMode="singleTask">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="demozpdk"
+                    android:host="app" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.PlayerActivity"
             android:exported="false"

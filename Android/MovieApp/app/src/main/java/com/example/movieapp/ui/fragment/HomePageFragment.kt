@@ -1,18 +1,21 @@
 package com.example.movieapp.ui.fragment
 
-import com.example.movieapp.adapter.CustomAdapter
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
+
+import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +26,10 @@ import com.example.movieapp.adapter.model.Movie
 import com.example.movieapp.service.GenreMovieViewModel
 import com.example.movieapp.service.GenreViewModel
 import com.example.movieapp.ui.activity.ResultGenreActivity
+
+import com.example.movieapp.adapter.CustomAdapter
+
+import com.example.movieapp.data.model.FilmDTO
 import com.example.movieapp.ui.activity.SearchActivity
 
 // TODO: Rename parameter arguments, choose names that match
@@ -60,6 +67,7 @@ class HomePageFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home_page, container, false)
 
+
         val viewModelGenre = ViewModelProvider(this).get(GenreViewModel::class.java)
         viewModelGenre.getListGenre(1).observe(viewLifecycleOwner){genre->
 
@@ -84,8 +92,12 @@ class HomePageFragment : Fragment() {
         val editText = view.findViewById<EditText>(R.id.editTextSearch)
         editText.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE ||
-                (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
+                (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) ||
+                (actionId == EditorInfo.IME_ACTION_DONE)
             ) {
+                val inputManager : InputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE)
+                        as InputMethodManager
+                inputManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
                 val intent = Intent(view.context, SearchActivity::class.java)
                 intent.putExtra("q", editText.text.toString())
                 startActivity(intent)

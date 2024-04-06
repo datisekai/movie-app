@@ -106,8 +106,10 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
     }
+
     fun callAPI(viewModel: SearchViewModel, receivedValue: String, progressbar: ProgressBar,recyclerView: RecyclerView){
         viewModel.getListFilm(receivedValue.toString(), currentPage).observe(this) { films ->
+
 
             totalEntries= films.totalEntries
 

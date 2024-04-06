@@ -106,4 +106,8 @@ dependencies {
 //    implementation ("org.sufficientlysecure:html-textview:3.10")
 
     implementation("com.squareup.picasso:picasso:2.71828")
+    //zalo pay
+    implementation(files("libs/zpdk-release-v3.1.aar"))
+    implementation("commons-codec:commons-codec:1.14")
+
 }
