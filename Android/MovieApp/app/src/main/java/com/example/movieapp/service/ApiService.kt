@@ -53,20 +53,16 @@ interface ApiService {
     fun login(
        @Body loginDto : LoginDTO
     ) : Call<TokenDTO>
-
-<<<<<<< HEAD
     @POST("api.user/register")
     fun register(
         @Body registerDto : RegisterDTO
     ) : Call<Register>
 
-=======
     //User
     @GET("api.user/{id}")
     fun getUserById(
         @Path("id") id: Int
     ) : Call<GetUser>
->>>>>>> DuongDat
     @PUT("api.user/{id}")
     fun editUser(
         @Path("id") id: Int,

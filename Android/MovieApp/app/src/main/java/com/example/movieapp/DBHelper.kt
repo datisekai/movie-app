@@ -89,4 +89,16 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
         return deletedRows > 0
     }
 
+    fun CheckIds(id: Int): Boolean {
+        val db = this.readableDatabase
+        val selection = "$COLUMN_ITEM_ID=?"
+        val selectionArgs = arrayOf(id.toString())
+        val cursor = db.query(TABLE_NAME, null, selection, selectionArgs, null, null, null)
+
+        val itemExists = cursor != null && cursor.count > 0
+        cursor?.close()
+
+        return itemExists
+    }
+
 }
