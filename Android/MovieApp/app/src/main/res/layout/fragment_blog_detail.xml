@@ -11,7 +11,45 @@
         android:orientation="vertical"
         android:background="@color/bg1">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            >
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="clickBack"
+                android:background="@drawable/baseline_keyboard_arrow_left_24"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="30dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chi Tiết Blog"
+                    android:textSize="24dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lines"
+            android:layout_marginBottom="10dp"/>
+
+        <ProgressBar
+            android:id="@+id/article_progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
         <RelativeLayout
+            android:id="@+id/article_main_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -19,7 +57,6 @@
                 android:id="@+id/article_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Title"
                 android:textSize="30dp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
@@ -27,16 +64,17 @@
 
         </RelativeLayout>
         <ImageView
-            android:layout_width="match_parent"
+            android:id="@+id/article_img"
+            android:layout_width="360dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/anime2"
             android:layout_marginBottom="10dp"
-            android:layout_marginHorizontal="10dp"/>
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
-
     <WebView
         android:id="@+id/blog_detail_webview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        />
+
 
 </LinearLayout>

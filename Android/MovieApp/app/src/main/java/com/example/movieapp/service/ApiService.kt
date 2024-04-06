@@ -1,9 +1,13 @@
 package com.example.movieapp.service
 
+import com.example.movieapp.data.model.Articles
 import com.example.movieapp.data.model.ClassToken
+import com.example.movieapp.data.model.EditPasswordUserDTO
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
 import com.example.movieapp.data.model.Genre
+import com.example.movieapp.data.model.GetArticle
+import com.example.movieapp.data.model.GetUser
 import com.example.movieapp.data.model.LoginDTO
 import com.example.movieapp.data.model.Payment
 import com.example.movieapp.data.model.PaymentDTO
@@ -50,14 +54,38 @@ interface ApiService {
        @Body loginDto : LoginDTO
     ) : Call<TokenDTO>
 
+<<<<<<< HEAD
     @POST("api.user/register")
     fun register(
         @Body registerDto : RegisterDTO
     ) : Call<Register>
 
+=======
+    //User
+    @GET("api.user/{id}")
+    fun getUserById(
+        @Path("id") id: Int
+    ) : Call<GetUser>
+>>>>>>> DuongDat
     @PUT("api.user/{id}")
     fun editUser(
         @Path("id") id: Int,
         @Body EditUserDto: UserDTO
     ) : Call<User>
+    @PUT("api.user/{id}")
+    fun editPasswordUser(
+        @Path("id") id: Int,
+        @Body EditUserDto: EditPasswordUserDTO
+    ) : Call<User>
+
+    //Blog
+    @GET("api.article")
+    fun getFirtListBlog() : Call<Articles>
+    @GET("api.article")
+    fun getListBlogPage(
+        @Query("page") page: Int
+    ) : Call<Articles>
+    //Article
+    @GET("api.article/{id}")
+    fun getArticleById(@Path("id") id: Int) : Call<GetArticle>
 }
