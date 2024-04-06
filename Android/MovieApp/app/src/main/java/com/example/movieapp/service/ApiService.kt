@@ -3,6 +3,7 @@ package com.example.movieapp.service
 import com.example.movieapp.data.model.Articles
 import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.EditPasswordUserDTO
+import com.example.movieapp.data.model.EpisodeHistoryDTO
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
 import com.example.movieapp.data.model.Genre
@@ -84,4 +85,8 @@ interface ApiService {
     //Article
     @GET("api.article/{id}")
     fun getArticleById(@Path("id") id: Int) : Call<GetArticle>
+
+    //History
+    @POST("api.episode/history")
+    fun getHistory() : Call<List<EpisodeHistoryDTO>>
 }
