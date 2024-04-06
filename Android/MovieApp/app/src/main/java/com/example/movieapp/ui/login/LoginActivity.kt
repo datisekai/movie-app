@@ -58,20 +58,22 @@ class LoginActivity : AppCompatActivity() {
         }
         try {
             val token = Helper.TokenManager.getToken(this)
-            val id = Helper.TokenManager.getId(this)
-            val email = Helper.TokenManager.getEmail(this)
-            val fullname = Helper.TokenManager.getFullName(this)
-            val isActive = Helper.TokenManager.getIsActive(this)
             if (token != null && !isTokenExpired(token)) {
-                Log.e("TOKEN1", ClassToken.MY_TOKEN)
+                val id = Helper.TokenManager.getId(this)
+                val email = Helper.TokenManager.getEmail(this)
+                val fullname = Helper.TokenManager.getFullName(this)
+                val isActive = Helper.TokenManager.getIsActive(this)
+                val role = Helper.TokenManager.getRoles(this)
+
+
                 ClassToken.MY_TOKEN= token.toString()
-                Log.e("TOKEN2", ClassToken.MY_TOKEN)
                 ClassToken.ID= id?: 0
                 ClassToken.EMAIL= email.toString()
                 ClassToken.FULLNAME= fullname.toString()
                 ClassToken.IS_ACTIVE = isActive!!
+                ClassToken.ROLES = role!!
 //                val checkToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTcxMTI2MTU5MiwiZXhwIjoxNzExMjY4NzkyfQ.ijPEfRK325BP_3ubNSHkoxUWtbxfvPkntaav-zIeL-k"
-//                Helper.TokenManager.saveToken(this, checkToken, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE)
+//                Helper.TokenManager.saveToken(this, checkToken, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE, ArrayList())
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()

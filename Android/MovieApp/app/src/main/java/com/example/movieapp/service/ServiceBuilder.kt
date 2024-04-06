@@ -16,10 +16,6 @@ class ServiceBuilder {
     var interceptor : Interceptor = Interceptor { chain ->
         val request = chain.request()
         val builder = request.newBuilder()
-<<<<<<< HEAD
-        Log.e("TOKEN", ClassToken.MY_TOKEN)
-=======
->>>>>>> nhatqui
         builder.addHeader("Authorization","Bearer ${ClassToken.MY_TOKEN}")
         return@Interceptor chain.proceed(builder.build())
     }

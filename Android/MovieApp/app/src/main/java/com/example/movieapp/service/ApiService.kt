@@ -73,22 +73,16 @@ interface ApiService {
     fun login(
         @Body loginDto : LoginDTO
     ) : Call<TokenDTO>
-
-<<<<<<< HEAD
-<<<<<<< HEAD
     @POST("api.user/register")
     fun register(
         @Body registerDto : RegisterDTO
     ) : Call<Register>
 
-=======
     //User
     @GET("api.user/{id}")
     fun getUserById(
         @Path("id") id: Int
     ) : Call<GetUser>
->>>>>>> DuongDat
-=======
     @POST("api.order")
     fun createOrder() : Call<PayOrder>
 
@@ -108,12 +102,10 @@ interface ApiService {
         @Body requestFilmFavorite: RequestFilmFavorite
     ) : Call<CommentCreate>
 
->>>>>>> nhatqui
     @PUT("api.user/{id}")
     fun editUser(
         @Path("id") id: Int,
         @Body EditUserDto: UserDTO
-<<<<<<< HEAD
     ) : Call<User>
     @PUT("api.user/{id}")
     fun editPasswordUser(
@@ -131,8 +123,5 @@ interface ApiService {
     //Article
     @GET("api.article/{id}")
     fun getArticleById(@Path("id") id: Int) : Call<GetArticle>
-=======
-    ) : Call<TokenDTO>
 
->>>>>>> nhatqui
 }
