@@ -44,5 +44,16 @@
         android:id="@+id/menu_homePage"
         android:name="com.example.movieapp.ui.fragment.HomePageFragment"
         android:label="fragment_home_page"
-        tools:layout="@layout/fragment_home_page" />
+        tools:layout="@layout/fragment_home_page" >
+        <action
+            android:id="@+id/action_currentFragment_to_menu_Profile"
+            app:destination="@id/menu_Profile"
+            app:popUpTo="@id/menu_homePage"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_currentFragment_to_menu_Blog"
+            app:destination="@id/menu_Blog"
+            app:popUpTo="@id/menu_homePage"
+            app:popUpToInclusive="true"/>
+    </fragment>
 </navigation>

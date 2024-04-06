@@ -42,6 +42,7 @@ class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCa
     private lateinit var progressBar: ProgressBar
     private lateinit var tvFullname: TextView
     private lateinit var tvEmail: TextView
+    private lateinit var linearLayout: LinearLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -68,6 +69,7 @@ class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCa
         progressBar = view.findViewById(R.id.fragment_profile_name_progressBar)
         tvFullname = view.findViewById(R.id.profile_username_textview)
         tvEmail = view.findViewById<TextView>(R.id.profile_email_textview)
+        linearLayout = view.findViewById<LinearLayout>(R.id.main_layout_fragment_profile)
 
         //Init Loader
         loaderManager.initLoader(0, null, this)
@@ -115,8 +117,7 @@ class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCa
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<GetUser> {
-        tvFullname.visibility = View.GONE
-        tvEmail.visibility = View.GONE
+        linearLayout.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
         return UserLoader(requireContext())
     }
@@ -127,8 +128,7 @@ class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCa
 
     override fun onLoadFinished(loader: Loader<GetUser>, data: GetUser?) {
         try {
-            tvFullname.visibility = View.VISIBLE
-            tvEmail.visibility = View.VISIBLE
+            linearLayout.visibility = View.VISIBLE
             progressBar.visibility = View.GONE
             if(data != null){
                 val fullname = data.data.fullname

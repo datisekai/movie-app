@@ -70,7 +70,7 @@
             </LinearLayout>
             <EditText
                 android:id="@+id/profile_detail_fullname_editText"
-                android:layout_width="wrap_content"
+                android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:hint="Họ tên"
                 android:textColor="@color/white"
