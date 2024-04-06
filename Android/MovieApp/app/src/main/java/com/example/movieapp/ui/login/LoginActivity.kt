@@ -180,7 +180,8 @@ class LoginActivity : AppCompatActivity() {
                 ClassToken.EMAIL= user.email
                 ClassToken.FULLNAME= user.fullname
                 ClassToken.IS_ACTIVE = user.is_active
-                Helper.TokenManager.saveToken(this, token, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE)
+                ClassToken.ROLES = user.roles
+                Helper.TokenManager.saveToken(this, token, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE,ClassToken.ROLES)
             }
         }
     }

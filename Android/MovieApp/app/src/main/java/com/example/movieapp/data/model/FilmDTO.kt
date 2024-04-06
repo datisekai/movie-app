@@ -43,6 +43,9 @@ class FilmDTO {
     @SerializedName("is_active")
     var isActive: Boolean = false
 
+    @SerializedName("created_at")
+    var createAt : String = ""
+
 
 
     constructor(){}

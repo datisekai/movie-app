@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.example.movieapp.Helper
 import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.Comment
+import com.example.movieapp.data.model.CommentCreate
 import com.example.movieapp.data.model.ConfirmOrder
 import com.example.movieapp.data.model.DataDTO
 import com.example.movieapp.data.model.Esopide
@@ -15,6 +16,8 @@ import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
 import com.example.movieapp.data.model.PayOrder
 import com.example.movieapp.data.model.Profile
+import com.example.movieapp.data.model.RequestComment
+import com.example.movieapp.data.model.RequestFilmFavorite
 import com.example.movieapp.data.model.UserDTO
 import com.example.movieapp.service.ServiceBuilder
 import okhttp3.MediaType
@@ -136,6 +139,48 @@ class MyViewModel() : ViewModel() {
 
     }
 
+    fun createComment(requestComment: RequestComment){
+        val call = ServiceBuilder().apiService.createComment(requestComment)
+        call.enqueue(object : Callback<CommentCreate>{
+            override fun onResponse(call: Call<CommentCreate>, response: Response<CommentCreate>) {
+                if (response.isSuccessful){
+                    Log.e("RESULT", "Success")
+                }else
+                {
+                    Log.e("ERROR",  "fail")
+                }
+            }
+
+            override fun onFailure(call: Call<CommentCreate>, t: Throwable) {
+                t.printStackTrace()
+            }
+
+        })
+    }
+
+    fun postFilmFavoutite(requestFilmFavorite: RequestFilmFavorite){
+        val call = ServiceBuilder().apiService.postFilmFavorite(requestFilmFavorite)
+        call.enqueue(object : Callback<CommentCreate>{
+            override fun onResponse(
+                call: Call<CommentCreate>,
+                response: Response<CommentCreate>
+            ) {
+                if (response.isSuccessful){
+                    Log.e("RESULT", "Success")
+                }else
+                {
+                    Log.e("ERROR",  "fail")
+                }
+            }
+
+            override fun onFailure(call: Call<CommentCreate>, t: Throwable) {
+               t.printStackTrace()
+            }
+
+        })
+    }
+
+
     fun updateProfile(context: Context){
         val call = ServiceBuilder().apiService.getMyProfile()
         call.enqueue(object : Callback<Profile>{
@@ -148,8 +193,9 @@ class MyViewModel() : ViewModel() {
                     ClassToken.EMAIL= user.email
                     ClassToken.FULLNAME= user.fullname
                     ClassToken.IS_ACTIVE = user.is_active
-                    Log.e("ROLES",user.roles[0])
-                    Helper.TokenManager.saveToken(context, ClassToken.MY_TOKEN, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE, )
+                    ClassToken.ROLES = user.roles
+                    Log.e("ROLES",ClassToken.ROLES[0])
+                    Helper.TokenManager.saveToken(context, ClassToken.MY_TOKEN, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE,ClassToken.ROLES )
                 }
                 else{
                     Log.e("ERROR",  "fail")

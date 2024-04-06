@@ -10,9 +10,11 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import com.example.movieapp.R
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
@@ -32,12 +34,17 @@ import com.example.movieapp.data.model.Esopide
 import com.example.movieapp.data.model.EsopideDTO
 import com.example.movieapp.service.DetailFilmLoader
 import com.example.movieapp.data.model.Film
+import com.example.movieapp.data.model.RequestComment
+import com.example.movieapp.data.model.RequestFilmFavorite
 
 
 class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Film>{
     private lateinit var editTextComment : EditText
     private lateinit var data : MutableList<EsopideDTO>
     private lateinit var dataComment : MutableList<CommentDTO>
+    private lateinit var btnFavorite : ImageButton
+    var check : Boolean = false
+    var filmId : Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_film)
@@ -48,13 +55,30 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
                 (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) ||
                 (actionId == EditorInfo.IME_ACTION_DONE)
             ) {
+                   if (filmId!=0){
+                       val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+                       val dataComment1 = RequestComment(editTextComment.text.toString(),filmId)
+                       viewModel.createComment(dataComment1)
+                       getComment(filmId)
+                       editTextComment.text.clear()
+                   }else
+                   {
+                       Toast.makeText(this,"Create Comment Fail",Toast.LENGTH_LONG).show()
+                   }
                 val inputManager : InputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE)
                         as InputMethodManager
-                inputManager.hideSoftInputFromWindow(this.currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+                inputManager.hideSoftInputFromWindow(this.editTextComment.windowToken, 0)
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
         }
+        btnFavorite = findViewById(R.id.btnFavotite)
+        btnFavorite.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                clickBtnFavotite()
+            }
+
+        })
         //Check if a Loader is running, if it is, reconnect to it
         if (supportLoaderManager.getLoader<Film>(0)!=null) {
             supportLoaderManager.initLoader(0,null,this).forceLoad()
@@ -72,6 +96,24 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
         startActivity(intent);
 
     }
+
+    public fun clickBtnFavotite(){
+       if (check==false){
+           btnFavorite.setImageResource(R.drawable.baseline_check_24)
+           check = true
+           val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+           val dataFilmFavorite = RequestFilmFavorite(filmId)
+           viewModel.postFilmFavoutite(dataFilmFavorite)
+
+       }else
+       {
+           btnFavorite.setImageResource(R.drawable.baseline_add_24)
+           check = false
+           val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+           val dataFilmFavorite = RequestFilmFavorite(filmId)
+           viewModel.postFilmFavoutite(dataFilmFavorite)
+       }
+    }
     
     public fun getDetailFilm(){
        val connMgr : ConnectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -82,6 +124,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             val id = bundle.getInt("ID")
             val bundle2 = Bundle()
             if (id != null) {
+                filmId = id
                 bundle2.putInt("idFilm",id)
                 getEsopide(id)
                 getComment(id)
@@ -145,11 +188,21 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             val txtCate = findViewById<TextView>(R.id.txtCatelogy)
             val imgPoster = findViewById<ImageView>(R.id.imagePoster)
             val imgMain = findViewById<ImageView>(R.id.imageView3)
+            val txtCountry = findViewById<TextView>(R.id.txtCountry)
+            val txtView = findViewById<TextView>(R.id.txtView)
+            val txtYear = findViewById<TextView>(R.id.txtYear)
+            val txtMonth = findViewById<TextView>(R.id.txtMonth)
+            val txtDescription = findViewById<TextView>(R.id.txtDescription)
             if (data != null){
                 txtTitle.text = data.data.title
                 txtDirect.text = "Đạo diễn: ${data.data.director}"
                 txtCate.text = "Thể loại: ${data.data.type}"
-
+                txtCountry.text = data.data.location
+                txtView.text = data.data.view.toString()
+                val tmp = data.data.createAt.split("-")
+                txtYear.text = tmp[0]
+                txtMonth.text = "T"+tmp[1]
+                txtDescription.text = data.data.description
                 // load poster
                 val requestOption = RequestOptions().placeholder(R.drawable.default_movie)
                     .error(R.drawable.default_movie)

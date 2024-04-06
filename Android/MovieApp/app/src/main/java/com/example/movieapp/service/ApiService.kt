@@ -2,6 +2,7 @@ package com.example.movieapp.service
 
 import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.Comment
+import com.example.movieapp.data.model.CommentCreate
 import com.example.movieapp.data.model.ConfirmOrder
 import com.example.movieapp.data.model.Esopide
 import com.example.movieapp.data.model.Film
@@ -9,6 +10,8 @@ import com.example.movieapp.data.model.Film1
 import com.example.movieapp.data.model.LoginDTO
 import com.example.movieapp.data.model.PayOrder
 import com.example.movieapp.data.model.Profile
+import com.example.movieapp.data.model.RequestComment
+import com.example.movieapp.data.model.RequestFilmFavorite
 import com.example.movieapp.data.model.TokenDTO
 import com.example.movieapp.data.model.UserDTO
 import okhttp3.ResponseBody
@@ -54,6 +57,16 @@ interface ApiService {
     fun confirmOrder(
         @Field("zalo_trans_id") transId : String
     ) : Call<ConfirmOrder>
+
+    @POST("api.comment")
+    fun createComment(
+       @Body requestComment: RequestComment
+    ) : Call<CommentCreate>
+
+    @POST("api.favourite")
+    fun postFilmFavorite(
+        @Body requestFilmFavorite: RequestFilmFavorite
+    ) : Call<CommentCreate>
 
     @PUT("api.user/{id}")
     fun editUser(
