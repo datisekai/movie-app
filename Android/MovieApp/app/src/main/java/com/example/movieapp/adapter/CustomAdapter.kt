@@ -62,8 +62,7 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                         Log.e("DATA1",movieItem.imageResId)
                         Picasso.get().load(movieItem.imageResId).into(image);
                     }else{
-                        val noImage="https://image.tmdb.org/t/p/w500//A4j8S6moJS2zNtRR8oWF08gRnL5.jpg"
-                        Picasso.get().load(noImage).into(image);
+                        image.setImageResource(R.drawable.default_movie)
                     }
 
                     //Custom

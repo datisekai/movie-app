@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.movieapp.Api.MyViewModel
 import com.example.movieapp.DBHelper
 import com.example.movieapp.GridSpacingItemDecoration
 import com.example.movieapp.Helper
@@ -76,11 +78,19 @@ class HistoryFragment : Fragment() {
 
         recyclerView.layoutManager = GridLayoutManager(view.context, 2)
 
+        val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+        viewModel.getListHistory().observe(viewLifecycleOwner){ newData ->
+            callAPI(progressbar, newData)
+            val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }
+            recyclerView.adapter = adapter
+            adapter?.notifyDataSetChanged()
+        }
+        if(viewModel.getListHistory().value == null){
+            viewModel.CallGetHistory(requireContext())
+        }
+        //callAPI(progressbar)
 
-        callAPI(progressbar)
 
-        val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }
-        recyclerView.adapter = adapter
 
 
         return view
@@ -106,68 +116,15 @@ class HistoryFragment : Fragment() {
                 }
             }
     }
-    fun callAPI( progressbar: ProgressBar){
-            Log.e("CALL HISTORY API12",ListFilmHistory.toString())
-            initData()
-            Log.e("CALL HISTORY API12",ListFilmHistory.toString())
-            for (o in ListFilmHistory){
+    fun callAPI( progressbar: ProgressBar, list: List<FilmDTO>){
+            Log.e("CALL HISTORY API12",list.toString())
+            for (o in list){
                 dataList.add(Movie(o.id, o.thumbnail, o.title, o.description.toString(), o.isRequiredPremium))
             }
 
             progressbar.visibility = View.GONE
 
     }
-    fun initData(){
-        val userId = Helper.TokenManager.getId(requireContext())
-        val db =  DBHelper(requireContext())
-
-        if(userId != null){
-            val listId = db.getListId(userId)
-            for (id in listId){
-                Log.e("listId",id.toString())
-            }
-            val call = ServiceBuilder().apiService.getHistory(EpisodeIdsWrapper(listId))
-            call.enqueue(object : Callback<List<EpisodeHistoryDTO>>{
-                override fun onResponse(
-                    call: Call<List<EpisodeHistoryDTO>>?,
-                    response: Response<List<EpisodeHistoryDTO>>?
-                ) {
-                    if(response != null){
-                        if(response.isSuccessful){
-                            var temp = ListFilmHistory
-                            val result = response.body()
-                            if(result!= null && result.isNotEmpty()){
-                                for(ep in result){
-                                    if(temp.isEmpty()){
-                                        temp.add(ep.film)
-                                        Log.e("CALL HISTORY API",temp.toString())
-                                    }
-                                    else{
-                                        for(film in temp){
-                                            if(film.id != ep.film.id){
-                                                temp.add(ep.film)
-                                                Log.e("CALL HISTORY API",temp.toString())
-                                            }
-                                        }
-                                    }
-                                }
-                                ListFilmHistory = temp
-                                Log.e("CALL HISTORY API1",ListFilmHistory.toString())
-                            }else{
-                                Log.e("CALL HISTORY API","EMPTY")
-                            }
-                        }else{
-                            Log.e("CALL HISTORY API","FAIL")
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<List<EpisodeHistoryDTO>>?, t: Throwable?) {
-                    t?.printStackTrace()
-                }
-
-            })
-        }
-    }
 }
+
 data class EpisodeIdsWrapper(val episode_ids: List<Int>)
