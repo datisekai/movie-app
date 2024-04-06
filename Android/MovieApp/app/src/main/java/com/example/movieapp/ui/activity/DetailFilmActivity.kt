@@ -123,7 +123,6 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             val bundle : Bundle = intent.getBundleExtra("DataID")!!
             val id = bundle.getInt("ID")
             val bundle2 = Bundle()
-
             if (id != null) {
                 filmId = id
                 bundle2.putInt("idFilm",id)

@@ -62,7 +62,7 @@ class GenreFragment : Fragment() {
         recyclerView.addItemDecoration(GridSpacingItemDecoration(2, spacing, false))
         recyclerView.layoutManager = GridLayoutManager(view.context, 2)
 
-        callAPI(viewModel,  progressbar, recyclerView)
+        callAPI(viewModel,  progressbar)
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -86,7 +86,7 @@ class GenreFragment : Fragment() {
                 if (dy > 0 && visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
                     // Đã cuộn đến cuối danh sách, gọi hàm loadMoreData để tải dữ liệu trang tiếp theo
                     currentPage++
-                    callAPI(viewModel, progressbar, recyclerView)
+                    callAPI(viewModel, progressbar)
                 }
             }
         })
@@ -118,7 +118,7 @@ class GenreFragment : Fragment() {
                 }
             }
     }
-    fun callAPI(viewModel: GenreViewModel, progressbar: ProgressBar, recyclerView: RecyclerView){
+    fun callAPI(viewModel: GenreViewModel, progressbar: ProgressBar){
         viewModel.getListGenre(currentPage).observe(viewLifecycleOwner) { payments ->
 
             totalEntries= payments.totalEntries

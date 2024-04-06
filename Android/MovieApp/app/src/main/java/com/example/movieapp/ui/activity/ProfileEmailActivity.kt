@@ -57,7 +57,7 @@ class ProfileEmailActivity : AppCompatActivity() {
                 ClassToken.FULLNAME= user.fullname
                 ClassToken.EMAIL = user.email
                 ClassToken.IS_ACTIVE = user.is_active
-                Helper.TokenManager.saveToken(this, ClassToken.MY_TOKEN, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE)
+                Helper.TokenManager.saveToken(this, ClassToken.MY_TOKEN, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE, ClassToken.ROLES)
             }
 
         }

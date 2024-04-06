@@ -13,7 +13,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
-
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -26,9 +25,7 @@ import com.example.movieapp.adapter.model.Movie
 import com.example.movieapp.service.GenreMovieViewModel
 import com.example.movieapp.service.GenreViewModel
 import com.example.movieapp.ui.activity.ResultGenreActivity
-
 import com.example.movieapp.adapter.CustomAdapter
-
 import com.example.movieapp.data.model.FilmDTO
 import com.example.movieapp.ui.activity.SearchActivity
 
@@ -47,11 +44,6 @@ class HomePageFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
-    private lateinit var progressbar1 : ProgressBar
-    private lateinit var progressbar2 : ProgressBar
-    private lateinit var progressbar3 : ProgressBar
-    private lateinit var progressbar4 : ProgressBar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -74,18 +66,18 @@ class HomePageFragment : Fragment() {
             val dataList: MutableList<CardHome> = ArrayList()
 
             dataList.add(CardHome(genre.data[0].id, genre.data[0].title,R.id.recycler_view1,480, 480, false, R.id.progressBar1, R.id.viewAllList1, R.id.txtMoveGroup_1))
-            dataList.add(CardHome(genre.data[1].id, genre.data[1].title,R.id.recycler_view2,640, 320, false, R.id.progressBar, R.id.viewAllList2, R.id.txtMoveGroup_2))
+            dataList.add(CardHome(genre.data[1].id, genre.data[1].title,R.id.recycler_view2,640, 320, false, R.id.progressBar2, R.id.viewAllList2, R.id.txtMoveGroup_2))
             dataList.add(CardHome(genre.data[2].id, genre.data[2].title,R.id.recycler_view3,480, 720, false, R.id.progressBar3, R.id.viewAllList3, R.id.txtMoveGroup_3))
             dataList.add(CardHome(genre.data[3].id, genre.data[3].title,R.id.recycler_view4,480, 480, true , R.id.progressBar4, R.id.viewAllList4, R.id.txtMoveGroup_4))
 
             for(item in dataList){
+                val progressbar: ProgressBar = view.findViewById(item.progressbarId)
                 view.findViewById<TextView?>(item.titleGenreId).setText(item.title)
                 view.findViewById<Button?>(item.viewAllId).setOnClickListener{
                     handleSubmit(view, item.id, item.title)
                 }
+                callApi(view, item, progressbar)
             }
-            callApi(view, dataList)
-
         }
 
 
@@ -135,9 +127,8 @@ class HomePageFragment : Fragment() {
         intent.putExtras(bundle)
         view.context.startActivity(intent)
     }
-    fun callApi(view: View, dataList: MutableList<CardHome>){
+    fun callApi(view: View, data: CardHome, progressbar: ProgressBar){
         val spacing = 24
-            for (data in dataList) {
                 val viewModel = ViewModelProvider(this).get(GenreMovieViewModel::class.java)
                 viewModel.getListGenreMovie(data.id,1).observe(viewLifecycleOwner) { films ->
 
@@ -146,7 +137,6 @@ class HomePageFragment : Fragment() {
                         dataListMovie.add(Movie(o.id ,o.thumbnail, o.title.toString(), o.description.toString(), o.isRequiredPremium))
                     }
 
-                    val progressbar: ProgressBar = view.findViewById(data.progressbarId)
                     progressbar.visibility = View.GONE
 
                     val recyclerView1 = view.findViewById<RecyclerView>(data.view)
@@ -172,7 +162,7 @@ class HomePageFragment : Fragment() {
                     }
                     recyclerView1.adapter = adapter
                 }
-            }
+
     }
 
 }

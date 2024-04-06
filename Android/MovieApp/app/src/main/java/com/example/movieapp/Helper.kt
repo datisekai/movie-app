@@ -21,7 +21,7 @@ class Helper {
             editor.putString(KEY_EMAIL,email)
             editor.putString(KEY_FULLNAME,fullname)
             editor.putBoolean(KEY_IS_ACTIVE,isActive)
-            editor.putStringSet(KEY_ROLES,roles.toSet())
+            editor.putStringSet(KEY_ROLES, roles.toSet())
             editor.apply()
         }
 
@@ -47,7 +47,7 @@ class Helper {
         }
 
         fun getRoles(context: Context) : ArrayList<String>?{
-            val sharedPreferences = context.getSharedPreferences(KEY_ROLES,Context.MODE_PRIVATE)
+            val sharedPreferences = context.getSharedPreferences(TOKEN_PREFS_NAME,Context.MODE_PRIVATE)
             val tmp = sharedPreferences.getStringSet(KEY_ROLES,null)
             val result = ArrayList(tmp)
             return result
