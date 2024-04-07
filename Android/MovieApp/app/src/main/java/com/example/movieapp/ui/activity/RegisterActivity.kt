@@ -1,6 +1,8 @@
 package com.example.movieapp.ui.activity
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -58,6 +60,10 @@ class RegisterActivity : AppCompatActivity() {
 
             // disable login button unless both username / password is valid
             btn_register.isEnabled = registerState.isDataValid
+
+            if(registerState.isDataValid){
+                btn_register.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#19A1BE"))
+            }
 
             if (registerState.usernameError != null) {
                 textUserName.error = getString(registerState.usernameError)

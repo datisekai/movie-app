@@ -83,21 +83,31 @@
             android:textColor="@color/white"
             android:paddingVertical="8dp"/>
 
-        <EditText
-            android:id="@+id/password"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="@string/prompt_password"
-            android:hint="@string/prompt_password"
-            android:imeActionLabel="@string/action_sign_in_short"
-            android:imeOptions="actionDone"
-            android:inputType="textPassword"
-            android:selectAllOnFocus="true"
-            android:textColorHint="#80FFFFFF"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="16dp"
-            android:background="@drawable/image_border"
-            android:textColor="@color/white"/>
+            app:endIconMode="password_toggle"
+            app:hintEnabled="false"
+            app:endIconTint="@color/white"
+            app:boxBackgroundMode="none"
+            app:cursorColor="@color/white">
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/prompt_password"
+                android:hint="@string/prompt_password"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:selectAllOnFocus="true"
+                android:textColorHint="#80FFFFFF"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="16dp"
+                android:background="@drawable/image_border"
+                android:textColor="@color/white" />
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 
@@ -116,16 +126,17 @@
         app:strokeWidth="2dp"
         app:cornerRadius="60dp"
         android:paddingVertical="16dp"
-        android:paddingHorizontal="24dp"/>
+        android:paddingHorizontal="24dp" />
 
     <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+        android:id="@+id/textBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -141,6 +152,29 @@
                 android:cursorVisible="true"
                 android:textAppearance="?attr/textAppearanceBody1" />
         </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textBottom"
+        android:layout_marginVertical="16dp"
+        >
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/loginGoogle"
+            android:text=" Đăng nhập với Google"
+            android:textColor="@color/white"
+            app:strokeColor="@color/white"
+            app:strokeWidth="2dp"
+            app:cornerRadius="8dp"
+            android:backgroundTint="@color/bg1"
+            app:icon="@drawable/google"
+            app:iconGravity="start"
+            app:iconPadding="8dp"/>
+    </LinearLayout>
     <ProgressBar
         android:id="@+id/loading"
         android:layout_width="wrap_content"

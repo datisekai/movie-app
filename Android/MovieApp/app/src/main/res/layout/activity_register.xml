@@ -116,21 +116,31 @@
             android:textColor="@color/white"
             android:paddingVertical="8dp"/>
 
-
-        <EditText
-            android:id="@+id/passwordRegister"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="@string/prompt_password"
-            android:hint="@string/prompt_password"
-            android:imeOptions="actionDone"
-            android:inputType="textPassword"
-            android:selectAllOnFocus="true"
-            android:textColorHint="#80FFFFFF"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="16dp"
-            android:background="@drawable/image_border"
-            android:textColor="@color/white"/>
+            app:endIconMode="password_toggle"
+            app:hintEnabled="false"
+            app:endIconTint="@color/white"
+            app:boxBackgroundMode="none"
+            app:cursorColor="@color/white"
+            >
+            <EditText
+                android:id="@+id/passwordRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/prompt_password"
+                android:hint="@string/prompt_password"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:selectAllOnFocus="true"
+                android:textColorHint="#80FFFFFF"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="16dp"
+                android:background="@drawable/image_border"
+                android:textColor="@color/white" />
+        </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
 
 
