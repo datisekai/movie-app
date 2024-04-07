@@ -39,15 +39,6 @@ class HistoryFragment : Fragment() {
     private var dataList: MutableList<Movie> = ArrayList()
     private lateinit var adapter: CustomAdapter
 
-    private fun generateDataList(): List<Movie> {
-        val dataList: MutableList<Movie> = ArrayList()
-        dataList.add(Movie(0,"", "Chú thuật hồi chiến", "2022", true))
-        dataList.add(Movie(0,"", "abc 2", "2023", false))
-//        dataList.add(MovieItem(R.drawable.anime3, "abc 3", "2024"))
-        // Thêm các phần tử khác vào danh sách dữ liệu
-        return dataList
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
