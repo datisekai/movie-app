@@ -41,8 +41,7 @@ class LoginDataSource {
                     ClassToken.EMAIL = user.email
                     ClassToken.FULLNAME = user.fullname
                     ClassToken.IS_ACTIVE = user.is_active
-                    ClassToken.ROLES = user.roles
-
+                    ClassToken.ROLES=user.roles
                     Helper.TokenManager.saveToken(
                         context,
                         token,
