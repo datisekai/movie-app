@@ -19,23 +19,13 @@ class ProfileDetailsActivity : AppCompatActivity(), View.OnClickListener {
         //set onclick from profile to email
         val buttonclickEmail: RelativeLayout = findViewById(R.id.profile_detail_email_onclick)
         buttonclickEmail.setOnClickListener(this)
-        //set onclick from profile to phone number
-        val buttonclickPhonenumber: RelativeLayout = findViewById(R.id.profile_detail_phonenumber_onclick)
-        buttonclickPhonenumber.setOnClickListener(this)
-        //set onclick from profile to birthday
-        val buttonclickBirthday: RelativeLayout = findViewById(R.id.profile_detail_birthday_onclick)
-        buttonclickBirthday.setOnClickListener(this)
         //set onclick from profile to password
         val buttonclickPassword: RelativeLayout = findViewById(R.id.profile_detail_password_onclick)
         buttonclickPassword.setOnClickListener(this)
-        //set onclick from profile to gender
-        val buttonclickGender: RelativeLayout = findViewById(R.id.profile_detail_gender_onclick)
-        buttonclickGender.setOnClickListener(this)
     }
 
     public fun clickBack(view: View){
-        val intent = Intent(this,HomePage_Activity::class.java)
-        startActivity(intent)
+        finish()
     }
 
     override fun onClick(view: View) {
@@ -50,20 +40,9 @@ class ProfileDetailsActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(intent)
             }
 
-            R.id.profile_detail_phonenumber_onclick ->{
-                val intent = Intent(this, ProfilePhoneNumberActivity::class.java)
-                startActivity(intent)
-            }
-
-            R.id.profile_detail_birthday_onclick ->{
-            }
-
             R.id.profile_detail_password_onclick ->{
                 val intent = Intent(this, ProfilePasswordActivity::class.java)
                 startActivity(intent)
-            }
-
-            R.id.profile_detail_gender_onclick ->{
             }
 
         }

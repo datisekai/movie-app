@@ -9,13 +9,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.loader.content.Loader
+import androidx.loader.app.LoaderManager
 import com.example.movieapp.Helper
 import com.example.movieapp.R
 import com.example.movieapp.data.model.ClassToken
+import com.example.movieapp.data.model.Film
+import com.example.movieapp.data.model.GetUser
+import com.example.movieapp.data.model.User
+import com.example.movieapp.service.UserLoader
+import com.example.movieapp.ui.activity.PrivacyActivity
 import com.example.movieapp.ui.activity.RegisterPremiumActivity
 import com.example.movieapp.ui.activity.ProfileDetailsActivity
+import com.example.movieapp.ui.activity.ReplyActivity
+import com.example.movieapp.ui.activity.TermOfUseActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,11 +37,15 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ProfileFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ProfileFragment : Fragment(), View.OnClickListener {
+class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCallbacks<GetUser> {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var progressBar: ProgressBar
+    private lateinit var tvFullname: TextView
+    private lateinit var tvEmail: TextView
+    private lateinit var linearLayout: LinearLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -51,20 +65,21 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         //set onclick for profile to detail
         val buttonclickProfile: RelativeLayout = view.findViewById(R.id.fragment_profile_click_details)
         buttonclickProfile.setOnClickListener(this)
-        //set onclick from profile to history
-        val buttonclickHistory: RelativeLayout = view.findViewById(R.id.fragment_profile_click_history)
-        buttonclickHistory.setOnClickListener(this)
 
-        //Get Username
-        val id = ClassToken.ID
-        val fullname = ClassToken.FULLNAME
-        val email = ClassToken.EMAIL
+        val buttonclickPrivacy: RelativeLayout = view.findViewById(R.id.btn_profile_to_privacy)
+        buttonclickPrivacy.setOnClickListener(this)
+        val buttonclickTermOfUse: RelativeLayout = view.findViewById(R.id.btn_profile_to_term)
+        buttonclickTermOfUse.setOnClickListener(this)
+        val buttonclickReply: RelativeLayout = view.findViewById(R.id.btn_profile_to_reply)
+        buttonclickReply.setOnClickListener(this)
 
-        val tvFullname = view.findViewById<TextView>(R.id.profile_username_textview)
-        val tvEmail = view.findViewById<TextView>(R.id.profile_email_textview)
+        progressBar = view.findViewById(R.id.fragment_profile_name_progressBar)
+        tvFullname = view.findViewById(R.id.profile_username_textview)
+        tvEmail = view.findViewById<TextView>(R.id.profile_email_textview)
+        linearLayout = view.findViewById<LinearLayout>(R.id.main_layout_fragment_profile)
 
-        tvFullname.setText(fullname)
-        tvEmail.setText(email)
+        //Init Loader
+        loaderManager.initLoader(0, null, this)
 
         return view
     }
@@ -81,7 +96,17 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                 startActivity(intent)
             }
 
-            R.id.fragment_profile_click_history ->{
+            R.id.btn_profile_to_privacy -> {
+                val intent = Intent(requireContext(),PrivacyActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.btn_profile_to_term -> {
+                val intent = Intent(requireContext(),TermOfUseActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.btn_profile_to_reply -> {
+                val intent = Intent(requireContext(),ReplyActivity::class.java)
+                startActivity(intent)
             }
 
         }
@@ -106,5 +131,35 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<GetUser> {
+        linearLayout.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
+        return UserLoader(requireContext())
+    }
+
+    override fun onLoaderReset(loader: Loader<GetUser>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onLoadFinished(loader: Loader<GetUser>, data: GetUser?) {
+        try {
+            linearLayout.visibility = View.VISIBLE
+            progressBar.visibility = View.GONE
+            if(data != null){
+                val fullname = data.data.fullname
+                val email = data.data.email
+
+                ClassToken.FULLNAME = fullname
+                ClassToken.EMAIL = email
+                tvFullname?.setText(fullname)
+                tvEmail?.setText(email)
+            }
+
+
+        }catch (e : Exception){
+            e.printStackTrace()
+        }
     }
 }

@@ -61,11 +61,12 @@
 
                 <EditText
                     android:id="@+id/profile_detail_email_editText"
-                    android:layout_width="wrap_content"
+                    android:layout_width="330dp"
                     android:layout_height="wrap_content"
                     android:hint="Ví dụ: ten_email@example.com"
                     android:layout_gravity="center"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"/>
             </LinearLayout>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/profile_detail_email_btn_confirm"

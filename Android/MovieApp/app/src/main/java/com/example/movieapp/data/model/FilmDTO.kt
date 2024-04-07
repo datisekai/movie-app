@@ -43,6 +43,9 @@ class FilmDTO {
     @SerializedName("is_active")
     var isActive: Boolean = false
 
+    @SerializedName("created_at")
+    var createAt : String = ""
+
 
 
     constructor(){}
@@ -74,5 +77,9 @@ class FilmDTO {
         this.director = director
         this.location = location
         this.isActive = isActive
+    }
+
+    override fun toString(): String {
+        return id.toString() + " " + title
     }
 }
