@@ -24,14 +24,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Search for a content"
+                        android:text="Tìm kiếm phim"
                         android:textColor="@color/white"
                         android:textAppearance="?attr/textAppearanceHeadline5"
                         android:paddingBottom="16dp" />
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:hint="Search for a content"
+                        android:hint="Tìm kiếm..."
                         android:textColor="@color/white"
                         android:textColorHint="#80FFFFFF"
                         android:paddingHorizontal="16dp"

@@ -42,7 +42,7 @@ class SearchActivity : AppCompatActivity() {
         textSearch.setText(receivedValue)
 
         val textResultSearch= findViewById<TextView>(R.id.textResultSearch)
-        textResultSearch.text="Search Results: " + receivedValue.toString()
+        textResultSearch.text="Tìm kiếm: " + receivedValue.toString()
 
         val progressbar: ProgressBar = findViewById(R.id.progressBar)
         val viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)

@@ -32,7 +32,7 @@ class ResultGenreActivity : AppCompatActivity() {
             id = bundle.getInt("id")
             val name = bundle.getString("name")
             val textViewResultGenre= findViewById<TextView>(R.id.textViewResultGenre)
-            textViewResultGenre.text ="Genre: " +name.toString()
+            textViewResultGenre.text ="Thể loại: " +name.toString()
         }
 
         dataList.clear()
