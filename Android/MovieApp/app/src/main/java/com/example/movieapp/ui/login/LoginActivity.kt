@@ -2,6 +2,8 @@ package com.example.movieapp.ui.login
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -102,6 +104,10 @@ class LoginActivity : AppCompatActivity() {
 
             // disable login button unless both username / password is valid
             login.isEnabled = loginState.isDataValid
+
+            if(loginState.isDataValid){
+                login.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#19A1BE"))
+            }
 
             if (loginState.usernameError != null) {
                 username.error = getString(loginState.usernameError)

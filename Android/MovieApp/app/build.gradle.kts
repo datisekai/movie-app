@@ -109,4 +109,11 @@ dependencies {
     //zalo pay
     implementation(files("libs/zpdk-release-v3.1.aar"))
     implementation("commons-codec:commons-codec:1.14")
+
+
+    implementation("androidx.credentials:credentials:1.0.0-alpha02")
+
+    // optional - needed for credentials support from play services, for devices running
+    // Android 13 and below.
+    implementation("androidx.credentials:credentials-play-services-auth:1.0.0-alpha02")
 }
