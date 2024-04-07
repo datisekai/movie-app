@@ -2,6 +2,7 @@ package com.example.movieapp.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -35,6 +36,20 @@ class EsopideAdapter(private val context: Context, private val data : List<Esopi
     override fun onBindViewHolder(holder: EsopideAdapter.EsopideViewHolder, position: Int) {
         val urlImage : String? = data.get(position).thumbnail
         holder.txt.text = data.get(position).title
+        //Check Watched Episode
+        val db = DBHelper(context)
+        val userId = Helper.TokenManager.getId(context)
+        if(userId != null){
+            val listHistory = db.getListId(userId)
+            if(!listHistory.isNullOrEmpty()){
+                for(epId in listHistory){
+                    if(epId == data.get(position).id){
+                        holder.txt.setTextColor(Color.GREEN)
+                        break
+                    }
+                }
+            }
+        }
         var index: Int = position
         if (urlImage.isNullOrBlank()){
             Glide.with(context).load(R.drawable.default_esopide).into(holder.img)

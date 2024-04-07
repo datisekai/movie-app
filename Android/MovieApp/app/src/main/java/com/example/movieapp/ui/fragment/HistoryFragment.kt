@@ -79,14 +79,25 @@ class HistoryFragment : Fragment() {
         recyclerView.layoutManager = GridLayoutManager(view.context, 2)
 
         val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
-        viewModel.getListHistory().observe(viewLifecycleOwner){ newData ->
-            callAPI(progressbar, newData)
-            val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }
-            recyclerView.adapter = adapter
-            adapter?.notifyDataSetChanged()
-        }
-        if(viewModel.getListHistory().value == null){
-            viewModel.CallGetHistory(requireContext())
+        //Check Database Has History
+        val checkUserId = Helper.TokenManager.getId(requireContext())
+        val db = DBHelper(requireContext())
+        if(checkUserId != null){
+            val listEpHistory = db.getListId(checkUserId)
+            if(!listEpHistory.isNullOrEmpty()){
+                viewModel.getListHistory().observe(viewLifecycleOwner){ newData ->
+                    callAPI(progressbar, newData)
+                    val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }
+                    recyclerView.adapter = adapter
+                    adapter?.notifyDataSetChanged()
+                }
+                if(viewModel.getListHistory().value == null){
+                    viewModel.CallGetHistory(requireContext())
+                }
+            }
+            else{
+                progressbar.visibility = View.GONE
+            }
         }
         //callAPI(progressbar)
 
