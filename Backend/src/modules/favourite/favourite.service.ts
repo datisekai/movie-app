@@ -23,6 +23,7 @@ export class FavouriteService {
       .createQueryBuilder('favourite')
       .andWhere('favourite.user.id = :userId', { userId: user.id })
       .orderBy('favourite.created_at', 'DESC')
+      .leftJoinAndSelect('favourite.film', 'film')
       .take(limit)
       .skip((page - 1) * limit);
 
