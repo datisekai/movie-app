@@ -117,7 +117,10 @@ class SearchActivity : AppCompatActivity() {
             }
 
             progressbar.visibility = View.GONE
-
+            if(totalEntries ==0 ){
+                val viewNoItem: TextView = findViewById(R.id.viewNoItem)
+                viewNoItem.visibility = View.VISIBLE
+            }
             adapter?.notifyDataSetChanged()
         }
     }

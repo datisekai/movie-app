@@ -2,20 +2,30 @@ package com.example.movieapp.ui.fragment
 
 import com.example.movieapp.adapter.CustomAdapter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.movieapp.Api.MyViewModel
+import com.example.movieapp.DBHelper
 import com.example.movieapp.GridSpacingItemDecoration
+import com.example.movieapp.Helper
 import com.example.movieapp.R
 import com.example.movieapp.adapter.model.Movie
+import com.example.movieapp.data.model.EpisodeHistoryDTO
 import com.example.movieapp.data.model.Film1
 import com.example.movieapp.data.model.FilmDTO
 import com.example.movieapp.service.FavoriteViewModel
+import com.example.movieapp.service.ServiceBuilder
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -38,6 +48,8 @@ class HistoryFragment : Fragment() {
     private var totalEntries = 0
     private var dataList: MutableList<Movie> = ArrayList()
     private lateinit var adapter: CustomAdapter
+
+    private var ListFilmHistory: MutableList<FilmDTO> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,10 +78,19 @@ class HistoryFragment : Fragment() {
 
         recyclerView.layoutManager = GridLayoutManager(view.context, 2)
 
-        callAPI(progressbar)
+        val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+        viewModel.getListHistory().observe(viewLifecycleOwner){ newData ->
+            callAPI(progressbar, newData)
+            val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }
+            recyclerView.adapter = adapter
+            adapter?.notifyDataSetChanged()
+        }
+        if(viewModel.getListHistory().value == null){
+            viewModel.CallGetHistory(requireContext())
+        }
+        //callAPI(progressbar)
 
-        val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }
-        recyclerView.adapter = adapter
+
 
 
         return view
@@ -95,68 +116,15 @@ class HistoryFragment : Fragment() {
                 }
             }
     }
-    fun callAPI( progressbar: ProgressBar){
+    fun callAPI( progressbar: ProgressBar, list: List<FilmDTO>){
+        Log.e("CALL HISTORY API12",list.toString())
+        for (o in list){
+            dataList.add(Movie(o.id, o.thumbnail, o.title, o.description.toString(), o.isRequiredPremium))
+        }
 
-            for (o in initData()){
-                dataList.add(Movie(o.id, o.thumbnail, o.title, o.description.toString(), o.isRequiredPremium))
-            }
+        progressbar.visibility = View.GONE
 
-            progressbar.visibility = View.GONE
-
-    }
-    fun initData() : List<FilmDTO>{
-        val dataList: MutableList<FilmDTO> = ArrayList()
-        dataList.add(
-            FilmDTO(
-                1,
-                "film-1",
-                "Film 1",
-                "Film 1",
-                "Description 1",
-                100,
-                "thumbnail-1.jpg",
-                "Action",
-                "Released",
-                false,
-                "Director 1",
-                "Location 1",
-                true
-            )
-        )
-        dataList.add(
-            FilmDTO(
-                2,
-                "film-2",
-                "Film 2",
-                "Film 2",
-                "Description 2",
-                200,
-                "thumbnail-2.jpg",
-                "Drama",
-                "Released",
-                true,
-                "Director 2",
-                "Location 2",
-                true
-            )
-        )
-        dataList.add(
-            FilmDTO(
-                3,
-                "film-3",
-                "Film 3",
-                "Film 3",
-                "Description 3",
-                150,
-                "thumbnail-3.jpg",
-                "Comedy",
-                "Released",
-                false,
-                "Director 3",
-                "Location 3",
-                false
-            )
-        )
-        return dataList
     }
 }
+
+data class EpisodeIdsWrapper(val episode_ids: List<Int>)
