@@ -16,6 +16,7 @@
         app:riv_oval="true" />
 
     <TextView
+        android:textColor="#8F8F8F"
         android:id="@+id/txtComment"
         android:layout_width="0dp"
         android:layout_marginLeft="5dp"
@@ -29,6 +30,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:textColor="#8F8F8F"
         android:id="@+id/txtDateCreated"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

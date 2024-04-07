@@ -59,6 +59,7 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
+  @ApiProperty()
   fullname: string;
 
   @IsArray()

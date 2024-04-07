@@ -97,6 +97,27 @@ class MyViewModel() : ViewModel() {
         return commentLiveData
     }
 
+    fun getAllFilmFavourite() : LiveData<Film1>{
+        val favoriteLiveData = MutableLiveData<Film1>()
+        val call = ServiceBuilder().apiService.getAllFilmFavourite()
+        call.enqueue(object : Callback<Film1>{
+            override fun onResponse(call: Call<Film1>, response: Response<Film1>) {
+                if(response.isSuccessful){
+                    favoriteLiveData.value = response.body()
+                    _dataLoaded.value = true
+                }else{
+                    Log.e("ERROR",  "fail")
+                }
+            }
+
+            override fun onFailure(call: Call<Film1>, t: Throwable) {
+               t.printStackTrace()
+            }
+
+        })
+        return favoriteLiveData
+    }
+
     fun getTokenCreateOrder() : LiveData<PayOrder>{
         val tokenPayOrder : LiveData<PayOrder> = MutableLiveData()
         val call = ServiceBuilder().apiService.createOrder()

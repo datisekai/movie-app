@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activity.DetailFilmActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#1A1A1D">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,7 +65,7 @@
         android:layout_marginRight="5dp"
         android:layout_marginTop="20dp"
         android:text="Film"
-        android:textColor="@color/black"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -72,6 +73,7 @@
 
 
     <ScrollView
+        android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -79,49 +81,42 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_margin="16dp">
-            <ImageButton
-                android:id="@+id/btnFavotite"
-                android:layout_marginLeft="50dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/baseline_add_24"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="Thêm vào yêu thích" />
-
             <LinearLayout
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
+                    android:textColor="#8F8F8F"
                     android:id="@+id/txtYear"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"/>
                 <TextView
+                    android:textColor="#8F8F8F"
                     android:text="|"
                     android:layout_marginLeft="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"/>
                 <TextView
+                    android:textColor="#8F8F8F"
                     android:id="@+id/txtMonth"
                     android:layout_marginLeft="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"/>
                 <TextView
+                    android:textColor="#8F8F8F"
                     android:text="|"
                     android:layout_marginLeft="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"/>
                 <TextView
+                    android:textColor="#8F8F8F"
                     android:id="@+id/txtCountry"
                     android:layout_marginLeft="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"/>
                 <TextView
+                    android:textColor="#8F8F8F"
                     android:text="|"
                     android:layout_marginLeft="5dp"
                     android:layout_width="wrap_content"
@@ -136,46 +131,72 @@
                 android:layout_marginTop="5dp">
 
                 <TextView
+                    android:textColor="#8F8F8F"
                     android:gravity="center"
                     android:id="@+id/txtView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
                 <TextView
+                    android:textColor="#8F8F8F"
                     android:layout_marginLeft="5dp"
+                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="lượt xem"/>
+                    android:text="view"/>
+                <LinearLayout
+                    android:layout_marginLeft="150dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageButton
+                        android:id="@+id/btnFavotite"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:gravity="center"
+                        android:src="@drawable/baseline_add_24"
+                        app:backgroundTint="@null"/>
+
+                    <TextView
+                        android:textColor="#8F8F8F"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="Add Favourite Film" />
+                </LinearLayout>
             </LinearLayout>
 
             <Button
                 android:id="@+id/buttonWatch"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableBottom="@drawable/icon_play"
-                android:text="XEM NGAY"
-                android:textColor="@color/black"
+                android:text="WATCH NOW"
+                android:textColor="@color/white"
                 android:drawablePadding="10dp"
-                android:drawableTint="@color/black"
-                android:backgroundTint="#F3EFEF"
+                app:backgroundTint="@null"
+                android:background="@drawable/custome_button"
                 android:onClick="clickWatch"/>
             <TextView
                 android:layout_marginTop="5dp"
+                android:textColor="#8F8F8F"
                 android:id="@+id/txtDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"/>
             <TextView
+                android:textColor="#8F8F8F"
                 android:id="@+id/txtDirector"
                 android:layout_marginTop="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Đạo diễn: "/>
+                android:text="Director: "/>
             <TextView
+                android:textColor="#8F8F8F"
                 android:id="@+id/txtCatelogy"
                 android:layout_marginTop="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Thể loại: "/>
+                android:text="Category: "/>
 
             <LinearLayout
                 android:layout_marginTop="20dp"
@@ -183,9 +204,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <TextView
+                    android:textColor="#8F8F8F"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Danh sách tập"
+                    android:text="List of episodes"
                     android:textStyle="bold"
                     android:textSize="16sp"/>
             </LinearLayout>
@@ -197,10 +219,11 @@
                 android:layout_height="wrap_content" />
 
             <TextView
+                android:textColor="#8F8F8F"
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Bình luận"
+                android:text="Comment"
                 android:textSize="26sp"
                 android:textStyle="bold"/>
 
@@ -218,11 +241,12 @@
                     app:riv_oval="true"/>
 
                 <EditText
+                    android:textColor="#8F8F8F"
                     android:id="@+id/edtComment"
                     android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Thêm bình luận"
+                    android:hint="Add comment here"
                     android:inputType="text"
                     android:imeOptions="actionDone"/>
 

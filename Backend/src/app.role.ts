@@ -20,6 +20,9 @@ export enum AppResource {
   ARTICLE = 'ARTICLE',
   HISTORY = 'HISTORY',
   UPLOAD = 'UPLOAD',
+  COMMENT = 'COMMENT',
+  ORDER = 'ORDER',
+  FAVOURITE = 'FAVOURITE',
 }
 
 export const roles: RolesBuilder = new RolesBuilder();
@@ -27,6 +30,7 @@ export const roles: RolesBuilder = new RolesBuilder();
 roles
   // USER ROLES
   .grant(AppRoles.FREE)
+  .createAny([AppResource.COMMENT, AppResource.ORDER, AppResource.FAVOURITE])
   .updateOwn([
     AppResource.USER,
     AppResource.CATEGORY,
@@ -52,16 +56,19 @@ roles
     AppResource.FILM,
     AppResource.EPISODE,
     AppResource.UPLOAD,
+    AppResource.ARTICLE,
   ])
   .updateAny([
     AppResource.USER,
     AppResource.CATEGORY,
     AppResource.FILM,
     AppResource.EPISODE,
+    AppResource.ARTICLE,
   ])
   .deleteAny([
     AppResource.USER,
     AppResource.CATEGORY,
     AppResource.FILM,
     AppResource.EPISODE,
+    AppResource.ARTICLE,
   ]);

@@ -3,26 +3,42 @@ package com.example.movieapp.ui.activity
 import com.example.movieapp.adapter.CustomAdapter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.GridSpacingItemDecoration
 import com.example.movieapp.R
 import com.example.movieapp.adapter.model.Movie
+import com.example.movieapp.adapter.model.PaymentHistory
+import com.example.movieapp.service.GenreMovieViewModel
+import com.example.movieapp.service.PaymentViewModel
 
 class ResultGenreActivity : AppCompatActivity() {
+    private var currentPage = 1
+    private var totalEntries = 0
+    private var dataList: MutableList<Movie> = ArrayList()
+    private lateinit var adapter: CustomAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result_genre)
 
         val bundle = intent.extras
+        var id = -1
         if (bundle != null) {
-            val id = bundle.getInt("id")
+            id = bundle.getInt("id")
             val name = bundle.getString("name")
             val textViewResultGenre= findViewById<TextView>(R.id.textViewResultGenre)
             textViewResultGenre.text ="Genre: " +name.toString()
         }
+
+        dataList.clear()
+
+        val progressbar: ProgressBar = findViewById(R.id.progressBar)
+        val viewModel = ViewModelProvider(this).get(GenreMovieViewModel::class.java)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
 //        recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -32,24 +48,67 @@ class ResultGenreActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
-        val dataList: List<Movie>? = generateDataList()
+        if(id !== -1){
+            callAPI(viewModel, id,  progressbar, recyclerView)
 
-        val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) } ?: CustomAdapter(emptyList(),
-            R.layout.card, 480, 480, true)
+            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                    val visibleItemCount = layoutManager.childCount
+                    val totalItemCount = layoutManager.itemCount
+                    val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                    val itemsPerPage = 10
+
+                    val totalPages = totalEntries / itemsPerPage + if (totalEntries % itemsPerPage == 0) 0 else 1
+                    val isLastPage = currentPage == totalPages
+
+                    if (isLastPage) {
+                        return
+                    }
+
+                    // Kiểm tra nếu người dùng đang cuộn xuống dưới (dy > 0)
+                    if (dy > 0 && visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
+                        // Đã cuộn đến cuối danh sách, gọi hàm loadMoreData để tải dữ liệu trang tiếp theo
+                        currentPage++
+                        callAPI(viewModel,id,  progressbar, recyclerView)
+                    }
+                }
+            })
+
+        }
+
+        adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }!!
         recyclerView.adapter = adapter
-
         val imageView = findViewById<ImageView>(R.id.back)
 
         imageView.setOnClickListener {
             finish()
         }
     }
-    private fun generateDataList(): List<Movie> {
-        val dataList: MutableList<Movie> = ArrayList()
-        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022",1))
-        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023",1))
-        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024",1))
-        // Thêm các phần tử khác vào danh sách dữ liệu
-        return dataList
+
+//    private fun generateDataList(): List<Movie> {
+//        val dataList: MutableList<Movie> = ArrayList()
+//        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022",1))
+//        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023",1))
+//        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024",1))
+//        // Thêm các phần tử khác vào danh sách dữ liệu
+//        return dataList
+
+    fun callAPI(viewModel: GenreMovieViewModel, genreId: Int , progressbar: ProgressBar, recyclerView: RecyclerView){
+        viewModel.getListGenreMovie(genreId, currentPage).observe(this) { films ->
+
+            totalEntries= films.totalEntries
+
+            for (o in films.data){
+                dataList.add(Movie(o.id, o.thumbnail, o.title, o.description.toString(), o.isRequiredPremium))
+            }
+
+            progressbar.visibility = View.GONE
+
+            adapter?.notifyDataSetChanged()
+        }
     }
 }

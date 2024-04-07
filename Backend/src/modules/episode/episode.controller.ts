@@ -14,7 +14,11 @@ import { RolesBuilder, InjectRolesBuilder } from 'nest-access-control';
 import { AppResource, AppRoles } from 'src/app.role';
 import { User as UserEntity } from '../user/user.entity';
 import { EpisodeService } from './episode.service';
-import { CreateEpisodeDto, EpisodeUpdatePositionDto } from './episode.dto';
+import {
+  CreateEpisodeDto,
+  EpisodeHistoryDto,
+  EpisodeUpdatePositionDto,
+} from './episode.dto';
 import { Episode } from './episode.entity';
 
 @ApiTags(AppResource.EPISODE)
@@ -99,13 +103,19 @@ export class EpisodeController {
     resource: AppResource.EPISODE,
   })
   @ApiOperation({
-    summary: 'Edit Episode',
+    summary: 'Edit Episode Position',
   })
   @Put('position')
-  async updatePosition(
-    @Body() update_position_dto: EpisodeUpdatePositionDto,
-  ) {
-   
+  async updatePosition(@Body() update_position_dto: EpisodeUpdatePositionDto) {
     return this.episodeService.updatePosition(update_position_dto);
+  }
+
+  @ApiOperation({
+    summary: 'Get Episode History By Episode Ids',
+  })
+  @Post('history')
+  async findEpisodesByIds(@Body() body: EpisodeHistoryDto) {
+    const { episode_ids } = body;
+    return this.episodeService.findEpisodesByIds(episode_ids);
   }
 }

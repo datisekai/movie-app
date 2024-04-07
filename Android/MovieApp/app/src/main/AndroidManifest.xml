@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,6 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieApp"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
+        <activity
+            android:name=".ui.activity.AllMovieActivity"
+            android:exported="false">
+        </activity>
         <activity
             android:name=".ui.activity.BlogDetailActivity"
             android:exported="false" />
@@ -50,11 +60,9 @@
             android:screenOrientation="landscape"
             android:supportsPictureInPicture="true"
             android:theme="@style/Theme.AppCompat.FullScreen" />
-
-
         <activity
             android:name=".ui.activity.ResultGenreActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".ui.activity.SearchActivity"
             android:exported="false" />
@@ -89,4 +97,5 @@
             android:name=".ui.activity.MainActivity"
             android:exported="false" />
     </application>
+
 </manifest>

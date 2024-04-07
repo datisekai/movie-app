@@ -7,11 +7,18 @@
     tools:context=".ui.fragment.ProfileFragment"
     android:background="@color/bg1">
 
+    <ProgressBar
+        android:id="@+id/fragment_profile_name_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/main_layout_fragment_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">

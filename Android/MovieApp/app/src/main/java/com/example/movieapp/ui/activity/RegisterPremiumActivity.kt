@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
@@ -25,17 +26,20 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.example.movieapp.Api.MyViewModel
 import com.example.movieapp.R
+import com.example.movieapp.adapter.PaymentsAdapter
 import com.example.movieapp.adapter.SlideAdapter
 import com.example.movieapp.data.model.PayOrder
 import com.example.movieapp.service.ServiceBuilder
 import com.example.movieapp.service.ZaloPay.Api.CreateOrder
 import com.example.movieapp.slideItem
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.json.JSONObject
 import vn.zalopay.sdk.Environment
 import vn.zalopay.sdk.ZaloPayError
@@ -50,8 +54,6 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_premium)
-
-
 
         val button = findViewById<ImageButton>(R.id.imgButtonPremium)
         button.setOnClickListener(this)
@@ -94,6 +96,15 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
         ZaloPaySDK.init(2553, Environment.SANDBOX)
         val buttonPay = findViewById<Button>(R.id.buttonPay)
         buttonPay.setOnClickListener(this)
+
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerPayment)
+        val data : List<Int> = mutableListOf(R.drawable.zaloimg,R.drawable.qr_img,R.drawable.gate_img,R.drawable.momo_img,
+            R.drawable.vnpay_img,R.drawable.onepay_img)
+        recyclerView.layoutManager = GridLayoutManager(this,3)
+        recyclerView.adapter = PaymentsAdapter(this,data)
+
+        val btnPayMent = findViewById<Button>(R.id.btnPayInSheet)
+        btnPayMent.setOnClickListener(this)
 
     }
 
@@ -181,6 +192,17 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
     }
 
 
+    private fun showBottomSheet(){
+        val linearLayout = findViewById<LinearLayout>(R.id.layoutBottomSheet)
+        val bottomSheetBehavior = BottomSheetBehavior.from(linearLayout)
+        if (bottomSheetBehavior.state!=BottomSheetBehavior.STATE_EXPANDED){
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }else{
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+    }
+
+
     override fun onPause() {
         super.onPause()
         Slidehandler.removeCallbacks(SlideRunnable)
@@ -196,7 +218,18 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
             R.id.imgButtonPremium -> {
                 finish()
             }
-            R.id.buttonPay -> requestZaloPay()
+            R.id.buttonPay -> showBottomSheet()
+            R.id.btnPayInSheet ->{
+                if (PaymentsAdapter.check.checkChoose==true){
+                    if (PaymentsAdapter.check.index==0){
+                        requestZaloPay()
+                    }else{
+                        Toast.makeText(this,"Please choose payments another",Toast.LENGTH_LONG).show()
+                    }
+                }else{
+                    Toast.makeText(this,"Please choose payments",Toast.LENGTH_LONG).show()
+                }
+            }
 
         }
 

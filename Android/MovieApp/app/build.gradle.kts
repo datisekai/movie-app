@@ -103,10 +103,17 @@ dependencies {
 
 
     implementation("androidx.fragment:fragment-ktx:1.4.0")
+//    implementation ("org.sufficientlysecure:html-textview:3.10")
 
     //zalo pay
     implementation(files("libs/zpdk-release-v3.1.aar"))
     implementation("commons-codec:commons-codec:1.14")
 
+    
+    implementation("com.squareup.picasso:picasso:2.71828")
+    implementation("com.google.android.material:material:1.2.1")
 
+
+    // Google ads
+    implementation ("com.google.android.gms:play-services-ads:23.0.0")
 }
