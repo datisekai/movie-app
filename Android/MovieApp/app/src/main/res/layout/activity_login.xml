@@ -13,93 +13,130 @@
     android:background="@drawable/bg_login">
 
     <TextView
+        android:id="@+id/header1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Login"
+        android:text="Đăng nhập"
         android:textColor="@color/white"
-        android:layout_marginTop="96dp"
-        android:gravity="center"
+        android:layout_marginTop="88dp"
         android:textAppearance="?attr/textAppearanceHeadline4"/>
-
-    <EditText
-        android:id="@+id/username"
+    <TextView
+        android:id="@+id/header2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
-        android:autofillHints="@string/prompt_email"
-        android:hint="@string/prompt_email"
-        android:inputType="textEmailAddress"
-        android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColorHint="#80FFFFFF"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="20dp"
-        android:background="@drawable/image_border"
-        android:textColor="@color/white"/>
+        app:layout_constraintTop_toBottomOf="@+id/header1"
+        android:text="Đăng nhập để tiếp tục"
+        android:textColor="@color/white"
+        android:paddingVertical="8dp"
+        android:textAppearance="?attr/textAppearanceHeadline6"/>
 
-    <EditText
-        android:id="@+id/password"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints="@string/prompt_password"
-        android:hint="@string/prompt_password"
-        android:imeActionLabel="@string/action_sign_in_short"
-        android:imeOptions="actionDone"
-        android:inputType="textPassword"
-        android:selectAllOnFocus="true"
+        android:id="@+id/usernameLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header2"
         android:layout_marginVertical="16dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textColor="@color/white"
+            android:paddingVertical="8dp"/>
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/prompt_email"
+            android:hint="@string/prompt_email"
+            android:inputType="textEmailAddress"
+            android:selectAllOnFocus="true"
+            android:textColorHint="#80FFFFFF"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="16dp"
+            android:background="@drawable/image_border"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username"
-        android:textColorHint="#80FFFFFF"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="20dp"
-        android:background="@drawable/image_border"
-        android:textColor="@color/white"/>
+        app:layout_constraintTop_toBottomOf="@+id/usernameLayout"
+        android:id="@+id/passwrordLayout"
+        android:orientation="vertical"
+        android:layout_marginVertical="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mật khẩu"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textColor="@color/white"
+            android:paddingVertical="8dp"/>
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/prompt_password"
+            android:hint="@string/prompt_password"
+            android:imeActionLabel="@string/action_sign_in_short"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:selectAllOnFocus="true"
+            android:textColorHint="#80FFFFFF"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="16dp"
+            android:background="@drawable/image_border"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/login"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="16dp"
         android:text="@string/action_sign_in"
         android:enabled="false"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/passwrordLayout"
         app:layout_constraintVertical_bias="0.2"
         android:textColor="@color/white"
         app:strokeColor="@color/white"
         app:strokeWidth="2dp"
-        app:cornerRadius="8dp"
+        app:cornerRadius="60dp"
         android:paddingVertical="16dp"
-        />
-        <LinearLayout
+        android:paddingHorizontal="24dp"/>
+
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login"
             android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Do you have an account?"
+                android:text="Chưa đăng ký?"
                 android:textColor="@color/white"
                 android:textAppearance="?attr/textAppearanceBody1" />
             <TextView
                 android:id="@+id/linkRegister"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" Register"
+                android:text=" Đăng ký"
                 android:textColor="@color/start_color"
                 android:cursorVisible="true"
                 android:textAppearance="?attr/textAppearanceBody1" />
@@ -113,8 +150,8 @@
         android:layout_marginBottom="64dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/password"
-        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintEnd_toEndOf="@+id/passwrordLayout"
+        app:layout_constraintStart_toStartOf="@+id/passwrordLayout"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
 
