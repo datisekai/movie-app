@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -32,14 +33,18 @@ class ProfileFullNameActivity : AppCompatActivity() {
         btnSave.setOnClickListener {
             val Fullname = editText.text.toString()
             if (Fullname?.isNotEmpty() == true){
-                executeEditFullname(Fullname)
+                val result = executeEditFullname(Fullname)
                 editText.setText("")
-                oldTv.setText(ClassToken.FULLNAME)
-
-                //Return To Profile Fragment
-                val intent = Intent(this, HomePage_Activity::class.java)
-                intent.putExtra("typeFragment",1)
-                startActivity(intent)
+                if(result){
+                    Toast.makeText(this, "Update FullName Successfully!!", Toast.LENGTH_LONG).show()
+                    oldTv.setText(ClassToken.FULLNAME)
+                    //Return To Profile Fragment
+                    val intent = Intent(this, HomePage_Activity::class.java)
+                    intent.putExtra("typeFragment",1)
+                    startActivity(intent)
+                }else{
+                    Toast.makeText(this, "Update Fail Successfully!!", Toast.LENGTH_LONG).show()
+                }
             } else{
                 val alertDialog = AlertDialog.Builder(this)
                     .setTitle("Thông báo")
@@ -54,9 +59,10 @@ class ProfileFullNameActivity : AppCompatActivity() {
         }
     }
 
-    private fun executeEditFullname(fullname: String){
+    private fun executeEditFullname(fullname: String): Boolean{
         val execute = Executors.newSingleThreadExecutor()
-        execute.execute {
+
+        val futureResult = execute.submit<Boolean> {
             val userDTO = UserDTO(ClassToken.ID,ClassToken.EMAIL,fullname,ClassToken.IS_ACTIVE)
 
             val result = ServiceBuilder().apiService.editUser(ClassToken.ID,userDTO).execute()
@@ -68,8 +74,18 @@ class ProfileFullNameActivity : AppCompatActivity() {
                 ClassToken.IS_ACTIVE = user.is_active
                 ClassToken.ROLES = user.roles
                 Helper.TokenManager.saveToken(this, ClassToken.MY_TOKEN, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE,ClassToken.ROLES)
-            }
 
+                return@submit true
+            }else{
+                return@submit false
+            }
+        }
+
+        val resultGetApi = futureResult.get()
+        if(resultGetApi){
+            return true
+        }else{
+            return false
         }
     }
 

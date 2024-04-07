@@ -157,6 +157,7 @@
 
                 <!--Mục quyền riêng tư-->
                 <RelativeLayout
+                    android:id="@+id/btn_profile_to_privacy"
                     android:layout_width="360dp"
                     android:layout_height="wrap_content"
                     >
@@ -183,6 +184,7 @@
 
                 <!--Mục Điều khoản sử dụng-->
                 <RelativeLayout
+                    android:id="@+id/btn_profile_to_term"
                     android:layout_width="360dp"
                     android:layout_height="wrap_content"
                     >
@@ -209,6 +211,7 @@
 
                 <!--Mục phản hồi-->
                 <RelativeLayout
+                    android:id="@+id/btn_profile_to_reply"
                     android:layout_width="360dp"
                     android:layout_height="wrap_content"
                     >

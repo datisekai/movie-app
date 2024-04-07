@@ -9,39 +9,46 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/bg1">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
-            >
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="clickBack"
-                android:background="@drawable/baseline_keyboard_arrow_left_24"
-                />
+            android:orientation="vertical"
+            android:background="@color/bg1">
             <LinearLayout
+
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="30dp">
-                <TextView
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                >
+                <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Chi Tiết Blog"
-                    android:textSize="24dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"/>
-            </LinearLayout>
+                    android:onClick="clickBack"
+                    android:background="@drawable/baseline_keyboard_arrow_left_24"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="30dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chi Tiết Blog"
+                        android:textSize="24dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
 
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lines"
+                android:layout_marginBottom="10dp"/>
         </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/lines"
-            android:layout_marginBottom="10dp"/>
 
         <ProgressBar
             android:id="@+id/article_progressBar"
@@ -59,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="30dp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:layout_centerHorizontal="true"/>
 
         </RelativeLayout>
