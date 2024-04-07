@@ -93,8 +93,8 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                         val intent : Intent =  Intent(itemView.context, DetailFilmActivity::class.java)
                         val bundle = Bundle()
                         val movie = data as Movie
-//                        bundle.putInt("id", movieItem.id) // Đặt giá trị vào Bundle
-                        intent.putExtras(bundle)
+                        bundle.putInt("ID",movie.id)
+                        intent.putExtra("DataID",bundle)
                         itemView.context.startActivity(intent);
                     }
                 }
