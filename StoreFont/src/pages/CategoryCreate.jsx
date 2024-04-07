@@ -1,6 +1,6 @@
-import { useLocation,useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import API_URL from "../url";
@@ -11,7 +11,7 @@ function CategoryCreate() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit } = useForm();
   const initialImg =
     "https://image.tmdb.org/t/p/w500//A4j8S6moJS2zNtRR8oWF08gRnL5.jpg"; // Initial image
   const [imgUrl, setImgUrl] = useState(initialImg);
@@ -62,9 +62,6 @@ function CategoryCreate() {
     }
       setLoading(false)
       const token = localStorage.getItem("accessToken");
-      const is_active = data.is_active === "true";
-      data.is_active = is_active;
-      data.description = description;
       data.updated_at = new Date();
       axios
         .post(`${API_URL}.category`, data, {
@@ -102,16 +99,43 @@ function CategoryCreate() {
     >
       {/* left side */}
       <div className="w-1/3">
-        <h3>Thumbnail</h3>
-        <img src={imgUrl} alt={`film_poster`} className="w-96 h-96" />
-        <input
-          type="file"
-          multiple={false}
-          {...register("thumbnail", { onChange: handleFileChange })}
-        />
+      <div className="flex items-center justify-center w-full h-full">
+            <label className="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+              <img
+                src={imgUrl}
+                alt="Preview"
+                className="w-full h-full"
+              />
+              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <svg
+                  className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 16"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                  />
+                </svg>
+                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                  <span className="font-semibold">Click to upload</span> or drag
+                  and drop
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  SVG, PNG, JPG or GIF (MAX. 800x400px)
+                </p>
+              </div>
+              <input id="dropzone-file" type="file" className="hidden" {...register("thumbnail", { onChange: handleFileChange })} />
+            </label>
+          </div>
       </div>
       {/* right side */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-y-2 w-2/3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-y-2 w-2/3 h-fit">
         <div className="flex flex-col">
           <label htmlFor="title">Title:</label>
           <input
@@ -121,55 +145,27 @@ function CategoryCreate() {
             {...register("title")}
           />
         </div>
-        <div className="flex flex-col">
-          <label htmlFor="title_search">Title_Search:</label>
-          <input
-            type="text"
-            name="title_search"
-            className="rounded p-2 border border-gray-600  max-w-[250px]"
-            {...register("title_search")}
-          />
-        </div>
-        <div className="flex flex-col md:col-span-3 w-full">
+        
+        <div className="flex flex-col md:col-span-3">
           <label htmlFor="description">Description:</label>
           <SunEditor
             setContents={description}
             onChange={(content) => setDescription(content)}
+            height="10rem"
           />
         </div>
-        <div className="flex flex-col">
-          <label htmlFor="is_active">Is Active:</label>
-          <select
-            name="is_active"
-            id=""
-            className="rounded p-2 border border-gray-600  max-w-[250px]"
-            {...register("is_active")}
-          >
-            <option value="true">True</option>
-            <option value="false">False</option>
-          </select>
+        <div className="flex flex-col col-span-3">
+          
+              <label className="inline-flex items-center cursor-pointer">
+                <input type="checkbox" value="" className="sr-only peer" {...register("is_active")} defaultChecked={true}/>
+                <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                  Is Active
+                </span>
+              </label>
+            
         </div>
-        <div className="flex flex-col">
-          <label htmlFor="is_deleted">Is Deleted:</label>
-          <select
-            name="is_deleted"
-            id=""
-            className="rounded p-2 border border-gray-600  max-w-[250px]"
-            {...register("is_deleted")}
-          >
-            <option value="false">False</option>
-            <option value="true">True</option>
-          </select>
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="created_at">Created At:</label>
-          <input
-            type="text"
-            name="created_at"
-            className="rounded p-2 border border-gray-600  max-w-[250px]"
-            readOnly
-          />
-        </div>
+        
         <div className="">
         <button
             type="submit"

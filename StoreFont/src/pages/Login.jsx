@@ -45,6 +45,7 @@ function Login() {
           text: err.response.data.message,
           icon: "error",
         });
+        setLoading(false);
       });
   };
   return (

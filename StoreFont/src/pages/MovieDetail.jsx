@@ -1,5 +1,5 @@
-import { Link, useLocation,useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
@@ -7,6 +7,7 @@ import axios from "axios";
 import API_URL from "../url";
 import Swal from "sweetalert2";
 import ClipLoader from "react-spinners/ClipLoader";
+import { MultiSelect } from "react-multi-select-component";
 function MovieDetail() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -14,7 +15,6 @@ function MovieDetail() {
   const location = useLocation();
   const movie = location.state;
   const [description, setDescription] = useState(movie.description);
-  const addGenreRef = useRef(null);
   const [currentGenre, setCurrentGenre] = useState(movie.categories || []);
   const [allGenre, setAllGenres] = useState([]);
   const initialImg = movie.thumbnail; // Initial image
@@ -66,7 +66,7 @@ function MovieDetail() {
     const token = localStorage.getItem("accessToken");
     data.description = description;
     data.categoryIds = currentGenre.map((genre) => {
-      return genre.id;
+      return genre.value;
     });
     axios
       .put(`${API_URL}.film/${movie.id}`, data, {
@@ -83,9 +83,9 @@ function MovieDetail() {
           icon: "success",
         }).then((result) => {
           if (result.isConfirmed) {
-            navigate(-1)
+            navigate(-1);
           }
-        })
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -96,35 +96,7 @@ function MovieDetail() {
         });
       });
   };
-  function addGenre() {
-    const newGenreId = addGenreRef.current.value;
-    const [selectedGenre] = allGenre.filter((genre) => {
-      return genre.id == newGenreId;
-    });
-    if (selectedGenre) {
-      if (currentGenre.length > 0) {
-        if (!currentGenre.includes(selectedGenre)) {
-          setCurrentGenre([...currentGenre, selectedGenre]);
-          setAllGenres(
-            allGenre.filter((genre) => {
-              return genre.id != newGenreId;
-            })
-          );
-        }
-      } else {
-        setCurrentGenre([selectedGenre]);
-        setAllGenres(
-          allGenre.filter((genre) => {
-            return genre.id != newGenreId;
-          })
-        );
-      }
-    }
-  }
-  function removeGenre(genre) {
-    setCurrentGenre(currentGenre.filter((item) => item.id != genre.id));
-    setAllGenres([...allGenre, genre]);
-  }
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     axios
@@ -134,14 +106,22 @@ function MovieDetail() {
         },
       })
       .then((res) => {
-        console.log(currentGenre)
-        console.log(res.data.data)
-        setAllGenres(res.data.data.filter(item => !currentGenre.some(currentItem => currentItem.id === item.id)));
+        setAllGenres(
+          res.data.data.map((genre) => ({
+            label: genre.title,
+            value: genre.id,
+          }))
+        );
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+  useEffect(() => {
+    setCurrentGenre(
+      movie.categories.map((genre) => ({ label: genre.title, value: genre.id }))
+    );
+  }, [movie.categories]);
   return (
     <div className="w-full">
       <h1 className="text-2xl font-bold pl-2">{movie.title}</h1>
@@ -152,12 +132,40 @@ function MovieDetail() {
       >
         {/* left side */}
         <div className="p-2 space-y-2 w-1/3">
-          <img src={imgUrl} alt={`film_poster`} className="w-full h-full" />
-          <input
-            type="file"
-            multiple={false}
-            {...register("thumbnail", { onChange: handleFileChange })}
-          />
+          <div className="flex items-center justify-center w-full h-full">
+            <label className="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+              <img
+                src={imgUrl}
+                alt="Preview"
+                className="w-full h-full"
+              />
+              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <svg
+                  className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 16"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                  />
+                </svg>
+                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                  <span className="font-semibold">Click to upload</span> or drag
+                  and drop
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  SVG, PNG, JPG or GIF (MAX. 800x400px)
+                </p>
+              </div>
+              <input id="dropzone-file" type="file" className="hidden" {...register("thumbnail", { onChange: handleFileChange })} />
+            </label>
+          </div>
         </div>
         {/* right side */}
         <div className="p-2 w-2/3 flex flex-col gap-3">
@@ -173,7 +181,7 @@ function MovieDetail() {
                 defaultValue={movie.title}
               />
             </div>
-            
+
             <div className="flex flex-col">
               <label htmlFor="director">Director:</label>
               <input
@@ -195,24 +203,6 @@ function MovieDetail() {
               />
             </div>
 
-            <div className="flex flex-col">
-              <label htmlFor="title">View:</label>
-              <p className="rounded p-2 border border-gray-600  max-w-[250px]">
-                {movie.view}
-              </p>
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="is_required_premium">Is Required Premium:</label>
-              <select
-                type="text"
-                name="location"
-                className="rounded p-2 border border-gray-600 max-w-[250px]"
-                {...register("is_required_premium")}
-              >
-                <option value="false">False</option>
-                <option value="true">True</option>
-              </select>
-            </div>
             <div className="flex flex-col">
               <label htmlFor="is_required_premium">Film type:</label>
               <select
@@ -238,52 +228,13 @@ function MovieDetail() {
               </select>
             </div>
           </div>
-          <div className="flex flex-col">
-            <label htmlFor="released_date">Current Genre:</label>
-            <div>
-              {/* genre group */}
-              <div className="py-2 space-x-2 flex gap-2 flex-wrap ">
-                {currentGenre.map((genre) => (
-                  <div
-                    className="flex cursor-pointer group w-fit relative"
-                    key={genre.id}
-                  >
-                    <span className="p-2 bg-gray-400 rounded text-white group-hover:opacity-0 opacity-100 w-full text-center transition-all duration-300">
-                      {genre.title}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => removeGenre(genre)}
-                      className="p-2 bg-red-400 rounded text-white group-hover:opacity-100 opacity-0 w-full text-center absolute left-0 transition-all duration-300"
-                    >
-                      X
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="genre">Add New Genre:</label>
-            <select
-              name=""
-              id=""
-              className="rounded p-2 border border-gray-600 max-w-[250px]"
-              ref={addGenreRef}
-            >
-              {allGenre.map((genre) => (
-                <option value={genre.id} key={genre.id}>
-                  {genre.title}
-                </option>
-              ))}
-            </select>
-            <button
-              type="button"
-              onClick={addGenre}
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-fit"
-            >
-              Add Genre
-            </button>
+          <div className="pb-20 z-10 ">
+            <label htmlFor="">Genres:</label>
+            <MultiSelect
+              value={currentGenre}
+              onChange={setCurrentGenre}
+              options={allGenre}
+            />
           </div>
           <div className="flex flex-col">
             <label htmlFor="description">Description:</label>
@@ -291,32 +242,51 @@ function MovieDetail() {
               defaultValue={movie.description}
               setContents={description}
               onChange={(content) => setDescription(content)}
+              height="10rem"
             />
           </div>
           {/* grid */}
-          <div className="grid grid-cols-2">
-            <div className="flex flex-col">
-              <label htmlFor="is_active">Is Active:</label>
-              <select
-                name="is_active"
-                id=""
-                className="rounded p-2 border border-gray-600  max-w-[250px]"
-                defaultValue={movie.is_active}
-                {...register("is_active")}
-              >
-                <option value="true">True</option>
-                <option value="false">False</option>
-              </select>
+          <div className="grid grid-cols-2 gap-2 w-fit">
+            <div className="flex flex-col justify-center  w-fit">
+              <label className="inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  value=""
+                  className="sr-only peer"
+                  {...register("is_required_premium")}
+                  defaultChecked={movie.is_required_premium}
+                  defaultValue={movie.is_required_premium}
+                />
+                <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                  Is Premium
+                </span>
+              </label>
             </div>
-            
+            <div className="flex flex-col w-fit">
+              <label className="inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  value=""
+                  className="sr-only peer"
+                  {...register("is_active")}
+                  defaultChecked={movie.is_active}
+                  defaultValue={movie.is_active}
+                />
+                <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                  Is Active
+                </span>
+              </label>
+            </div>
           </div>
 
           {/*Save button  */}
           <div className="flex gap-1">
-          <button
-            type="submit"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 max-w-20"
-          >
+            <button
+              type="submit"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 max-w-20"
+            >
               {loading ? (
                 <ClipLoader
                   color={"f"}
@@ -328,10 +298,8 @@ function MovieDetail() {
               ) : (
                 "Save"
               )}
-          </button>
-          <div>
-            
-          </div>
+            </button>
+            <div></div>
             <Link
               to={`episodes`}
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 "

@@ -93,14 +93,22 @@ const Episodes = () => {
   }
   return (
     <div>
-      <button
+      {/* <button
         type="button"
         className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
       >
         <Link to={`create`} state={location.pathname.split("/")[2]}>
           Create new Episode
         </Link>
+      </button> */}
+      <button
+        onClick={()=>navigate("create",{state: location.pathname.split("/")[2]})}
+        type="button"
+        className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+      >
+        Create new Episode
       </button>
+      
       <div>Total: {episodes.length}</div>
       <div>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
