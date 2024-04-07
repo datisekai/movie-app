@@ -5,21 +5,26 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.movieapp.DBHelper
 import com.example.movieapp.Helper
+import com.example.movieapp.data.model.Articles
 import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.Comment
 import com.example.movieapp.data.model.CommentCreate
 import com.example.movieapp.data.model.ConfirmOrder
 import com.example.movieapp.data.model.DataDTO
+import com.example.movieapp.data.model.EpisodeHistoryDTO
 import com.example.movieapp.data.model.Esopide
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
+import com.example.movieapp.data.model.FilmDTO
 import com.example.movieapp.data.model.PayOrder
 import com.example.movieapp.data.model.Profile
 import com.example.movieapp.data.model.RequestComment
 import com.example.movieapp.data.model.RequestFilmFavorite
 import com.example.movieapp.data.model.UserDTO
 import com.example.movieapp.service.ServiceBuilder
+import com.example.movieapp.ui.fragment.EpisodeIdsWrapper
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -208,6 +213,67 @@ class MyViewModel() : ViewModel() {
 
         })
 
+    }
+
+    private var ListFilmHistory = MutableLiveData<List<FilmDTO>>()
+    fun getListHistory(): MutableLiveData<List<FilmDTO>>{
+        return ListFilmHistory
+    }
+
+    fun CallGetHistory(context: Context){
+        val userId = Helper.TokenManager.getId(context)
+        val db =  DBHelper(context)
+
+        if(userId != null){
+            val listId = db.getListId(userId)
+            for (id in listId){
+                Log.e("listId",id.toString())
+            }
+            val call = ServiceBuilder().apiService.getHistory(EpisodeIdsWrapper(listId))
+            call.enqueue(object : Callback<List<EpisodeHistoryDTO>>{
+                override fun onResponse(
+                    call: Call<List<EpisodeHistoryDTO>>?,
+                    response: Response<List<EpisodeHistoryDTO>>?
+                ) {
+                    if(response != null){
+                        if(response.isSuccessful){
+                            var temp = ListFilmHistory.value?.toMutableList()
+                            val result = response.body()
+                            if(result!= null && result.isNotEmpty()){
+                                for(ep in result){
+                                    if(temp == null){
+                                        temp = ArrayList()
+                                    }
+                                    if(temp.isEmpty()){
+                                        temp.add(ep.film)
+                                        Log.e("CALL HISTORY API",temp.toString())
+                                    }
+                                    else{
+                                        for(film in temp){
+                                            if(film.id != ep.film.id){
+                                                temp.add(ep.film)
+                                                Log.e("CALL HISTORY API",temp.toString())
+                                            }
+                                        }
+                                    }
+                                }
+                                ListFilmHistory.value = temp!!.toList()
+                                Log.e("CALL HISTORY API1",ListFilmHistory.value.toString())
+                            }else{
+                                Log.e("CALL HISTORY API","EMPTY")
+                            }
+                        }else{
+                            Log.e("CALL HISTORY API","FAIL")
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<List<EpisodeHistoryDTO>>?, t: Throwable?) {
+                    t?.printStackTrace()
+                }
+
+            })
+        }
     }
 
 }

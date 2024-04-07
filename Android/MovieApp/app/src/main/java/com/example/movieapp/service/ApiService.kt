@@ -3,6 +3,7 @@ package com.example.movieapp.service
 import com.example.movieapp.data.model.Articles
 import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.EditPasswordUserDTO
+import com.example.movieapp.data.model.EpisodeHistoryDTO
 import com.example.movieapp.data.model.Comment
 import com.example.movieapp.data.model.CommentCreate
 import com.example.movieapp.data.model.ConfirmOrder
@@ -24,6 +25,7 @@ import com.example.movieapp.data.model.TokenDTO
 import com.example.movieapp.data.model.User
 import com.example.movieapp.data.model.UserDTO
 import com.example.movieapp.data.model.Register
+import com.example.movieapp.ui.fragment.EpisodeIdsWrapper
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -101,7 +103,6 @@ interface ApiService {
     fun postFilmFavorite(
         @Body requestFilmFavorite: RequestFilmFavorite
     ) : Call<CommentCreate>
-
     @PUT("api.user/{id}")
     fun editUser(
         @Path("id") id: Int,
@@ -124,4 +125,9 @@ interface ApiService {
     @GET("api.article/{id}")
     fun getArticleById(@Path("id") id: Int) : Call<GetArticle>
 
+    //History
+    @POST("api.episode/history")
+    fun getHistory(
+        @Body episode_ids: EpisodeIdsWrapper
+    ) : Call<List<EpisodeHistoryDTO>>
 }

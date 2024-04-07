@@ -8,6 +8,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import com.example.movieapp.Helper
@@ -90,33 +91,16 @@ class ProfilePasswordActivity : AppCompatActivity(), View.OnClickListener, View.
             if(validatePassword() && validateConfirmPassword() && validatePasswordAndConfirmPassword()){
                 val result = executeEditPassword(binding.profileDetailPasswordEditTextNewpwd.text.toString())
                 if(result){
-                    val alertSuccessDialog = AlertDialog.Builder(this)
-                        .setTitle("Thông báo")
-                        .setMessage("Sửa mật khẩu thành công")
-                        .setPositiveButton("OK"){ dialog, _ ->
-                            dialog.dismiss()
-
-                            binding.profileDetailPasswordEditTextNewpwd.setText("")
-                            binding.profileDetailPasswordEditTextRenewpwd.setText("")
-                        }
-                        .create()
-                    alertSuccessDialog.show()
+                    binding.profileDetailPasswordEditTextNewpwd.setText("")
+                    binding.profileDetailPasswordEditTextRenewpwd.setText("")
+                    Toast.makeText(this, "Update Password Successflly!!", Toast.LENGTH_LONG).show()
 
                     //Return To Profile Fragment
                     val intent = Intent(this, HomePage_Activity::class.java)
                     intent.putExtra("typeFragment",1)
                     startActivity(intent)
                 }else{
-                    val alertFailDialog = AlertDialog.Builder(this)
-                        .setTitle("Thông báo")
-                        .setMessage("Sửa mật khẩu thất bại")
-                        .setPositiveButton("OK"){ dialog, _ ->
-                            dialog.dismiss()
-                            binding.profileDetailPasswordEditTextNewpwd.setText("")
-                            binding.profileDetailPasswordEditTextRenewpwd.setText("")
-                        }
-                        .create()
-                    alertFailDialog.show()
+                    Toast.makeText(this, "Update Password Fail!!", Toast.LENGTH_LONG).show()
                 }
             }
             else{

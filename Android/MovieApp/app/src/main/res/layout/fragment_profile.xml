@@ -95,127 +95,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/round_back_premium"
-                    android:text="Mua Premium"
+                    android:text="Buy Premium"
                     android:textSize="20dp"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
-            </LinearLayout>
-
-            <!--Change Profile Area-->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/round_back_setting"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp">
-
-                <!--Mục ưa thích-->
-                <RelativeLayout
-                    android:layout_width="360dp"
-                    android:layout_height="wrap_content"
-                    >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Mục đã đánh dấu"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"
-                        android:layout_marginVertical="10dp"
-                        android:layout_marginLeft="30dp"/>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/arrow_right_icon"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="10dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
-                </RelativeLayout>
-
-                <!--Mục Lịch sử-->
-                <RelativeLayout
-                    android:id="@+id/fragment_profile_click_history"
-                    android:layout_width="360dp"
-                    android:layout_height="wrap_content"
-                    >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Lịch sử"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"
-                        android:layout_marginVertical="10dp"
-                        android:layout_marginLeft="30dp"/>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/arrow_right_icon"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="10dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
-                </RelativeLayout>
-
-
-                <!--Mục đã lưu-->
-                <RelativeLayout
-                    android:layout_width="360dp"
-                    android:layout_height="wrap_content"
-                    >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Video Đã lưu"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"
-                        android:layout_marginVertical="10dp"
-                        android:layout_marginLeft="30dp"/>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/arrow_right_icon"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="10dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
-                </RelativeLayout>
-
-                <!--Mục thống kê>-->
-                <RelativeLayout
-                    android:layout_width="360dp"
-                    android:layout_height="wrap_content"
-                    >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Thống kê"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"
-                        android:layout_marginVertical="10dp"
-                        android:layout_marginLeft="30dp"/>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/arrow_right_icon"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="10dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
-                </RelativeLayout>
-
             </LinearLayout>
 
             <!--Change Mode Area-->
@@ -261,41 +144,6 @@
                         android:switchMinWidth="50dp"
                         android:theme="@style/switchMode"/>
                 </RelativeLayout>
-
-                <!--Mục thông báo-->
-                <RelativeLayout
-                    android:layout_width="360dp"
-                    android:layout_height="wrap_content"
-                    >
-
-                    <ImageView
-                        android:id="@+id/icon_notification"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:background="@drawable/notifications_icon"
-                        android:layout_margin="10dp"
-                        android:layout_centerVertical="true"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Thông báo"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"
-                        android:layout_toEndOf="@+id/icon_notification"
-                        android:layout_marginVertical="15dp"
-                        android:layout_marginLeft="10dp"/>
-
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/notificationSwich"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:switchMinWidth="50dp"
-                        android:theme="@style/switchMode"/>
-                </RelativeLayout>
             </LinearLayout>
 
             <!--Settings Area-->
@@ -306,34 +154,10 @@
                 android:background="@drawable/round_back_setting"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp">
-                <!--Mục cai đặt phát-->
-                <RelativeLayout
-                    android:layout_width="360dp"
-                    android:layout_height="wrap_content"
-                    >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Cài đặt phát"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"
-                        android:layout_marginVertical="10dp"
-                        android:layout_marginLeft="30dp"/>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/arrow_right_icon"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="10dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
-                </RelativeLayout>
 
                 <!--Mục quyền riêng tư-->
                 <RelativeLayout
+                    android:id="@+id/btn_profile_to_privacy"
                     android:layout_width="360dp"
                     android:layout_height="wrap_content"
                     >
@@ -341,7 +165,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Quyền riêng tư"
+                        android:text="Privacy"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="@color/white"
@@ -360,6 +184,7 @@
 
                 <!--Mục Điều khoản sử dụng-->
                 <RelativeLayout
+                    android:id="@+id/btn_profile_to_term"
                     android:layout_width="360dp"
                     android:layout_height="wrap_content"
                     >
@@ -367,7 +192,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Điều khoản sử dụng"
+                        android:text="Terms Of Use"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="@color/white"
@@ -386,6 +211,7 @@
 
                 <!--Mục phản hồi-->
                 <RelativeLayout
+                    android:id="@+id/btn_profile_to_reply"
                     android:layout_width="360dp"
                     android:layout_height="wrap_content"
                     >
@@ -393,7 +219,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Phản hồi"
+                        android:text="Reply"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="@color/white"

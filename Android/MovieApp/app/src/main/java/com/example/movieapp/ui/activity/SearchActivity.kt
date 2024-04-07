@@ -106,6 +106,7 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
     }
+
     fun callAPI(viewModel: SearchViewModel, receivedValue: String, progressbar: ProgressBar){
         viewModel.getListFilm(receivedValue.toString(), currentPage).observe(this) { films ->
 
