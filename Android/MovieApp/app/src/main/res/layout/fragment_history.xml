@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.HistoryFragment">
+    tools:context=".ui.fragment.HistoryFragment"
+    android:paddingBottom="100dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +29,18 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:layout_marginTop="200dp"/>
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/viewNoItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Không có phim nào!!!"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:layout_marginTop="200dp"
+            android:textAppearance="?attr/textAppearanceHeadline6"/>
     </LinearLayout>
 
 </FrameLayout>

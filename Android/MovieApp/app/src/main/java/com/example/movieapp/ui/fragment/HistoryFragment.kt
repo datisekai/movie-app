@@ -128,12 +128,12 @@ class HistoryFragment : Fragment() {
             }
     }
     fun callAPI( progressbar: ProgressBar, list: List<FilmDTO>){
-            Log.e("CALL HISTORY API12",list.toString())
-            for (o in list){
-                dataList.add(Movie(o.id, o.thumbnail, o.title, o.description.toString(), o.isRequiredPremium))
-            }
+        Log.e("CALL HISTORY API12",list.toString())
+        for (o in list){
+            dataList.add(Movie(o.id, o.thumbnail, o.title, o.description.toString(), o.isRequiredPremium))
+        }
 
-            progressbar.visibility = View.GONE
+        progressbar.visibility = View.GONE
 
     }
 }

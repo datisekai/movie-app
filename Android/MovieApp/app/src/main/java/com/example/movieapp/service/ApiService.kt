@@ -10,6 +10,7 @@ import com.example.movieapp.data.model.ConfirmOrder
 import com.example.movieapp.data.model.Esopide
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
+import com.example.movieapp.data.model.FilmFavorite
 import com.example.movieapp.data.model.Genre
 import com.example.movieapp.data.model.GetArticle
 import com.example.movieapp.data.model.GetUser
@@ -55,7 +56,7 @@ interface ApiService {
     fun getListFilmGenre(@Query("category_id") title: String, @Query("page") page: Int) : Call<Film1>
 
     @GET("api.favourite/me")
-    fun getListFilmFavorite(@Query("page") page: Int) : Call<Film1>
+    fun getListFilmFavorite(@Query("page") page: Int) : Call<FilmFavorite>
 
     @GET("api.order/me")
     fun getListPayment(@Query("page") page: Int) : Call<Payment>
