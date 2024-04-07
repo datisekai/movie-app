@@ -249,12 +249,17 @@ class MyViewModel() : ViewModel() {
                                         Log.e("CALL HISTORY API",temp.toString())
                                     }
                                     else{
+                                        var checkAdd = true
                                         for(film in temp){
-                                            if(film.id != ep.film.id){
-                                                temp.add(ep.film)
-                                                Log.e("CALL HISTORY API",temp.toString())
+                                            if(film.id == ep.film.id){
+                                                checkAdd = false
+                                                break
                                             }
                                         }
+                                        if(checkAdd){
+                                            temp.add(ep.film)
+                                        }
+                                        Log.e("CALL HISTORY API Check",temp.toString())
                                     }
                                 }
                                 ListFilmHistory.value = temp!!.toList()

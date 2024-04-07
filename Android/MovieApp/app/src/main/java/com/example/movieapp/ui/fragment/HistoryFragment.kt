@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModelProvider
@@ -96,6 +97,8 @@ class HistoryFragment : Fragment() {
                 }
             }
             else{
+                val viewNoItem: TextView = view.findViewById(R.id.viewNoItem)
+                viewNoItem.visibility = View.VISIBLE
                 progressbar.visibility = View.GONE
             }
         }
