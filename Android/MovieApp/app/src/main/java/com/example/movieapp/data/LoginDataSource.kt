@@ -73,6 +73,6 @@ class LoginDataSource {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
         // Kết thúc các hoạt động khác và đặt LoginActivity làm hoạt động gốc mới
-        (context as Activity).finish()
+        (context as Activity).finishAffinity()
     }
 }

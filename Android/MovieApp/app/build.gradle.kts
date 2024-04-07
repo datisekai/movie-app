@@ -111,9 +111,5 @@ dependencies {
     implementation("commons-codec:commons-codec:1.14")
 
 
-    implementation("androidx.credentials:credentials:1.0.0-alpha02")
-
-    // optional - needed for credentials support from play services, for devices running
-    // Android 13 and below.
-    implementation("androidx.credentials:credentials-play-services-auth:1.0.0-alpha02")
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
 }
