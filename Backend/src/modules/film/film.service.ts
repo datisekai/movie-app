@@ -43,6 +43,12 @@ export class FilmService {
       });
     }
 
+    if (query.category_id) {
+      queryBuilder.andWhere('category.id = :categoryId', {
+        categoryId: query.category_id,
+      });
+    }
+
     if (query.is_active) {
       queryBuilder.andWhere('film.is_active = :is_active', {
         is_active: query.is_active,

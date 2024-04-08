@@ -10,9 +10,11 @@ import {
 export class CommentDto {
   @IsString()
   @IsNotEmpty()
+  @ApiProperty()
   content: string;
 
   @IsNumber()
+  @ApiProperty()
   @IsNotEmpty()
   film_id: number;
 }

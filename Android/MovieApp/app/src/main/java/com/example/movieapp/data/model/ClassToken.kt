@@ -7,5 +7,6 @@ class ClassToken{
         var EMAIL: String = ""
         var FULLNAME: String = ""
         var IS_ACTIVE: Boolean = false
+        var ROLES : ArrayList<String> = arrayListOf()
     }
 }

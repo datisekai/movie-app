@@ -2,15 +2,21 @@ package com.example.movieapp.ui.fragment
 
 import com.example.movieapp.adapter.CustomAdapter
 import android.os.Bundle
+import android.text.Html
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.GridSpacingItemDecoration
 import com.example.movieapp.R
+import com.example.movieapp.adapter.model.Movie
 import com.example.movieapp.adapter.model.PaymentHistory
+import com.example.movieapp.service.PaymentViewModel
+import com.example.movieapp.service.SearchViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,14 +33,10 @@ class PaymentHistoryFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private fun generateDataList(): List<PaymentHistory> {
-        val dataList: MutableList<PaymentHistory> = ArrayList()
-        dataList.add(PaymentHistory(1, "Thanh toán gói Premium1", "23-09-2022", 100000))
-        dataList.add(PaymentHistory(2, "Thanh toán gói Premium2", "09-03-2022", 200000))
-        dataList.add(PaymentHistory(3, "Thanh toán gói Premium3", "02-10-2022", 300000))
-        // Thêm các phần tử khác vào danh sách dữ liệu
-        return dataList
-    }
+    private var currentPage = 1
+    private var totalEntries = 0
+    private var dataList: MutableList<PaymentHistory> = ArrayList()
+    private lateinit var adapter: CustomAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -50,6 +52,11 @@ class PaymentHistoryFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_payment_history, container, false)
 
+        dataList.clear()
+
+        val progressbar: ProgressBar = view.findViewById(R.id.progressBar)
+        val viewModel = ViewModelProvider(this).get(PaymentViewModel::class.java)
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
 //        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -58,10 +65,36 @@ class PaymentHistoryFragment : Fragment() {
 
         recyclerView.layoutManager = GridLayoutManager(view.context, 1)
 
-        val dataList: List<PaymentHistory>? = generateDataList() // Tạo danh sách dữ liệu
+        callAPI(viewModel,  progressbar)
 
-        val adapter = dataList?.let { CustomAdapter(it, R.layout.payment_history, 0, 0, true) } ?: CustomAdapter(emptyList(),
-            R.layout.payment_history, 0, 0, true)
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                val itemsPerPage = 10
+
+                val totalPages = totalEntries / itemsPerPage + if (totalEntries % itemsPerPage == 0) 0 else 1
+                val isLastPage = currentPage == totalPages
+
+                if (isLastPage) {
+                    return
+                }
+
+                // Kiểm tra nếu người dùng đang cuộn xuống dưới (dy > 0)
+                if (dy > 0 && visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
+                    // Đã cuộn đến cuối danh sách, gọi hàm loadMoreData để tải dữ liệu trang tiếp theo
+                    currentPage++
+                    callAPI(viewModel, progressbar)
+                }
+            }
+        })
+
+        adapter = dataList?.let { CustomAdapter(it, R.layout.payment_history, 0, 0, true) }!!
         recyclerView.adapter = adapter
 
         return view
@@ -85,5 +118,19 @@ class PaymentHistoryFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+    fun callAPI(viewModel: PaymentViewModel, progressbar: ProgressBar){
+        viewModel.getListPayment(currentPage).observe(viewLifecycleOwner) { payments ->
+
+            totalEntries= payments.totalEntries
+
+            for (o in payments.data){
+                dataList.add(PaymentHistory(o.id , o.description.toString(), o.createdAt, o.amount, o.orderStatus))
+            }
+
+            progressbar.visibility = View.GONE
+
+            adapter?.notifyDataSetChanged()
+        }
     }
 }

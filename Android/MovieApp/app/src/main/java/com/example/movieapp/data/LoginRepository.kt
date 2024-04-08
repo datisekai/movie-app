@@ -1,6 +1,9 @@
 package com.example.movieapp.data
 
+import android.content.Context
+import android.util.Log
 import com.example.movieapp.data.model.LoggedInUser
+import com.example.movieapp.data.model.UserDTO
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -10,7 +13,7 @@ import com.example.movieapp.data.model.LoggedInUser
 class LoginRepository(val dataSource: LoginDataSource) {
 
     // in-memory cache of the loggedInUser object
-    var user: LoggedInUser? = null
+    var user: UserDTO? = null
         private set
 
     val isLoggedIn: Boolean
@@ -22,14 +25,14 @@ class LoginRepository(val dataSource: LoginDataSource) {
         user = null
     }
 
-    fun logout() {
+    fun logout( context: Context) {
         user = null
-        dataSource.logout()
+        dataSource.logout(context)
     }
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
+    fun login(username: String, password: String, context: Context): Result<UserDTO> {
         // handle login
-        val result = dataSource.login(username, password)
+        val result = dataSource.login(username, password, context)
 
         if (result is Result.Success) {
             setLoggedInUser(result.data)
@@ -38,8 +41,8 @@ class LoginRepository(val dataSource: LoginDataSource) {
         return result
     }
 
-    private fun setLoggedInUser(loggedInUser: LoggedInUser) {
-        this.user = loggedInUser
+    private fun setLoggedInUser(userDTO: UserDTO) {
+        this.user = userDTO
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore
     }

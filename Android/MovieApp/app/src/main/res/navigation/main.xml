@@ -41,8 +41,24 @@
         android:label="fragment_payment_history"
         tools:layout="@layout/fragment_payment_history" />
     <fragment
+        android:id="@+id/menu_Logout"
+        android:name="com.example.movieapp.ui.fragment.LogoutFragment"
+        android:label="fragment_logout"
+        tools:layout="@layout/fragment_logout" />
+    <fragment
         android:id="@+id/menu_homePage"
         android:name="com.example.movieapp.ui.fragment.HomePageFragment"
         android:label="fragment_home_page"
-        tools:layout="@layout/fragment_home_page" />
+        tools:layout="@layout/fragment_home_page" >
+        <action
+            android:id="@+id/action_currentFragment_to_menu_Profile"
+            app:destination="@id/menu_Profile"
+            app:popUpTo="@id/menu_homePage"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_currentFragment_to_menu_Blog"
+            app:destination="@id/menu_Blog"
+            app:popUpTo="@id/menu_homePage"
+            app:popUpToInclusive="true"/>
+    </fragment>
 </navigation>
