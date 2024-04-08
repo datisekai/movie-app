@@ -161,6 +161,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             PlayerActivity::class.java);
         val bundle = Bundle()
         bundle.putString("URL",data.get(0).url)
+        bundle.putString("TITLE",data.get(0).title)
         intent.putExtra("videoUrl",bundle)
         startActivity(intent);
     }

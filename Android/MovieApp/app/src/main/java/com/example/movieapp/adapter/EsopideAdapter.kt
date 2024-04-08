@@ -44,6 +44,7 @@ class EsopideAdapter(private val context: Context, private val data : List<Esopi
                     PlayerActivity::class.java);
                 val bundle = Bundle()
                 bundle.putString("URL",data.get(index).url)
+                bundle.putString("TITLE",data.get(index).title)
                 intent.putExtra("videoUrl",bundle)
                 context.startActivity(intent);
             }
