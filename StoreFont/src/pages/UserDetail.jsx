@@ -15,11 +15,9 @@ function UserDetail() {
   const onSubmit = (data) => {
     setLoading(true);
     const token = localStorage.getItem("accessToken");
-    const is_active = data.is_active === "true";
-    const roles = ["admin"];
+    const roles = [data.roles];
     data = {
       ...data,
-      is_active,
       roles,
     };
     console.log(data);
@@ -85,6 +83,7 @@ function UserDetail() {
             name="password"
             className="rounded p-2 border border-gray-600  max-w-[250px]"
             defaultValue={user.password}
+            {...register("password")}
           />
         </div>
 
@@ -97,7 +96,8 @@ function UserDetail() {
             defaultValue={user.role}
             {...register("role")}
           >
-            <option value="user">User</option>
+            <option value="free_user">Free User</option>
+            <option value="premium_user">Premium User</option>
             <option value="admin">Admin</option>
           </select>
         </div>

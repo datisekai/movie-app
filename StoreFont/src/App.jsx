@@ -13,7 +13,6 @@ import CategoryDetail from './pages/CategoryDetail'
 import History from './pages/History'
 import Episodes from './pages/Episodes'
 import EpisodeDetail from './pages/EpisodeDetail'
-import TestDND from "./pages/TestDND";
 import Login from './pages/Login'
 import CreateUser from './pages/UserCreate'
 import MovieCreate from './pages/MovieCreate'

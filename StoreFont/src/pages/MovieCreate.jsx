@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import API_URL from "../url";
 import axios from "axios";
@@ -12,7 +11,6 @@ function MovieCreate() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm();
-  const [description, setDescription] = useState("");
   const [currentGenre, setCurrentGenre] = useState([]);
   const [allGenre, setAllGenres] = useState([]);
   const initialImg =
@@ -63,7 +61,6 @@ function MovieCreate() {
     }
     setLoading(false);
     const token = localStorage.getItem("accessToken");
-    data.description = description;
     data.updated_at = new Date();
     data.categoryIds = currentGenre.map((genre) => {
       return genre.value;
@@ -131,11 +128,7 @@ function MovieCreate() {
           {/* img */}
           <div className="flex items-center justify-center w-full h-full">
             <label className="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-              <img
-                src={imgUrl}
-                alt="Preview"
-                className="w-full h-full"
-              />
+              <img src={imgUrl} alt="Preview" className="w-full h-full" />
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
                 <svg
                   className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
@@ -160,7 +153,12 @@ function MovieCreate() {
                   SVG, PNG, JPG or GIF (MAX. 800x400px)
                 </p>
               </div>
-              <input id="dropzone-file" type="file" className="hidden" {...register("thumbnail", { onChange: handleFileChange })}/>
+              <input
+                id="dropzone-file"
+                type="file"
+                className="hidden"
+                {...register("thumbnail", { onChange: handleFileChange })}
+              />
             </label>
           </div>
         </div>
@@ -222,7 +220,7 @@ function MovieCreate() {
               </select>
             </div>
           </div>
-          <div className="pb-20 z-10 ">
+          <div className="z-10 ">
             <label htmlFor="">Genres:</label>
             <MultiSelect
               value={currentGenre}
@@ -230,13 +228,15 @@ function MovieCreate() {
               options={allGenre}
             />
           </div>
-          <div className="flex flex-col grow-[2]">
-            <label htmlFor="description">Description:</label>
-            <SunEditor
-              setContents={description}
-              onChange={(content) => setDescription(content)}
-              height="10rem"
-            />
+          <div className="flex flex-col pt-4">
+            <label htmlFor="des">Description:</label>
+            <textarea
+              id="des"
+              rows="4"
+              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Write your description here..."
+              {...register("description")}
+            ></textarea>
           </div>
           {/* grid */}
           <div className="grid grid-cols-2 w-fit gap-2">

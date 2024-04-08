@@ -1,7 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import axios from "axios";
 import API_URL from "../url";
@@ -14,7 +13,6 @@ function MovieDetail() {
   const { register, handleSubmit } = useForm();
   const location = useLocation();
   const movie = location.state;
-  const [description, setDescription] = useState(movie.description);
   const [currentGenre, setCurrentGenre] = useState(movie.categories || []);
   const [allGenre, setAllGenres] = useState([]);
   const initialImg = movie.thumbnail; // Initial image
@@ -64,7 +62,6 @@ function MovieDetail() {
       data.thumbnail = initialImg;
     }
     const token = localStorage.getItem("accessToken");
-    data.description = description;
     data.categoryIds = currentGenre.map((genre) => {
       return genre.value;
     });
@@ -228,7 +225,7 @@ function MovieDetail() {
               </select>
             </div>
           </div>
-          <div className="pb-20 z-10 ">
+          <div className=" z-10 ">
             <label htmlFor="">Genres:</label>
             <MultiSelect
               value={currentGenre}
@@ -236,14 +233,16 @@ function MovieDetail() {
               options={allGenre}
             />
           </div>
-          <div className="flex flex-col">
-            <label htmlFor="description">Description:</label>
-            <SunEditor
+          <div className="flex flex-col pt-4">
+            <label htmlFor="des">Description:</label>
+            <textarea
+              id="des"
+              rows="4"
+              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Write your description here..."
+              {...register("description")}
               defaultValue={movie.description}
-              setContents={description}
-              onChange={(content) => setDescription(content)}
-              height="10rem"
-            />
+            ></textarea>
           </div>
           {/* grid */}
           <div className="grid grid-cols-2 gap-2 w-fit">

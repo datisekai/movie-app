@@ -11,7 +11,7 @@ function ArticleCreate() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm();
-  const [description, setDescription] = useState("");
+  const [content, setContent] = useState("");
   const initialImg =
     "https://images.unsplash.com/photo-1481349518771-20055b2a7b24?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cmFuZG9tfGVufDB8fDB8fHww";
   const [imgUrl, setImgUrl] = useState(initialImg);
@@ -49,7 +49,7 @@ function ArticleCreate() {
     }
 
     const token = localStorage.getItem("accessToken");
-    data.content = description;
+    data.content = content;
     data.updated_at = new Date();
     data.categoryIds = currentGenre.map((genre) => {
       return genre.value;
@@ -183,12 +183,27 @@ function ArticleCreate() {
           />
         </div>
         <div className="flex flex-col">
-          <label htmlFor="desc">Description:</label>
+          <label htmlFor="desc">Content:</label>
           <SunEditor
-            setContents={description}
-            onChange={(content) => setDescription(content)}
+            setContents={content}
+            onChange={(content) => setContent(content)}
             height="10rem"
           />
+        </div>
+
+        <div className="flex flex-col pt-4">
+          <label
+            htmlFor="des"
+          >
+            Description:
+          </label>
+          <textarea
+            id="des"
+            rows="4"
+            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Write your description here..."
+            {...register("description")}
+          ></textarea>
         </div>
 
         <div className="flex flex-col py-2">

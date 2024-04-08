@@ -19,7 +19,7 @@ function Article() {
   // Simulate fetching items from another resources.
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
-  const pageCount = Math.ceil(articles.length / itemsPerPage);
+  const pageCount = Math.ceil(totalEntries/ itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
@@ -86,7 +86,7 @@ function Article() {
       {loading ? (<div className="flex items-center justify-center">
           <ClipLoader
             color={"f"}
-            size="15rem"
+            size="2rem"
             loading={loading}
             aria-label="Loading Spinner"
             data-testid="loader"

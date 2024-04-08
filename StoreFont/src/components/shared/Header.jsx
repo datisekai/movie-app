@@ -6,7 +6,11 @@ import classNames from 'classnames'
 
 export default function Header() {
 	const navigate = useNavigate()
-
+	function logout(){
+		localStorage.removeItem('accessToken')
+		localStorage.removeItem('user')
+		window.location.reload()
+	}
 	return (
 		<div className="bg-white h-16 px-4 flex items-center border-b border-gray-200 justify-between">
 			<div className="relative">
@@ -133,6 +137,7 @@ export default function Header() {
 											active && 'bg-gray-100',
 											'active:bg-gray-200 rounded-sm px-4 py-2 text-gray-700 cursor-pointer focus:bg-gray-200'
 										)}
+									onClick={logout}
 									>
 										Sign out
 									</div>

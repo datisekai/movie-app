@@ -93,7 +93,7 @@ export default function Movies() {
           <div className="flex items-center justify-center">
           <ClipLoader
             color={"f"}
-            size="15rem"
+            size="2rem"
             loading={loading}
             aria-label="Loading Spinner"
             data-testid="loader"

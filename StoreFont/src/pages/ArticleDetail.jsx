@@ -14,7 +14,7 @@ function ArticleDetail() {
   const [loading, setLoading] = useState(false);
   const article = location.state;
   const { register, handleSubmit } = useForm();
-  const [description, setDescription] = useState(article.content || "");
+  const [content, setContent] = useState(article.content || "");
   const initialImg = article.thumbnail; // Initial image
   const [imgUrl, setImgUrl] = useState(initialImg);
   const [currentGenre, setCurrentGenre] = useState([]);
@@ -50,15 +50,13 @@ function ArticleDetail() {
     }
 
     const token = localStorage.getItem("accessToken");
-    const is_active = data.is_active === "true";
-    data.is_active = is_active;
-    data.content = description;
+    data.content = content;
     data.updated_at = new Date();
     data.categoryIds = currentGenre.map((genre) => {
       return genre.value;
     });
     axios
-      .put(`${API_URL}.article`, data, {
+      .put(`${API_URL}.article/${article.id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -67,7 +65,7 @@ function ArticleDetail() {
         console.log(res);
         Swal.fire({
           title: "Success",
-          text: "Article created successfully",
+          text: "Article updated successfully",
           icon: "success",
         }).then((result) => {
           if (result.isConfirmed) {
@@ -207,20 +205,35 @@ function ArticleDetail() {
           />
         </div>
         <div className="flex flex-col">
-          <label htmlFor="desc">Description:</label>
+          <label htmlFor="desc">Content:</label>
           <SunEditor
             defaultValue={article.description}
-            setContents={description}
-            onChange={(content) => setDescription(content)}
+            setContents={content}
+            onChange={(content) => setContent(content)}
             height="10rem"
           />
+        </div>
+        <div className="flex flex-col pt-4">
+          <label
+            htmlFor="des"
+          >
+            Description:
+          </label>
+          <textarea
+            id="des"
+            rows="4"
+            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Write your content here..."
+            defaultValue={article.description}
+            {...register("description")}
+          ></textarea>
         </div>
         <div className="flex flex-col py-2">
           <label className="inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
-              value=""
               className="sr-only peer"
+              value=""
               {...register("is_active")}
               defaultChecked={article.is_active}
               defaultValue={article.is_active}

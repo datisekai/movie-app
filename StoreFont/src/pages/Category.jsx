@@ -85,7 +85,7 @@ function Category() {
         <div className="flex items-center justify-center">
         <ClipLoader
           color={"f"}
-          size="15rem"
+          size="2rem"
           loading={loading}
           aria-label="Loading Spinner"
           data-testid="loader"
@@ -108,6 +108,9 @@ function Category() {
           </th>
           <th scope="col" className="px-6 py-3">
             Created At
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Action
           </th>
         </tr>
       </thead>
