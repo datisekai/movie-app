@@ -30,10 +30,20 @@ class BlogDetailActivity : AppCompatActivity() {
                 binding.articleProgressBar.visibility = View.GONE
                 binding.articleTitle.text = newData.data.title
                 //Set Image for ImageView
-                Glide.with(this)
-                    .load(newData.data.thumbnail)
-                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                    .into(binding.articleImg)
+                if(newData.data.thumbnail.isNullOrBlank()){
+                    Glide.with(this)
+                        .load(R.drawable.default_esopide)
+                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                        .apply(RequestOptions().override(600, Integer.MAX_VALUE))
+                        .into(binding.articleImg)
+                }
+                else{
+                    Glide.with(this)
+                        .load(newData.data.thumbnail)
+                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                        .apply(RequestOptions().override(800, Integer.MAX_VALUE))
+                        .into(binding.articleImg)
+                }
                 //Set content for WebView
                 val webView = binding.blogDetailWebview
                 webView.loadData(newData.data.content,"text/html", "UTF-8")

@@ -2,29 +2,32 @@ package com.example.movieapp.service
 
 import com.example.movieapp.data.model.Articles
 import com.example.movieapp.data.model.ClassToken
+import com.example.movieapp.data.model.EditPasswordUserDTO
+import com.example.movieapp.data.model.EpisodeHistoryDTO
 import com.example.movieapp.data.model.Comment
 import com.example.movieapp.data.model.CommentCreate
 import com.example.movieapp.data.model.ConfirmOrder
 import com.example.movieapp.data.model.Esopide
-import com.example.movieapp.data.model.EditPasswordUserDTO
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
+import com.example.movieapp.data.model.FilmFavorite
 import com.example.movieapp.data.model.Genre
 import com.example.movieapp.data.model.GetArticle
 import com.example.movieapp.data.model.GetUser
 import com.example.movieapp.data.model.LoginDTO
+import com.example.movieapp.data.model.Payment
+import com.example.movieapp.data.model.PaymentDTO
+import com.example.movieapp.data.model.RegisterDTO
 import com.example.movieapp.data.model.PayOrder
 import com.example.movieapp.data.model.Profile
 import com.example.movieapp.data.model.RequestComment
 import com.example.movieapp.data.model.RequestFilmFavorite
-import com.example.movieapp.data.model.Payment
-import com.example.movieapp.data.model.PaymentDTO
-import com.example.movieapp.data.model.RegisterDTO
 import com.example.movieapp.data.model.TokenDTO
 import com.example.movieapp.data.model.User
 import com.example.movieapp.data.model.UserDTO
-import okhttp3.ResponseBody
 import com.example.movieapp.data.model.Register
+import com.example.movieapp.ui.fragment.EpisodeIdsWrapper
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -45,7 +48,20 @@ interface ApiService {
 
     @GET("api.film")
     fun getListFilm() : Call<Film1>
+    @GET("api.film")
+    fun getListFilmSearch(@Query("title") title: String, @Query("page") page: Int) : Call<Film1>
 
+    @GET("api.film")
+    fun getListFilmGenre(@Query("category_id") title: String, @Query("page") page: Int) : Call<Film1>
+
+    @GET("api.favourite/me")
+    fun getListFilmFavorite(@Query("page") page: Int) : Call<FilmFavorite>
+
+    @GET("api.order/me")
+    fun getListPayment(@Query("page") page: Int) : Call<Payment>
+
+    @GET("api.category")
+    fun getListGenre(@Query("page") page: Int) : Call<Genre>
     @GET("api.episode/film/{id}")
     fun getListEsopide(@Path("id") id:Int) : Call<Esopide>
 
@@ -54,29 +70,23 @@ interface ApiService {
 
     @GET("api.auth/profile")
     fun getMyProfile() : Call<Profile>
-    @GET("api.film")
-    fun getListFilmSearch(@Query("title") title: String, @Query("page") page: Int) : Call<Film1>
-
-    @GET("api.film")
-    fun getListFilmGenre(@Query("category_id") title: String, @Query("page") page: Int) : Call<Film1>
-
-    @GET("api.favourite/me")
-    fun getListFilmFavorite(@Query("page") page: Int) : Call<Film1>
 
     @GET("api.favourite/me")
     fun getAllFilmFavourite() : Call<Film1>
-
-    @GET("api.order/me")
-    fun getListPayment(@Query("page") page: Int) : Call<Payment>
-
-    @GET("api.category")
-    fun getListGenre(@Query("page") page: Int) : Call<Genre>
 
     @POST("api.auth/login")
     fun login(
         @Body loginDto : LoginDTO
     ) : Call<TokenDTO>
-
+    @POST("api.user/register")
+    fun register(
+        @Body registerDto : RegisterDTO
+    ) : Call<Register>
+    //User
+    @GET("api.user/{id}")
+    fun getUserById(
+        @Path("id") id: Int
+    ) : Call<GetUser>
     @POST("api.order")
     fun createOrder() : Call<PayOrder>
 
@@ -95,18 +105,6 @@ interface ApiService {
     fun postFilmFavorite(
         @Body requestFilmFavorite: RequestFilmFavorite
     ) : Call<CommentCreate>
-
-    @POST("api.user/register")
-    fun register(
-        @Body registerDto : RegisterDTO
-    ) : Call<Register>
-
-    //User
-    @GET("api.user/{id}")
-    fun getUserById(
-        @Path("id") id: Int
-    ) : Call<GetUser>
-
     @PUT("api.user/{id}")
     fun editUser(
         @Path("id") id: Int,
@@ -129,4 +127,10 @@ interface ApiService {
     //Article
     @GET("api.article/{id}")
     fun getArticleById(@Path("id") id: Int) : Call<GetArticle>
+
+    //History
+    @POST("api.episode/history")
+    fun getHistory(
+        @Body episode_ids: EpisodeIdsWrapper
+    ) : Call<List<EpisodeHistoryDTO>>
 }

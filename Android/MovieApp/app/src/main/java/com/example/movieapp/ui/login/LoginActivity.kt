@@ -2,43 +2,48 @@ package com.example.movieapp.ui.login
 
 import android.app.Activity
 import android.content.Intent
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.SignatureVerificationException
 import com.auth0.jwt.exceptions.TokenExpiredException
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.example.movieapp.Helper
-
-import com.example.movieapp.data.model.LoginDTO
-import java.util.concurrent.Executors
-import com.example.movieapp.ui.activity.MainActivity
-import com.example.movieapp.databinding.ActivityLoginBinding
-
 import com.example.movieapp.R
 import com.example.movieapp.data.model.ClassToken
-import com.example.movieapp.data.model.DataDTO
-import com.example.movieapp.data.model.UserDTO
-import com.example.movieapp.service.ServiceBuilder
+import com.example.movieapp.databinding.ActivityLoginBinding
+import com.example.movieapp.ui.activity.HomePage_Activity
+import com.example.movieapp.ui.activity.MainActivity
 import com.example.movieapp.ui.activity.RegisterActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import java.util.Date
+
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
+    lateinit var gso: GoogleSignInOptions
+    lateinit var gsc: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,20 +63,22 @@ class LoginActivity : AppCompatActivity() {
         }
         try {
             val token = Helper.TokenManager.getToken(this)
-            val id = Helper.TokenManager.getId(this)
-            val email = Helper.TokenManager.getEmail(this)
-            val fullname = Helper.TokenManager.getFullName(this)
-            val isActive = Helper.TokenManager.getIsActive(this)
             if (token != null && !isTokenExpired(token)) {
-                Log.e("TOKEN1", ClassToken.MY_TOKEN)
+                val id = Helper.TokenManager.getId(this)
+                val email = Helper.TokenManager.getEmail(this)
+                val fullname = Helper.TokenManager.getFullName(this)
+                val isActive = Helper.TokenManager.getIsActive(this)
+                val role = Helper.TokenManager.getRoles(this)
+
+
                 ClassToken.MY_TOKEN= token.toString()
-                Log.e("TOKEN2", ClassToken.MY_TOKEN)
                 ClassToken.ID= id?: 0
                 ClassToken.EMAIL= email.toString()
                 ClassToken.FULLNAME= fullname.toString()
                 ClassToken.IS_ACTIVE = isActive!!
+                ClassToken.ROLES = role!!
 //                val checkToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTcxMTI2MTU5MiwiZXhwIjoxNzExMjY4NzkyfQ.ijPEfRK325BP_3ubNSHkoxUWtbxfvPkntaav-zIeL-k"
-//                Helper.TokenManager.saveToken(this, checkToken, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE)
+//                Helper.TokenManager.saveToken(this, checkToken, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE, ArrayList())
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -91,6 +98,20 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.password
         val login = binding.login
         val loading = binding.loading
+        val googleBtn: Button = findViewById(R.id.loginGoogle)
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+        gsc = GoogleSignIn.getClient(this, gso)
+
+        val acct = GoogleSignIn.getLastSignedInAccount(this)
+        if (acct != null) {
+            navigateToSecondActivity()
+        }
+
+        googleBtn.setOnClickListener {
+            signIn()
+        }
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
@@ -100,6 +121,12 @@ class LoginActivity : AppCompatActivity() {
 
             // disable login button unless both username / password is valid
             login.isEnabled = loginState.isDataValid
+
+            if(loginState.isDataValid){
+                login.setBackgroundColor(resources.getColor(android.R.color.black))
+            }else{
+                login.setBackgroundColor(resources.getColor(android.R.color.transparent))
+            }
 
             if (loginState.usernameError != null) {
                 username.error = getString(loginState.usernameError)
@@ -202,23 +229,36 @@ class LoginActivity : AppCompatActivity() {
 
         return true
     }
-    private fun performNetWorkRequest(email: String, password: String) {
-        val excutor = Executors.newSingleThreadExecutor()
-        excutor.execute{
-            val login = LoginDTO("datly030102@gmail.com", "datisekai")
-            val result = ServiceBuilder().apiService.login(login).execute()
-            if (result.isSuccessful){
-                val token : String =result.body().data.accessToken
-                val user : UserDTO =result.body().data.user
-                ClassToken.MY_TOKEN= token
-                ClassToken.ID= user.id
-                ClassToken.EMAIL= user.email
-                ClassToken.FULLNAME= user.fullname
-                ClassToken.IS_ACTIVE = user.is_active
-                ClassToken.ROLES = user.roles
-                Helper.TokenManager.saveToken(this, token, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE,ClassToken.ROLES)
+    fun signIn() {
+        val signInIntent = gsc.signInIntent
+        startActivityForResult(signInIntent, 1000)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1000) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+
+            try {
+                val account = task.getResult(ApiException::class.java)
+                if (account != null) {
+                    // Lấy thông tin cần thiết từ account
+                    val displayName = account.displayName
+                    val email = account.email
+                    // ...
+                    Log.e("CHECKED", email.toString())
+                }
+                navigateToSecondActivity()
+            } catch (e: ApiException) {
+                Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    fun navigateToSecondActivity() {
+        finish()
+        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        startActivity(intent)
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {

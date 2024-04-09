@@ -1,5 +1,6 @@
 package com.example.movieapp.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,11 @@ import androidx.fragment.app.Fragment
 import com.example.movieapp.R
 import com.example.movieapp.data.LoginDataSource
 import com.example.movieapp.data.LoginRepository
-import com.example.movieapp.ui.login.LoginViewModel
+import com.example.movieapp.ui.activity.MainActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+
 
 /**
  * A simple [Fragment] subclass.
@@ -21,6 +26,8 @@ class LogoutFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var gso: GoogleSignInOptions
+    lateinit var gsc: GoogleSignInClient
     private lateinit var logoutLogin: LoginRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,12 +41,27 @@ class LogoutFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val dataSource = LoginDataSource()
-        logoutLogin = LoginRepository(dataSource)
         val view = inflater.inflate(R.layout.fragment_logout, container, false)
-        logoutLogin.logout(view.context)
+        // Inflate the layout for this fragment
+        gso =
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
+        gsc = GoogleSignIn.getClient(requireActivity(), gso)
+
+        val acct = GoogleSignIn.getLastSignedInAccount(view.context)
+        if (acct != null) {
+            val personName = acct.displayName
+            val personEmail = acct.email
+        }
+
+        signOut(inflater, container, view)
         return view
+    }
+    fun signOut(inflater: LayoutInflater, container: ViewGroup?, view: View) {
+        gsc.signOut().addOnCompleteListener {
+            val dataSource = LoginDataSource()
+            logoutLogin = LoginRepository(dataSource)
+            logoutLogin.logout(view.context)
+        }
     }
 
     companion object {

@@ -32,7 +32,7 @@ class ResultGenreActivity : AppCompatActivity() {
             id = bundle.getInt("id")
             val name = bundle.getString("name")
             val textViewResultGenre= findViewById<TextView>(R.id.textViewResultGenre)
-            textViewResultGenre.text ="Genre: " +name.toString()
+            textViewResultGenre.text ="Thể loại: " +name.toString()
         }
 
         dataList.clear()
@@ -49,7 +49,7 @@ class ResultGenreActivity : AppCompatActivity() {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         if(id !== -1){
-            callAPI(viewModel, id,  progressbar, recyclerView)
+            callAPI(viewModel, id,  progressbar)
 
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -73,7 +73,7 @@ class ResultGenreActivity : AppCompatActivity() {
                     if (dy > 0 && visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
                         // Đã cuộn đến cuối danh sách, gọi hàm loadMoreData để tải dữ liệu trang tiếp theo
                         currentPage++
-                        callAPI(viewModel,id,  progressbar, recyclerView)
+                        callAPI(viewModel,id,  progressbar)
                     }
                 }
             })
@@ -89,15 +89,7 @@ class ResultGenreActivity : AppCompatActivity() {
         }
     }
 
-//    private fun generateDataList(): List<Movie> {
-//        val dataList: MutableList<Movie> = ArrayList()
-//        dataList.add(Movie(R.drawable.anime1, "Chú thuật hồi chiến", "2022",1))
-//        dataList.add(Movie(R.drawable.anime2, "abc 2", "2023",1))
-//        dataList.add(Movie(R.drawable.anime3, "abc 3", "2024",1))
-//        // Thêm các phần tử khác vào danh sách dữ liệu
-//        return dataList
-
-    fun callAPI(viewModel: GenreMovieViewModel, genreId: Int , progressbar: ProgressBar, recyclerView: RecyclerView){
+    fun callAPI(viewModel: GenreMovieViewModel, genreId: Int , progressbar: ProgressBar){
         viewModel.getListGenreMovie(genreId, currentPage).observe(this) { films ->
 
             totalEntries= films.totalEntries
@@ -107,7 +99,10 @@ class ResultGenreActivity : AppCompatActivity() {
             }
 
             progressbar.visibility = View.GONE
-
+            if(totalEntries ==0 ){
+                val viewNoItem: TextView = findViewById(R.id.viewNoItem)
+                viewNoItem.visibility = View.VISIBLE
+            }
             adapter?.notifyDataSetChanged()
         }
     }

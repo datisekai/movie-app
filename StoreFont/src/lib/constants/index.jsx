@@ -3,12 +3,11 @@ import {
 	HiOutlineCube,
 	HiOutlineUsers,
 	HiOutlineDocumentText,
-	HiOutlineAnnotation,
 	HiOutlineQuestionMarkCircle,
 	HiOutlineCog
 } from 'react-icons/hi'
 import { BiCategory } from "react-icons/bi";
-
+import { FaMoneyBill } from "react-icons/fa";
 export const DASHBOARD_SIDEBAR_LINKS = [
 	{
 		key: 'dashboard',
@@ -41,10 +40,10 @@ export const DASHBOARD_SIDEBAR_LINKS = [
 		icon: <HiOutlineDocumentText />
 	},
 	{
-		key: 'messages',
-		label: 'Messages',
-		path: '/messages',
-		icon: <HiOutlineAnnotation />
+		key: 'payments',
+		label: 'Payments',
+		path: '/payments',
+		icon: <FaMoneyBill />
 	}
 ]
 

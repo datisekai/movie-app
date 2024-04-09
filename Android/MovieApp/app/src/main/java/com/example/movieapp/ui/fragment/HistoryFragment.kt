@@ -2,15 +2,31 @@ package com.example.movieapp.ui.fragment
 
 import com.example.movieapp.adapter.CustomAdapter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.movieapp.Api.MyViewModel
+import com.example.movieapp.DBHelper
 import com.example.movieapp.GridSpacingItemDecoration
+import com.example.movieapp.Helper
 import com.example.movieapp.R
 import com.example.movieapp.adapter.model.Movie
+import com.example.movieapp.data.model.EpisodeHistoryDTO
+import com.example.movieapp.data.model.Film1
+import com.example.movieapp.data.model.FilmDTO
+import com.example.movieapp.service.FavoriteViewModel
+import com.example.movieapp.service.ServiceBuilder
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -29,14 +45,12 @@ class HistoryFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private fun generateDataList(): List<Movie> {
-        val dataList: MutableList<Movie> = ArrayList()
-        dataList.add(Movie(0,"", "Chú thuật hồi chiến", "2022", true))
-        dataList.add(Movie(0,"", "abc 2", "2023", false))
-//        dataList.add(MovieItem(R.drawable.anime3, "abc 3", "2024"))
-        // Thêm các phần tử khác vào danh sách dữ liệu
-        return dataList
-    }
+    private var currentPage = 1
+    private var totalEntries = 0
+    private var dataList: MutableList<Movie> = ArrayList()
+    private lateinit var adapter: CustomAdapter
+
+    private var ListFilmHistory: MutableList<FilmDTO> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +67,10 @@ class HistoryFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_history, container, false)
 
+        dataList.clear()
+
+        val progressbar: ProgressBar = view.findViewById(R.id.progressBar)
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
 //        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -61,11 +79,32 @@ class HistoryFragment : Fragment() {
 
         recyclerView.layoutManager = GridLayoutManager(view.context, 2)
 
-        val dataList: List<Movie>? = generateDataList() // Tạo danh sách dữ liệu
+        val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+        //Check Database Has History
+        val checkUserId = Helper.TokenManager.getId(requireContext())
+        val db = DBHelper(requireContext())
+        if(checkUserId != null){
+            val listEpHistory = db.getListId(checkUserId)
+            if(!listEpHistory.isNullOrEmpty()){
+                viewModel.getListHistory().observe(viewLifecycleOwner){ newData ->
+                    callAPI(progressbar, newData)
+                    val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }
+                    recyclerView.adapter = adapter
+                    adapter?.notifyDataSetChanged()
+                }
+                if(viewModel.getListHistory().value == null){
+                    viewModel.CallGetHistory(requireContext())
+                }
+            }
+            else{
+                val viewNoItem: TextView = view.findViewById(R.id.viewNoItem)
+                viewNoItem.visibility = View.VISIBLE
+                progressbar.visibility = View.GONE
+            }
+        }
+        //callAPI(progressbar)
 
-        val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) } ?: CustomAdapter(emptyList(),
-            R.layout.card, 480, 480, true)
-        recyclerView.adapter = adapter
+
 
 
         return view
@@ -91,4 +130,15 @@ class HistoryFragment : Fragment() {
                 }
             }
     }
+    fun callAPI( progressbar: ProgressBar, list: List<FilmDTO>){
+        Log.e("CALL HISTORY API12",list.toString())
+        for (o in list){
+            dataList.add(Movie(o.id, o.thumbnail, o.title, o.description.toString(), o.isRequiredPremium))
+        }
+
+        progressbar.visibility = View.GONE
+
+    }
 }
+
+data class EpisodeIdsWrapper(val episode_ids: List<Int>)

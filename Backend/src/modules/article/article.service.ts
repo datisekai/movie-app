@@ -33,6 +33,7 @@ export class ArticleService {
     const queryBuilder = await this.articleRepository
       .createQueryBuilder('article')
       .where('article.is_deleted = false')
+      .leftJoinAndSelect('article.categories', 'category')
       .take(limit)
       .skip((page - 1) * limit);
 
@@ -55,7 +56,7 @@ export class ArticleService {
 
   async getOne(id: number, articleEntity?: Article) {
     const article = await this.articleRepository
-      .findOne({ where: { id, is_deleted: false } })
+      .findOne({ where: { id, is_deleted: false }, relations: ['categories'] })
       .then((u) =>
         !articleEntity ? u : !!u && articleEntity.id === u.id ? u : null,
       );

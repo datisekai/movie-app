@@ -1,23 +1,24 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import SunEditor from "suneditor-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import API_URL from "../url";
 import ClipLoader from "react-spinners/ClipLoader";
 import axios from "axios";
+import { MultiSelect } from "react-multi-select-component";
+
 function ArticleDetail() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(false);
   const article = location.state;
   const { register, handleSubmit } = useForm();
-  const [description, setDescription] = useState(article.content || "");
+  const [content, setContent] = useState(article.content || "");
   const initialImg = article.thumbnail; // Initial image
   const [imgUrl, setImgUrl] = useState(initialImg);
   const [currentGenre, setCurrentGenre] = useState([]);
   const [allGenre, setAllGenres] = useState([]);
-  const addGenreRef = useRef(null);
   // Handle form submission
   const onSubmit = async (data) => {
     setLoading(true);
@@ -49,15 +50,13 @@ function ArticleDetail() {
     }
 
     const token = localStorage.getItem("accessToken");
-    const is_active = data.is_active === "true";
-    data.is_active = is_active;
-    data.content = description;
+    data.content = content;
     data.updated_at = new Date();
     data.categoryIds = currentGenre.map((genre) => {
-      return genre.id;
+      return genre.value;
     });
     axios
-      .put(`${API_URL}.article`, data, {
+      .put(`${API_URL}.article/${article.id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -66,11 +65,11 @@ function ArticleDetail() {
         console.log(res);
         Swal.fire({
           title: "Success",
-          text: "Article created successfully",
+          text: "Article updated successfully",
           icon: "success",
         }).then((result) => {
           if (result.isConfirmed) {
-            navigate(-1)
+            navigate(-1);
           }
         });
       })
@@ -98,35 +97,6 @@ function ArticleDetail() {
       console.warn("Please select an image file.");
     }
   };
-  function addGenre() {
-    const newGenreId = addGenreRef.current.value;
-    const [selectedGenre] = allGenre.filter((genre) => {
-      return genre.id == newGenreId;
-    });
-    if (selectedGenre) {
-      if (currentGenre.length > 0) {
-        if (!currentGenre.includes(selectedGenre)) {
-          setCurrentGenre([...currentGenre, selectedGenre]);
-          setAllGenres(
-            allGenre.filter((genre) => {
-              return genre.id != newGenreId;
-            })
-          );
-        }
-      } else {
-        setCurrentGenre([selectedGenre]);
-        setAllGenres(
-          allGenre.filter((genre) => {
-            return genre.id != newGenreId;
-          })
-        );
-      }
-    }
-  }
-  function removeGenre(genre) {
-    setCurrentGenre(currentGenre.filter((item) => item.id != genre.id));
-    setAllGenres([...allGenre, genre]);
-  }
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     axios
@@ -139,16 +109,24 @@ function ArticleDetail() {
         console.log(currentGenre);
         console.log(res.data.data);
         setAllGenres(
-          res.data.data.filter(
-            (item) =>
-              !currentGenre.some((currentItem) => currentItem.id === item.id)
-          )
+          res.data.data.map((genre) => ({
+            label: genre.title,
+            value: genre.id,
+          }))
         );
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+  useEffect(() => {
+    setCurrentGenre(
+      article.categories.map((genre) => ({
+        label: genre.title,
+        value: genre.id,
+      }))
+    );
+  }, [article.categories]);
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -156,13 +134,41 @@ function ArticleDetail() {
     >
       {/* left side */}
       <div className="flex flex-col gap-4 w-1/3">
-        <h3>Thumbnail</h3>
-        <img src={imgUrl} alt={`film_poster`} className="w-full h-full" />
-        <input
-          type="file"
-          multiple={false}
-          {...register("thumbnail", { onChange: handleFileChange })}
-        />
+        <div className="flex items-center justify-center w-full h-full">
+          <label className="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+            <img src={imgUrl} alt="Preview" className="w-full h-full" />
+            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+              <svg
+                className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 16"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                />
+              </svg>
+              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                <span className="font-semibold">Click to upload</span> or drag
+                and drop
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                SVG, PNG, JPG or GIF (MAX. 800x400px)
+              </p>
+            </div>
+            <input
+              id="dropzone-file"
+              type="file"
+              className="hidden"
+              {...register("thumbnail", { onChange: handleFileChange })}
+            />
+          </label>
+        </div>
       </div>
       {/* right side */}
       <div className=" flex flex-col w-2/3 mt-5">
@@ -189,73 +195,54 @@ function ArticleDetail() {
             />
           </div>
         </div>
-        <div className="flex flex-col">
-          <label htmlFor="released_date">Current Genre:</label>
-          <div>
-            {/* genre group */}
-            <div className="py-2 space-x-2 flex gap-2 flex-wrap ">
-              {currentGenre.map((genre) => (
-                <div
-                  className="flex cursor-pointer group w-fit relative"
-                  key={genre.id}
-                >
-                  <span className="p-2 bg-gray-400 rounded text-white group-hover:opacity-0 opacity-100 w-full text-center transition-all duration-300">
-                    {genre.title}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => removeGenre(genre)}
-                    className="p-2 bg-red-400 rounded text-white group-hover:opacity-100 opacity-0 w-full text-center absolute left-0 transition-all duration-300"
-                  >
-                    X
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="genre">Add New Genre:</label>
-          <select
-            name=""
-            id=""
-            className="rounded p-2 border border-gray-600 max-w-[250px]"
-            ref={addGenreRef}
-          >
-            {allGenre.map((genre) => (
-              <option value={genre.id} key={genre.id}>
-                {genre.title}
-              </option>
-            ))}
-          </select>
-          <button
-            type="button"
-            onClick={addGenre}
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-fit"
-          >
-            Add Genre
-          </button>
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="desc">Description:</label>
-          <SunEditor
-            defaultValue={article.description}
-            setContents={description}
-            onChange={(content) => setDescription(content)}
+
+        <div className="pb-20 z-10 ">
+          <label htmlFor="">Genres:</label>
+          <MultiSelect
+            value={currentGenre}
+            onChange={setCurrentGenre}
+            options={allGenre}
           />
         </div>
-        <div className="flex flex-col h-fit">
-          <label htmlFor="is_active">Is Active:</label>
-          <select
-            name="is_active"
-            id=""
-            className="rounded p-2 border border-gray-600  max-w-[250px]"
-            defaultValue={article.is_active}
-            {...register("is_active")}
+        <div className="flex flex-col">
+          <label htmlFor="desc">Content:</label>
+          <SunEditor
+            defaultValue={article.description}
+            setContents={content}
+            onChange={(content) => setContent(content)}
+            height="10rem"
+          />
+        </div>
+        <div className="flex flex-col pt-4">
+          <label
+            htmlFor="des"
           >
-            <option value="true">True</option>
-            <option value="false">False</option>
-          </select>
+            Description:
+          </label>
+          <textarea
+            id="des"
+            rows="4"
+            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Write your content here..."
+            defaultValue={article.description}
+            {...register("description")}
+          ></textarea>
+        </div>
+        <div className="flex flex-col py-2">
+          <label className="inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              className="sr-only peer"
+              value=""
+              {...register("is_active")}
+              defaultChecked={article.is_active}
+              defaultValue={article.is_active}
+            />
+            <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+              Is Active
+            </span>
+          </label>
         </div>
         <div>
           <button

@@ -78,4 +78,8 @@ class FilmDTO {
         this.location = location
         this.isActive = isActive
     }
+
+    override fun toString(): String {
+        return id.toString() + " " + title
+    }
 }

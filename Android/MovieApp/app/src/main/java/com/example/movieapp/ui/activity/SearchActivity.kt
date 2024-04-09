@@ -42,7 +42,7 @@ class SearchActivity : AppCompatActivity() {
         textSearch.setText(receivedValue)
 
         val textResultSearch= findViewById<TextView>(R.id.textResultSearch)
-        textResultSearch.text="Search Results: " + receivedValue.toString()
+        textResultSearch.text="Tìm kiếm: " + receivedValue.toString()
 
         val progressbar: ProgressBar = findViewById(R.id.progressBar)
         val viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
@@ -54,7 +54,7 @@ class SearchActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
-        callAPI(viewModel, receivedValue.toString(), progressbar, recyclerView)
+        callAPI(viewModel, receivedValue.toString(), progressbar)
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -78,7 +78,7 @@ class SearchActivity : AppCompatActivity() {
                 if (dy > 0 && visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
                     // Đã cuộn đến cuối danh sách, gọi hàm loadMoreData để tải dữ liệu trang tiếp theo
                     currentPage++
-                    callAPI(viewModel, receivedValue.toString(), progressbar, recyclerView)
+                    callAPI(viewModel, receivedValue.toString(), progressbar)
                 }
             }
         })
@@ -93,7 +93,7 @@ class SearchActivity : AppCompatActivity() {
             ) {
                 dataList.clear()
                 textResultSearch.text="Search Results: " + textSearch.text.toString()
-                callAPI(viewModel, textSearch.text.toString(), progressbar, recyclerView)
+                callAPI(viewModel, textSearch.text.toString(), progressbar)
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
@@ -107,7 +107,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    fun callAPI(viewModel: SearchViewModel, receivedValue: String, progressbar: ProgressBar,recyclerView: RecyclerView){
+    fun callAPI(viewModel: SearchViewModel, receivedValue: String, progressbar: ProgressBar){
         viewModel.getListFilm(receivedValue.toString(), currentPage).observe(this) { films ->
 
             totalEntries= films.totalEntries
@@ -117,7 +117,10 @@ class SearchActivity : AppCompatActivity() {
             }
 
             progressbar.visibility = View.GONE
-
+            if(totalEntries ==0 ){
+                val viewNoItem: TextView = findViewById(R.id.viewNoItem)
+                viewNoItem.visibility = View.VISIBLE
+            }
             adapter?.notifyDataSetChanged()
         }
     }

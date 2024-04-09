@@ -19,9 +19,14 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713"/>
         <activity
-            android:name=".ui.activity.AllMovieActivity"
-            android:exported="false">
-        </activity>
+            android:name=".ui.activity.ReplyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.TermOfUseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.PrivacyActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activity.BlogDetailActivity"
             android:exported="false" />
@@ -44,13 +49,15 @@
             android:name=".ui.activity.RegisterPremiumActivity"
             android:exported="true"
             android:launchMode="singleTask">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="demozpdk"
-                    android:host="app" />
+
+                <data
+                    android:host="app"
+                    android:scheme="demozpdk" />
             </intent-filter>
         </activity>
         <activity

@@ -9,13 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import com.example.movieapp.Api.MyViewModel
 
-
-import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import android.widget.Button
 import android.widget.EditText
@@ -27,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.GridSpacingItemDecoration
 import com.example.movieapp.R
 import com.example.movieapp.adapter.CustomAdapter
-import com.example.movieapp.data.model.FilmDTO
 import com.example.movieapp.adapter.model.CardHome
 import com.example.movieapp.adapter.model.Movie
 import com.example.movieapp.service.GenreMovieViewModel
@@ -134,6 +128,7 @@ class HomePageFragment : Fragment() {
     }
     fun callApi(view: View, data: CardHome, progressbar: ProgressBar){
         val spacing = 24
+
         val viewModel = ViewModelProvider(this).get(GenreMovieViewModel::class.java)
         viewModel.getListGenreMovie(data.id,1).observe(viewLifecycleOwner) { films ->
 

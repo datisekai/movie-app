@@ -21,8 +21,11 @@ import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.GetUser
 import com.example.movieapp.data.model.User
 import com.example.movieapp.service.UserLoader
+import com.example.movieapp.ui.activity.PrivacyActivity
 import com.example.movieapp.ui.activity.RegisterPremiumActivity
 import com.example.movieapp.ui.activity.ProfileDetailsActivity
+import com.example.movieapp.ui.activity.ReplyActivity
+import com.example.movieapp.ui.activity.TermOfUseActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,12 +62,30 @@ class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCa
         val view =  inflater.inflate(R.layout.fragment_profile, container, false)
         val buttonBuyPremium = view.findViewById<Button>(R.id.button2)
         buttonBuyPremium.setOnClickListener(this)
+        //
+        val rolesUser = Helper.TokenManager.getRoles(requireContext())
+        if(rolesUser != null){
+            for (role in rolesUser){
+                if (role.equals("free_user")){
+                    buttonBuyPremium.visibility = View.VISIBLE
+                    break
+                }
+                else{
+                    buttonBuyPremium.visibility = View.GONE
+                }
+            }
+        }
+
         //set onclick for profile to detail
         val buttonclickProfile: RelativeLayout = view.findViewById(R.id.fragment_profile_click_details)
         buttonclickProfile.setOnClickListener(this)
-        //set onclick from profile to history
-        val buttonclickHistory: RelativeLayout = view.findViewById(R.id.fragment_profile_click_history)
-        buttonclickHistory.setOnClickListener(this)
+
+        val buttonclickPrivacy: RelativeLayout = view.findViewById(R.id.btn_profile_to_privacy)
+        buttonclickPrivacy.setOnClickListener(this)
+        val buttonclickTermOfUse: RelativeLayout = view.findViewById(R.id.btn_profile_to_term)
+        buttonclickTermOfUse.setOnClickListener(this)
+        val buttonclickReply: RelativeLayout = view.findViewById(R.id.btn_profile_to_reply)
+        buttonclickReply.setOnClickListener(this)
 
         progressBar = view.findViewById(R.id.fragment_profile_name_progressBar)
         tvFullname = view.findViewById(R.id.profile_username_textview)
@@ -89,7 +110,17 @@ class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCa
                 startActivity(intent)
             }
 
-            R.id.fragment_profile_click_history ->{
+            R.id.btn_profile_to_privacy -> {
+                val intent = Intent(requireContext(),PrivacyActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.btn_profile_to_term -> {
+                val intent = Intent(requireContext(),TermOfUseActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.btn_profile_to_reply -> {
+                val intent = Intent(requireContext(),ReplyActivity::class.java)
+                startActivity(intent)
             }
 
         }

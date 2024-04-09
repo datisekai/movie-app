@@ -13,13 +13,13 @@ import CategoryDetail from './pages/CategoryDetail'
 import History from './pages/History'
 import Episodes from './pages/Episodes'
 import EpisodeDetail from './pages/EpisodeDetail'
-import TestDND from "./pages/TestDND";
 import Login from './pages/Login'
 import CreateUser from './pages/UserCreate'
 import MovieCreate from './pages/MovieCreate'
 import EpisodeCreate from './pages/EpisodeCreate'
 import CategoryCreate from './pages/CategoryCreate'
 import ArticleCreate from './pages/ArticleCreate'
+import Payment from './pages/Payment'
 function App() {
     return (
         <Router>
@@ -43,6 +43,7 @@ function App() {
                     <Route path="articles" element={<Article/>}/>
                     <Route path="articles/create" element={<ArticleCreate/>}/>
                     <Route path="articles/:id" element={<ArticleDetail/>}/>
+                    <Route path="payments" element={<Payment/>}/>
                     <Route path="*" element={<h1>404</h1>}/>  
                 </Route>
                 <Route path="/register" element={<Register />} />
