@@ -31,8 +31,9 @@ class ServiceBuilder {
 
     var gson : Gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()
 
+//    "https://movie-backend.datisekai.id.vn/
     var apiService : ApiService = Retrofit.Builder()
-            .baseUrl("https://movie-backend.datisekai.id.vn/")
+            .baseUrl("https://movie-backend-ashy.vercel.app/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okBuilder.build())
             .build()

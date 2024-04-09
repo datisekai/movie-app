@@ -110,7 +110,6 @@ dependencies {
     implementation("commons-codec:commons-codec:1.14")
 day
     implementation("com.squareup.picasso:picasso:2.71828")
-    implementation("com.google.android.material:material:1.2.1")
 
     implementation("com.google.android.gms:play-services-auth:21.0.0")
     implementation("androidx.credentials:credentials:1.0.0-alpha02")

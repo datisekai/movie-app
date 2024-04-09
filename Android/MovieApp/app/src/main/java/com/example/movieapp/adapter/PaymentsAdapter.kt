@@ -24,20 +24,19 @@ class PaymentsAdapter(private val context: Context,private val dataImage : List<
         holder.iconPay.setImageResource(dataImage.get(position))
         holder.iconPay.setOnClickListener(object : View.OnClickListener{
             override fun onClick(v: View?) {
-                if ( holder.checkContainer.visibility == View.VISIBLE &&
-                    holder.iconCheck.visibility == View.VISIBLE){
-                    holder.checkContainer.visibility = View.INVISIBLE
-                    holder.iconCheck.visibility = View.INVISIBLE
-                    check.checkChoose = false
-                    check.index=-1
+                    if ( holder.checkContainer.visibility == View.VISIBLE &&
+                        holder.iconCheck.visibility == View.VISIBLE){
+                        holder.checkContainer.visibility = View.INVISIBLE
+                        holder.iconCheck.visibility = View.INVISIBLE
+                        check.checkChoose = false
+                        check.index=-1
 
-                }else{
-                    holder.checkContainer.visibility = View.VISIBLE
-                    holder.iconCheck.visibility = View.VISIBLE
-                    check.checkChoose = true
-                    check.index = indexTmp
-                }
-
+                    }else{
+                        holder.checkContainer.visibility = View.VISIBLE
+                        holder.iconCheck.visibility = View.VISIBLE
+                        check.checkChoose = true
+                        check.index = indexTmp
+                    }
 
             }
 

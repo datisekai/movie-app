@@ -38,6 +38,7 @@ public class PlayerActivity extends AppCompatActivity {
         super.onStart();
         Intent intent = getIntent();
         VIDEO_URl = intent.getBundleExtra("videoUrl").getString("URL");
+        VIDEO_TITLE = intent.getBundleExtra("videoUrl").getString("TITLE");
         playerView = findViewById(R.id.video_player);
         simpleExoPlayer = new ExoPlayer.Builder(PlayerActivity.this).build();
         playerView.setPlayer(simpleExoPlayer);

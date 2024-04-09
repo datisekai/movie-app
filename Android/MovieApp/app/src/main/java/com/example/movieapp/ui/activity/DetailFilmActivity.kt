@@ -55,6 +55,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
     private lateinit var dataComment : MutableList<CommentDTO>
     private lateinit var btnFavorite : ImageButton
     private var mInterstitialAd: InterstitialAd? = null
+    private lateinit var recyclerView : RecyclerView
     private final val TAG = "MainActivity"
     var check : Boolean = false
     var filmId : Int = 0
@@ -68,10 +69,11 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
                 (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) ||
                 (actionId == EditorInfo.IME_ACTION_DONE)
             ) {
-                   if (filmId!=0){
+                   if (filmId!=0 && editTextComment.text.toString().isNullOrEmpty()==false){
                        val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
                        val dataComment1 = RequestComment(editTextComment.text.toString(),filmId)
                        viewModel.createComment(dataComment1)
+                       recyclerView.adapter = null
                        getComment(filmId)
                        editTextComment.text.clear()
                    }else
@@ -163,6 +165,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             PlayerActivity::class.java);
         val bundle = Bundle()
         bundle.putString("URL",data.get(0).url)
+        bundle.putString("TITLE",data.get(0).title)
         intent.putExtra("videoUrl",bundle)
         startActivity(intent);
     }
@@ -276,7 +279,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
         commentList.observe(this) { comments ->
             val tmp = comments.data.toMutableList()
             dataComment.addAll(tmp)
-            val recyclerView = findViewById<RecyclerView>(R.id.recyclerComment)
+            recyclerView = findViewById(R.id.recyclerComment)
             recyclerView.adapter = CommentAdapter(this, dataComment)
             recyclerView.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
