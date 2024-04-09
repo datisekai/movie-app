@@ -123,7 +123,9 @@ class LoginActivity : AppCompatActivity() {
             login.isEnabled = loginState.isDataValid
 
             if(loginState.isDataValid){
-                login.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#19A1BE"))
+                login.setBackgroundColor(resources.getColor(android.R.color.black))
+            }else{
+                login.setBackgroundColor(resources.getColor(android.R.color.transparent))
             }
 
             if (loginState.usernameError != null) {

@@ -62,8 +62,11 @@ class RegisterActivity : AppCompatActivity() {
             btn_register.isEnabled = registerState.isDataValid
 
             if(registerState.isDataValid){
-                btn_register.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#19A1BE"))
+                btn_register.setBackgroundColor(resources.getColor(android.R.color.black))
+            }else{
+                btn_register.setBackgroundColor(resources.getColor(android.R.color.transparent))
             }
+
 
             if (registerState.usernameError != null) {
                 textUserName.error = getString(registerState.usernameError)

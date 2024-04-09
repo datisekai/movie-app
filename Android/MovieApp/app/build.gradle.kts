@@ -108,7 +108,6 @@ dependencies {
     //zalo pay
     implementation(files("libs/zpdk-release-v3.1.aar"))
     implementation("commons-codec:commons-codec:1.14")
-day
     implementation("com.squareup.picasso:picasso:2.71828")
 
     implementation("com.google.android.gms:play-services-auth:21.0.0")
