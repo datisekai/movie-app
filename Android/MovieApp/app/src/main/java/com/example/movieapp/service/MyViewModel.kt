@@ -102,6 +102,27 @@ class MyViewModel() : ViewModel() {
         return commentLiveData
     }
 
+    fun getAllFilmFavourite() : LiveData<Film1>{
+        val favoriteLiveData = MutableLiveData<Film1>()
+        val call = ServiceBuilder().apiService.getAllFilmFavourite()
+        call.enqueue(object : Callback<Film1>{
+            override fun onResponse(call: Call<Film1>, response: Response<Film1>) {
+                if(response.isSuccessful){
+                    favoriteLiveData.value = response.body()
+                    _dataLoaded.value = true
+                }else{
+                    Log.e("ERROR",  "fail")
+                }
+            }
+
+            override fun onFailure(call: Call<Film1>, t: Throwable) {
+               t.printStackTrace()
+            }
+
+        })
+        return favoriteLiveData
+    }
+
     fun getTokenCreateOrder() : LiveData<PayOrder>{
         val tokenPayOrder : LiveData<PayOrder> = MutableLiveData()
         val call = ServiceBuilder().apiService.createOrder()
@@ -249,12 +270,17 @@ class MyViewModel() : ViewModel() {
                                         Log.e("CALL HISTORY API",temp.toString())
                                     }
                                     else{
+                                        var checkAdd = true
                                         for(film in temp){
-                                            if(film.id != ep.film.id){
-                                                temp.add(ep.film)
-                                                Log.e("CALL HISTORY API",temp.toString())
+                                            if(film.id == ep.film.id){
+                                                checkAdd = false
+                                                break
                                             }
                                         }
+                                        if(checkAdd){
+                                            temp.add(ep.film)
+                                        }
+                                        Log.e("CALL HISTORY API Check",temp.toString())
                                     }
                                 }
                                 ListFilmHistory.value = temp!!.toList()

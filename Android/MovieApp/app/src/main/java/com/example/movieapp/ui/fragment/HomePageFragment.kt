@@ -3,30 +3,30 @@ package com.example.movieapp.ui.fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 
+import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.Fragment
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.GridSpacingItemDecoration
 import com.example.movieapp.R
+import com.example.movieapp.adapter.CustomAdapter
 import com.example.movieapp.adapter.model.CardHome
 import com.example.movieapp.adapter.model.Movie
 import com.example.movieapp.service.GenreMovieViewModel
 import com.example.movieapp.service.GenreViewModel
 import com.example.movieapp.ui.activity.ResultGenreActivity
-import com.example.movieapp.adapter.CustomAdapter
-import com.example.movieapp.data.model.FilmDTO
 import com.example.movieapp.ui.activity.SearchActivity
 
 // TODO: Rename parameter arguments, choose names that match
@@ -58,7 +58,6 @@ class HomePageFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home_page, container, false)
-
 
         val viewModelGenre = ViewModelProvider(this).get(GenreViewModel::class.java)
         viewModelGenre.getListGenre(1).observe(viewLifecycleOwner){genre->
@@ -129,39 +128,40 @@ class HomePageFragment : Fragment() {
     }
     fun callApi(view: View, data: CardHome, progressbar: ProgressBar){
         val spacing = 24
-                val viewModel = ViewModelProvider(this).get(GenreMovieViewModel::class.java)
-                viewModel.getListGenreMovie(data.id,1).observe(viewLifecycleOwner) { films ->
 
-                    val dataListMovie: MutableList<Movie> = ArrayList()
-                    for (o in films.data){
-                        dataListMovie.add(Movie(o.id ,o.thumbnail, o.title.toString(), o.description.toString(), o.isRequiredPremium))
-                    }
+        val viewModel = ViewModelProvider(this).get(GenreMovieViewModel::class.java)
+        viewModel.getListGenreMovie(data.id,1).observe(viewLifecycleOwner) { films ->
 
-                    progressbar.visibility = View.GONE
+            val dataListMovie: MutableList<Movie> = ArrayList()
+            for (o in films.data){
+                dataListMovie.add(Movie(o.id ,o.thumbnail, o.title.toString(), o.description.toString(), o.isRequiredPremium))
+            }
 
-                    val recyclerView1 = view.findViewById<RecyclerView>(data.view)
-                    if(dataListMovie.isNotEmpty()){
-                        recyclerView1.addItemDecoration(
-                            GridSpacingItemDecoration(
-                                dataListMovie.size,
-                                spacing,
-                                false
-                            )
-                        )
-                    }
+            progressbar.visibility = View.GONE
 
-                    recyclerView1.layoutManager =
-                        LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
+            val recyclerView1 = view.findViewById<RecyclerView>(data.view)
+            if(dataListMovie.isNotEmpty()){
+                recyclerView1.addItemDecoration(
+                    GridSpacingItemDecoration(
+                        dataListMovie.size,
+                        spacing,
+                        false
+                    )
+                )
+            }
+
+            recyclerView1.layoutManager =
+                LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
 
 
-                    val adapter = dataListMovie?.let {
-                        CustomAdapter(
-                            it,
-                            R.layout.card, data.widthCard, data.heightCard, data.isBorderImage
-                        )
-                    }
-                    recyclerView1.adapter = adapter
-                }
+            val adapter = dataListMovie?.let {
+                CustomAdapter(
+                    it,
+                    R.layout.card, data.widthCard, data.heightCard, data.isBorderImage
+                )
+            }
+            recyclerView1.adapter = adapter
+        }
 
     }
 

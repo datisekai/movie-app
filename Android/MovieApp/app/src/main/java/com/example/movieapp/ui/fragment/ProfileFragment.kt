@@ -62,6 +62,20 @@ class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCa
         val view =  inflater.inflate(R.layout.fragment_profile, container, false)
         val buttonBuyPremium = view.findViewById<Button>(R.id.button2)
         buttonBuyPremium.setOnClickListener(this)
+        //
+        val rolesUser = Helper.TokenManager.getRoles(requireContext())
+        if(rolesUser != null){
+            for (role in rolesUser){
+                if (role.equals("free_user")){
+                    buttonBuyPremium.visibility = View.VISIBLE
+                    break
+                }
+                else{
+                    buttonBuyPremium.visibility = View.GONE
+                }
+            }
+        }
+
         //set onclick for profile to detail
         val buttonclickProfile: RelativeLayout = view.findViewById(R.id.fragment_profile_click_details)
         buttonclickProfile.setOnClickListener(this)

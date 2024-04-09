@@ -48,7 +48,6 @@ interface ApiService {
 
     @GET("api.film")
     fun getListFilm() : Call<Film1>
-
     @GET("api.film")
     fun getListFilmSearch(@Query("title") title: String, @Query("page") page: Int) : Call<Film1>
 
@@ -72,6 +71,9 @@ interface ApiService {
     @GET("api.auth/profile")
     fun getMyProfile() : Call<Profile>
 
+    @GET("api.favourite/me")
+    fun getAllFilmFavourite() : Call<Film1>
+
     @POST("api.auth/login")
     fun login(
         @Body loginDto : LoginDTO
@@ -80,7 +82,6 @@ interface ApiService {
     fun register(
         @Body registerDto : RegisterDTO
     ) : Call<Register>
-
     //User
     @GET("api.user/{id}")
     fun getUserById(
@@ -109,6 +110,7 @@ interface ApiService {
         @Path("id") id: Int,
         @Body EditUserDto: UserDTO
     ) : Call<User>
+
     @PUT("api.user/{id}")
     fun editPasswordUser(
         @Path("id") id: Int,

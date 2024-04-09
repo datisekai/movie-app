@@ -37,8 +37,16 @@ import com.example.movieapp.data.model.Esopide
 import com.example.movieapp.data.model.EsopideDTO
 import com.example.movieapp.service.DetailFilmLoader
 import com.example.movieapp.data.model.Film
+import com.example.movieapp.data.model.Film1
 import com.example.movieapp.data.model.RequestComment
 import com.example.movieapp.data.model.RequestFilmFavorite
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 
 
 class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Film>{
@@ -46,6 +54,8 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
     private lateinit var data : MutableList<EsopideDTO>
     private lateinit var dataComment : MutableList<CommentDTO>
     private lateinit var btnFavorite : ImageButton
+    private var mInterstitialAd: InterstitialAd? = null
+    private final val TAG = "MainActivity"
     var check : Boolean = false
     var filmId : Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,18 +97,74 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             supportLoaderManager.initLoader(0,null,this).forceLoad()
         }
 
+        // Google ads
+        serviceGoogleAds()
+
         getDetailFilm()
+    }
+
+    private fun serviceGoogleAds() {
+        var adRequest = AdRequest.Builder().build()
+
+        InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712", adRequest, object : InterstitialAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                Log.d(TAG, adError.toString())
+                mInterstitialAd = null
+            }
+
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                Log.d(TAG, "Ad was loaded.")
+                mInterstitialAd = interstitialAd
+                mInterstitialAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
+                    override fun onAdClicked() {
+                        // Called when a click is recorded for an ad.
+                        Log.e(TAG, "Ad was clicked.")
+                    }
+
+                    override fun onAdDismissedFullScreenContent() {
+                        // Called when ad is dismissed.
+                        Log.e(TAG, "Ad dismissed fullscreen content.")
+                    }
+
+                    override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                        // Called when ad fails to show.
+                        Log.e(TAG, "Ad failed to show fullscreen content.")
+                        mInterstitialAd = null
+                    }
+
+                    override fun onAdImpression() {
+                        // Called when an impression is recorded for an ad.
+                        Log.e(TAG, "Ad recorded an impression.")
+                    }
+
+                    override fun onAdShowedFullScreenContent() {
+                        // Called when ad is shown.
+                        Log.e(TAG, "Ad showed fullscreen content.")
+                    }
+                }
+            }
+        })
+
+
     }
 
     public fun clickWatch(view:View){
         addHistory(data)
+//        if (mInterstitialAd != null) {
+//            mInterstitialAd?.show(this)
+//        } else {
+//
+//        }
+        startPlayerActivity()
+
+    }
+    private fun startPlayerActivity(){
         val intent : Intent =  Intent(this,
             PlayerActivity::class.java);
         val bundle = Bundle()
         bundle.putString("URL",data.get(0).url)
         intent.putExtra("videoUrl",bundle)
         startActivity(intent);
-
     }
 
     private fun addHistory(data: MutableList<EsopideDTO>){
@@ -134,6 +200,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
            btnFavorite.setImageResource(R.drawable.baseline_check_24)
            check = true
            val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+           Log.e("CREATE",filmId.toString())
            val dataFilmFavorite = RequestFilmFavorite(filmId)
            viewModel.postFilmFavoutite(dataFilmFavorite)
 
@@ -142,6 +209,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
            btnFavorite.setImageResource(R.drawable.baseline_add_24)
            check = false
            val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+           Log.e("CREATE",filmId.toString())
            val dataFilmFavorite = RequestFilmFavorite(filmId)
            viewModel.postFilmFavoutite(dataFilmFavorite)
        }
@@ -160,11 +228,28 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
                 bundle2.putInt("idFilm",id)
                 getEsopide(id)
                 getComment(id)
+                checkFavoriteFilm(id)
             }
             supportLoaderManager.restartLoader<Film>(0, bundle2, this)
 
         }
     }
+
+    private fun checkFavoriteFilm(id : Int){
+        val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+        val dataList : LiveData<Film1> = viewModel.getAllFilmFavourite()
+        dataList.observe(this){datas->
+            val tmp = datas.data.toMutableList()
+            for (i in tmp){
+                if (id == i.id){
+                    val btn = findViewById<ImageButton>(R.id.btnFavotite)
+                    btn.setImageResource(R.drawable.baseline_check_24)
+                    check=true
+                }
+            }
+        }
+    }
+
 
     private fun getEsopide(id : Int){
         data = mutableListOf()
@@ -183,6 +268,9 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
 
     private fun getComment(id : Int){
         dataComment = mutableListOf()
+        if (dataComment.isEmpty()==false){
+            dataComment.clear()
+        }
         val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
         val commentList : LiveData<Comment> = viewModel.getAllComment(id)
         commentList.observe(this) { comments ->
@@ -227,8 +315,8 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             val txtDescription = findViewById<TextView>(R.id.txtDescription)
             if (data != null){
                 txtTitle.text = data.data.title
-                txtDirect.text = "Đạo diễn: ${data.data.director}"
-                txtCate.text = "Thể loại: ${data.data.type}"
+                txtDirect.text = "Director: ${data.data.director}"
+                txtCate.text = "Category: ${data.data.type}"
                 txtCountry.text = data.data.location
                 txtView.text = data.data.view.toString()
                 val tmp = data.data.createAt.split("-")

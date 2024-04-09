@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">MovieApp</string>
-    <string name="profile">profile</string>
-    <string name="blog">Blog</string>
+    <string name="home">Trang chủ</string>
+    <string name="profile">Thông tin cá nhân</string>
+    <string name="blog">Bài viết</string>
     <string name="search">Search</string>
     <string name="genre">Thể loại</string>
     <string name="history">Lịch sử xem</string>

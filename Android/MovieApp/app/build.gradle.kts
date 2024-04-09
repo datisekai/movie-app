@@ -105,11 +105,19 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.4.0")
 //    implementation ("org.sufficientlysecure:html-textview:3.10")
 
-    implementation("com.squareup.picasso:picasso:2.71828")
     //zalo pay
     implementation(files("libs/zpdk-release-v3.1.aar"))
     implementation("commons-codec:commons-codec:1.14")
-
+day
+    implementation("com.squareup.picasso:picasso:2.71828")
+    implementation("com.google.android.material:material:1.2.1")
 
     implementation("com.google.android.gms:play-services-auth:21.0.0")
+    implementation("androidx.credentials:credentials:1.0.0-alpha02")
+
+    // optional - needed for credentials support from play services, for devices running
+    // Android 13 and below.
+    implementation("androidx.credentials:credentials-play-services-auth:1.0.0-alpha02")
+    // Google ads
+    implementation ("com.google.android.gms:play-services-ads:23.0.0")
 }
