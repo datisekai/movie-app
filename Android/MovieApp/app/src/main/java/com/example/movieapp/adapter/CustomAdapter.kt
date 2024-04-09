@@ -88,7 +88,7 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                         image.cornerRadius = cornerRadius.toFloat()
                     }
 
-                    if(movieItem.is_required_premium){
+                    if(movieItem.is_required_premium==false){
                         iconPremium.visibility = View.GONE
                     }else{
                         iconPremium.visibility = View.VISIBLE
@@ -99,8 +99,9 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                         val bundle = Bundle()
                         val movie = data as Movie
                         bundle.putInt("ID",movie.id)
+                        Log.e("PRMIUM",movie.is_required_premium.toString())
+                        bundle.putBoolean("IS_PREMIUM",movie.is_required_premium)
                         intent.putExtra("DataID",bundle)
-//                        bundle.putInt("id", movieItem.id) // Đặt giá trị vào Bundle
                         intent.putExtras(bundle)
                         itemView.context.startActivity(intent);
                     }

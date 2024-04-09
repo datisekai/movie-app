@@ -46,7 +46,7 @@ class Helper {
             return sharedPreferences.getBoolean(KEY_IS_ACTIVE, false)
         }
 
-        fun getRoles(context: Context) : ArrayList<String>?{
+        fun getRoles(context: Context): ArrayList<String>?{
             val sharedPreferences = context.getSharedPreferences(KEY_ROLES,Context.MODE_PRIVATE)
             val tmp = sharedPreferences.getStringSet(KEY_ROLES,null)
             val result = ArrayList(tmp)
@@ -65,5 +65,6 @@ class Helper {
             editor.remove(KEY_ROLES)
             editor.apply()
         }
+
     }
 }
