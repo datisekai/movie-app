@@ -79,18 +79,21 @@ export default function Movies() {
   }
   return (
     <div>
+      
       <button
+        onClick={()=>navigate("create")}
         type="button"
         className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
       >
-        <Link to={`create`}>Create new Film</Link>
+        Create new Film
       </button>
+      
       <div className="relative overflow-x-auto">
         {loading ? (
           <div className="flex items-center justify-center">
           <ClipLoader
             color={"f"}
-            size="15rem"
+            size="2rem"
             loading={loading}
             aria-label="Loading Spinner"
             data-testid="loader"

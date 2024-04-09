@@ -41,7 +41,7 @@ export class EpisodeController {
 
   @Get(':episodeId')
   @ApiOperation({
-    summary: 'Get Film By ID',
+    summary: 'Get Episode By ID',
   })
   async getOne(@Param('episodeId') id: number) {
     const data = await this.episodeService.getOne(id);
@@ -105,7 +105,7 @@ export class EpisodeController {
   @ApiOperation({
     summary: 'Edit Episode Position',
   })
-  @Put('position')
+  @Post('position')
   async updatePosition(@Body() update_position_dto: EpisodeUpdatePositionDto) {
     return this.episodeService.updatePosition(update_position_dto);
   }
