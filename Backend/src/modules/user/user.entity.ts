@@ -29,7 +29,7 @@ export class User {
   @Column({ nullable: true, select: false })
   fullname_search: string;
 
-  @Column({ select: false })
+  @Column({ select: false, nullable: true })
   password: string;
 
   @Column({ type: 'simple-array' })

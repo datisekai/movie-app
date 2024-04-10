@@ -154,4 +154,13 @@ export class FilmService {
       .leftJoinAndSelect('film.categories', 'category')
       .getOne();
   }
+
+  async increaseViewCount(filmId: number) {
+    const film = await this.getOne(filmId);
+    if (film) {
+      film.view += 1;
+      return this.filmRepository.save(film);
+    }
+    return null;
+  }
 }

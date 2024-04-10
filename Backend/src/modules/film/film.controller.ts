@@ -7,6 +7,7 @@ import {
   Param,
   Body,
   Query,
+  NotFoundException,
 } from '@nestjs/common';
 import { Auth, User } from 'src/common/decorators';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -96,5 +97,15 @@ export class FilmController {
 
     data = await this.filmService.deleteOne(id);
     return { message: 'Film deleted', data };
+  }
+
+  @ApiOperation({ summary: 'Increase view by ID' })
+  @Get('view/:id')
+  async increaseView(@Param('id') id: number) {
+    const article = await this.filmService.increaseViewCount(id);
+    if (!article) {
+      throw new NotFoundException('Film');
+    }
+    return { success: true };
   }
 }

@@ -89,6 +89,21 @@ export class UserService {
     return user;
   }
 
+  async create(dto: CreateUserDto) {
+    const newUser = this.userRepository.create({
+      email: dto.email,
+      roles: dto.roles,
+      fullname: dto.fullname,
+      is_active: dto.is_active,
+      password: dto.password,
+      fullname_search: removeVietnameseDiacritics(dto.fullname),
+    });
+    const user = await this.userRepository.save(newUser);
+
+    delete user.password;
+    return user;
+  }
+
   async editOne(id: number, dto: EditUserDto, userEntity?: User) {
     const user = await this.getOne(id, userEntity);
     user.email = dto.email || user.email;
