@@ -23,6 +23,7 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.get
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
@@ -40,6 +41,7 @@ import com.example.movieapp.service.ServiceBuilder
 import com.example.movieapp.service.ZaloPay.Api.CreateOrder
 import com.example.movieapp.slideItem
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.makeramen.roundedimageview.RoundedImageView
 import org.json.JSONObject
 import vn.zalopay.sdk.Environment
 import vn.zalopay.sdk.ZaloPayError
@@ -51,9 +53,17 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
     private var Slidehandler : Handler = Handler()
     lateinit var viewpage : ViewPager2
     private lateinit var list : ArrayList<slideItem>
+    private lateinit var recyclerView : RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_premium)
+
+        // Payments
+        recyclerView = findViewById<RecyclerView>(R.id.recyclerPayment)
+        val data : List<Int> = mutableListOf(R.drawable.zaloimg,R.drawable.qr_img,R.drawable.gate_img,R.drawable.momo_img,
+            R.drawable.vnpay_img,R.drawable.onepay_img)
+        recyclerView.layoutManager = GridLayoutManager(this,3)
+        recyclerView.adapter = PaymentsAdapter(this,data)
 
         val button = findViewById<ImageButton>(R.id.imgButtonPremium)
         button.setOnClickListener(this)
@@ -97,11 +107,11 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
         val buttonPay = findViewById<Button>(R.id.buttonPay)
         buttonPay.setOnClickListener(this)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerPayment)
-        val data : List<Int> = mutableListOf(R.drawable.zaloimg,R.drawable.qr_img,R.drawable.gate_img,R.drawable.momo_img,
-            R.drawable.vnpay_img,R.drawable.onepay_img)
-        recyclerView.layoutManager = GridLayoutManager(this,3)
-        recyclerView.adapter = PaymentsAdapter(this,data)
+
+        if (recyclerView.isActivated){
+            val roundeImage : RoundedImageView = recyclerView[0].findViewById(R.id.checkContainer)
+            Log.e("IDDDD",roundeImage.toString())
+        }
 
         val btnPayMent = findViewById<Button>(R.id.btnPayInSheet)
         btnPayMent.setOnClickListener(this)
@@ -200,6 +210,7 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
         }else{
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
+
     }
 
 
