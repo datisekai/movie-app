@@ -18,6 +18,7 @@ import com.example.movieapp.data.model.Esopide
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
 import com.example.movieapp.data.model.FilmDTO
+import com.example.movieapp.data.model.IncreaseViewDTO
 import com.example.movieapp.data.model.PayOrder
 import com.example.movieapp.data.model.Profile
 import com.example.movieapp.data.model.RequestComment
@@ -204,6 +205,29 @@ class MyViewModel() : ViewModel() {
             }
 
         })
+    }
+
+    fun increaseView(id : Int){
+        val call = ServiceBuilder().apiService.increaseViewById(id)
+        call.enqueue(object : Callback<IncreaseViewDTO>{
+            override fun onResponse(
+                call: Call<IncreaseViewDTO>,
+                response: Response<IncreaseViewDTO>
+            ) {
+                if (response.isSuccessful){
+                    val result = response.body().success
+                    Log.e("RESULT",result.toString())
+                }else{
+                    Log.e("ERROR",  "fail")
+                }
+            }
+
+            override fun onFailure(call: Call<IncreaseViewDTO>, t: Throwable) {
+               t.printStackTrace()
+            }
+
+        })
+
     }
 
 

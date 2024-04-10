@@ -14,6 +14,7 @@ import com.example.movieapp.data.model.FilmFavorite
 import com.example.movieapp.data.model.Genre
 import com.example.movieapp.data.model.GetArticle
 import com.example.movieapp.data.model.GetUser
+import com.example.movieapp.data.model.IncreaseViewDTO
 import com.example.movieapp.data.model.LoginDTO
 import com.example.movieapp.data.model.Payment
 import com.example.movieapp.data.model.PaymentDTO
@@ -73,6 +74,11 @@ interface ApiService {
 
     @GET("api.favourite/me")
     fun getAllFilmFavourite() : Call<Film1>
+
+    @GET("api.film/view/{id}")
+    fun increaseViewById(
+        @Path("id") id:Int
+    ) : Call<IncreaseViewDTO>
 
     @POST("api.auth/login")
     fun login(
