@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import androidx.lifecycle.ViewModelProvider
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
@@ -245,11 +246,15 @@ class LoginActivity : AppCompatActivity() {
                     // Lấy thông tin cần thiết từ account
                     val displayName = account.displayName
                     val email = account.email
+
+                    Log.e("ID_TOKEN",account.idToken.toString())
+
                     // ...
                     Log.e("CHECKED", email.toString())
                 }
                 navigateToSecondActivity()
             } catch (e: ApiException) {
+                Log.e(e.toString());
                 Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
         }
