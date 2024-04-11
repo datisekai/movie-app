@@ -8,9 +8,11 @@ import com.example.movieapp.Helper
 import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.LoggedInUser
 import com.example.movieapp.data.model.LoginDTO
+import com.example.movieapp.data.model.TokenDTO
 import com.example.movieapp.data.model.UserDTO
 import com.example.movieapp.service.ServiceBuilder
 import com.example.movieapp.ui.login.LoginActivity
+import retrofit2.Response
 import java.io.IOException
 import java.util.concurrent.Executors
 import java.util.concurrent.Callable
@@ -20,18 +22,21 @@ import java.util.concurrent.Future
  */
 class LoginDataSource {
 
-    fun login(username: String, password: String, context: Context): Result<UserDTO> {
+    fun login(username: String, password: String, context: Context, type: String, idToken: String): Result<UserDTO> {
         var user = UserDTO()
         try {
             // TODO: handle loggedInUser authentication
             val executor = Executors.newSingleThreadExecutor()
             val userFuture: Future<UserDTO> = executor.submit(Callable<UserDTO> {
 
-                var emailData = username
-                var passwordData = password
+                val login = LoginDTO(username, password)
+                var result: Response<TokenDTO>
+                if(type === "GOOGLE"){
+                    result= ServiceBuilder().apiService.getGoogleLogin(idToken).execute()
+                }else{
+                    result= ServiceBuilder().apiService.login(login).execute()
+                }
 
-                val login = LoginDTO(emailData, passwordData)
-                val result = ServiceBuilder().apiService.login(login).execute()
                 if (result.isSuccessful) {
                     val token: String = result.body().data.accessToken
                     user = result.body().data.user
@@ -55,7 +60,7 @@ class LoginDataSource {
                 user
             })
 
-            val user = userFuture.get() // Chờ cho đến khi kết quả của future có sẵn
+            val user = userFuture.get()
             if (user.id == 0 && user.email.isEmpty() && user.fullname.isEmpty() && !user.is_active) {
                 return Result.Fail(user)
             }

@@ -1,6 +1,7 @@
 package com.example.movieapp.service
 
 import android.util.Log
+import com.example.movieapp.config
 import com.example.movieapp.data.model.ClassToken
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -33,7 +34,7 @@ class ServiceBuilder {
 
 //    "https://movie-backend.datisekai.id.vn/
     var apiService : ApiService = Retrofit.Builder()
-            .baseUrl("https://movie-backend-ashy.vercel.app/")
+            .baseUrl(config.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okBuilder.build())
             .build()

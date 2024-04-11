@@ -27,6 +27,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.example.movieapp.Helper
 import com.example.movieapp.R
+import com.example.movieapp.config
 import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.databinding.ActivityLoginBinding
 import com.example.movieapp.ui.activity.HomePage_Activity
@@ -35,7 +36,9 @@ import com.example.movieapp.ui.activity.RegisterActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
 import java.util.Date
 
 
@@ -45,23 +48,32 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     lateinit var gso: GoogleSignInOptions
     lateinit var gsc: GoogleSignInClient
-
+    private val contextView= this
+    lateinit var googleBtn: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val contextView= this
         val bundle = intent.extras
         if (bundle != null) {
             val username = bundle.getString("username")
             val password = bundle.getString("password")
-            Log.e("check1", username.toString())
             loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
                 .get(LoginViewModel::class.java)
             loginViewModel.login(
                 username.toString(),
                 password.toString(),
-                this
+                this,
+                "LOGIN",
+                ""
             )
         }
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val username = binding.username
+        val password = binding.password
+        val login = binding.login
+        val loading = binding.loading
+
         try {
             val token = Helper.TokenManager.getToken(this)
             if (token != null && !isTokenExpired(token)) {
@@ -92,27 +104,24 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        val username = binding.username
-        val password = binding.password
-        val login = binding.login
-        val loading = binding.loading
-        val googleBtn: Button = findViewById(R.id.loginGoogle)
-        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build()
-        gsc = GoogleSignIn.getClient(this, gso)
-
-        val acct = GoogleSignIn.getLastSignedInAccount(this)
-        if (acct != null) {
-            navigateToSecondActivity()
-        }
+        googleBtn = findViewById(R.id.loginGoogle)
 
         googleBtn.setOnClickListener {
             signIn()
         }
+
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestIdToken(config.WEB_CLIENT_ID)
+            .build()
+
+        gsc = GoogleSignIn.getClient(this, gso)
+
+//        val acct = GoogleSignIn.getLastSignedInAccount(this)
+//        if (acct != null) {
+//            navigateToSecondActivity()
+//        }
+
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
@@ -183,7 +192,9 @@ class LoginActivity : AppCompatActivity() {
                         loginViewModel.login(
                             username.text.toString(),
                             password.text.toString(),
-                            contextView
+                            contextView,
+                            "LOGIN",
+                            ""
                         )
                     }
 
@@ -197,7 +208,9 @@ class LoginActivity : AppCompatActivity() {
                 loginViewModel.login(
                     username.text.toString(),
                     password.text.toString(),
-                    contextView
+                    contextView,
+                    "LOGIN",
+                    ""
                 )
             }
         }
@@ -231,6 +244,7 @@ class LoginActivity : AppCompatActivity() {
         return true
     }
     fun signIn() {
+        googleBtn.isEnabled = true
         val signInIntent = gsc.signInIntent
         startActivityForResult(signInIntent, 1000)
     }
@@ -243,27 +257,20 @@ class LoginActivity : AppCompatActivity() {
             try {
                 val account = task.getResult(ApiException::class.java)
                 if (account != null) {
-                    // Lấy thông tin cần thiết từ account
-                    val displayName = account.displayName
-                    val email = account.email
-
-                    Log.e("ID_TOKEN",account.idToken.toString())
-
-                    // ...
-                    Log.e("CHECKED", email.toString())
+                    val idToken =account.idToken
+                    loginViewModel.login(
+                        "",
+                        "",
+                        contextView,
+                        "GOOGLE",
+                        idToken.toString()
+                        )
                 }
-                navigateToSecondActivity()
+                googleBtn.isEnabled = false
             } catch (e: ApiException) {
-                Log.e(e.toString());
                 Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    fun navigateToSecondActivity() {
-        finish()
-        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-        startActivity(intent)
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
