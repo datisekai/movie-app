@@ -9,228 +9,240 @@
     android:background="#1A1A1D">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/imagePoster"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="0dp"
-            android:layout_height="350dp"
-            android:src="@drawable/radient_bg"
-            app:layout_constraintBottom_toBottomOf="@id/imagePoster"
-            app:layout_constraintEnd_toEndOf="@+id/imagePoster"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/imagePoster" />
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="125dp"
-            android:layout_height="175dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="-50dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="MissingConstraints" />
-
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:onClick="clickBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/transparent"
-            android:src="@drawable/icons8_back_18"
-            app:layout_constraintBottom_toTopOf="@+id/imageView2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/txtTitleFilm"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="20dp"
-        android:text="Film"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:overScrollMode="always">
 
-
-
-
-    <ScrollView
-        android:layout_marginBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="16dp">
-            <LinearLayout
-                android:layout_marginTop="10dp"
+            android:layout_margin="16dp"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imagePoster"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="0dp"
+                    android:layout_height="350dp"
+                    android:src="@drawable/radient_bg"
+                    app:layout_constraintBottom_toBottomOf="@id/imagePoster"
+                    app:layout_constraintEnd_toEndOf="@+id/imagePoster"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/imagePoster" />
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="125dp"
+                    android:layout_height="175dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="-50dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="MissingConstraints" />
+
+                <ImageButton
+                    android:id="@+id/imageButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/transparent"
+                    android:onClick="clickBack"
+                    android:src="@drawable/icons8_back_18"
+                    app:layout_constraintBottom_toTopOf="@+id/imageView2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/txtTitleFilm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="5dp"
+                android:text="Film"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
+
                 <TextView
-                    android:textColor="#8F8F8F"
                     android:id="@+id/txtYear"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:textColor="#8F8F8F" />
+
                 <TextView
-                    android:textColor="#8F8F8F"
-                    android:text="|"
-                    android:layout_marginLeft="5dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:text="|"
+                    android:textColor="#8F8F8F" />
+
                 <TextView
-                    android:textColor="#8F8F8F"
                     android:id="@+id/txtMonth"
-                    android:layout_marginLeft="5dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="#8F8F8F" />
+
                 <TextView
-                    android:textColor="#8F8F8F"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
                     android:text="|"
-                    android:layout_marginLeft="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"/>
+                    android:textColor="#8F8F8F" />
+
                 <TextView
-                    android:textColor="#8F8F8F"
                     android:id="@+id/txtCountry"
-                    android:layout_marginLeft="5dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="#8F8F8F" />
+
                 <TextView
-                    android:textColor="#8F8F8F"
-                    android:text="|"
-                    android:layout_marginLeft="5dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:text="|"
+                    android:textColor="#8F8F8F" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:textColor="#8F8F8F"
-                    android:gravity="center"
                     android:id="@+id/txtView"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent" />
-                <TextView
-                    android:textColor="#8F8F8F"
-                    android:layout_marginLeft="5dp"
+                    android:layout_height="match_parent"
                     android:gravity="center"
+                    android:textColor="#8F8F8F" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="view"/>
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center"
+                    android:text="view"
+                    android:textColor="#8F8F8F" />
+
                 <LinearLayout
-                    android:layout_marginLeft="150dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="130dp"
                     android:orientation="horizontal">
+
                     <ImageButton
                         android:id="@+id/btnFavotite"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:gravity="center"
                         android:src="@drawable/baseline_add_24"
-                        app:backgroundTint="@null"/>
+                        app:backgroundTint="@null" />
 
                     <TextView
-                        android:textColor="#8F8F8F"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="Add Favourite Film" />
+                        android:text="Add Favourite Film"
+                        android:textColor="#8F8F8F" />
                 </LinearLayout>
             </LinearLayout>
 
             <Button
                 android:id="@+id/buttonWatch"
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/custome_button"
+                android:drawablePadding="10dp"
+                android:onClick="clickWatch"
                 android:text="WATCH NOW"
                 android:textColor="@color/white"
-                android:drawablePadding="10dp"
-                app:backgroundTint="@null"
-                android:background="@drawable/custome_button"
-                android:onClick="clickWatch"/>
+                app:backgroundTint="@null" />
+
             <TextView
-                android:layout_marginTop="5dp"
-                android:textColor="#8F8F8F"
                 android:id="@+id/txtDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"/>
-            <TextView
+                android:layout_marginTop="5dp"
                 android:textColor="#8F8F8F"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/txtDirector"
-                android:layout_marginTop="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Director: "/>
+                android:layout_marginTop="2dp"
+                android:text="Director: "
+                android:textColor="#8F8F8F" />
+
             <TextView
-                android:textColor="#8F8F8F"
                 android:id="@+id/txtCatelogy"
-                android:layout_marginTop="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Category: "/>
+                android:layout_marginTop="2dp"
+                android:text="Category: "
+                android:textColor="#8F8F8F" />
 
             <LinearLayout
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical">
+
                 <TextView
-                    android:textColor="#8F8F8F"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="List of episodes"
-                    android:textStyle="bold"
-                    android:textSize="16sp"/>
+                    android:textColor="#8F8F8F"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginTop="10dp"
                 android:id="@+id/recyclerEsopide"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" />
 
             <TextView
-                android:textColor="#8F8F8F"
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:text="Comment"
+                android:textColor="#8F8F8F"
                 android:textSize="26sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
 
                 <com.makeramen.roundedimageview.RoundedImageView
                     android:id="@+id/imageUserComment"
@@ -238,25 +250,27 @@
                     android:layout_height="40dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/user_comment"
-                    app:riv_oval="true"/>
+                    app:riv_oval="true" />
 
                 <EditText
-                    android:textColor="#8F8F8F"
                     android:id="@+id/edtComment"
-                    android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:hint="Add comment here"
+                    android:textColorHint="@color/white"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
-                    android:imeOptions="actionDone"/>
+                    android:textColor="#8F8F8F" />
 
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginTop="5dp"
                 android:id="@+id/recyclerComment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingBottom="15dp"/>
 
 
         </LinearLayout>

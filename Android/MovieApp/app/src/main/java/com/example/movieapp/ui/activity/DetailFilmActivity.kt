@@ -30,7 +30,6 @@ import com.example.movieapp.DBHelper
 import com.example.movieapp.Helper
 import com.example.movieapp.adapter.CommentAdapter
 import com.example.movieapp.adapter.EsopideAdapter
-import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.Comment
 import com.example.movieapp.data.model.CommentDTO
 import com.example.movieapp.data.model.Esopide
@@ -44,59 +43,60 @@ import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 
 
-class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Film>{
-    private lateinit var editTextComment : EditText
-    private lateinit var data : MutableList<EsopideDTO>
-    private lateinit var dataComment : MutableList<CommentDTO>
-    private lateinit var btnFavorite : ImageButton
+class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Film> {
+    private lateinit var editTextComment: EditText
+    private lateinit var data: MutableList<EsopideDTO>
+    private lateinit var dataComment: MutableList<CommentDTO>
+    private lateinit var btnFavorite: ImageButton
     private var mInterstitialAd: InterstitialAd? = null
-    private lateinit var recyclerView : RecyclerView
+    private lateinit var recyclerView: RecyclerView
     private final val TAG = "MainActivity"
-    var check : Boolean = false
-    var filmId : Int = 0
+    private lateinit var adapterComment: CommentAdapter
+    var check: Boolean = false
+    var checkPremium: Boolean = false
+    var filmId: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_film)
 
         editTextComment = findViewById(R.id.edtComment)
-        editTextComment.setOnEditorActionListener{_, actionId, event ->
+        editTextComment.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE ||
                 (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) ||
                 (actionId == EditorInfo.IME_ACTION_DONE)
             ) {
-                   if (filmId!=0 && editTextComment.text.toString().isNullOrEmpty()==false){
-                       val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
-                       val dataComment1 = RequestComment(editTextComment.text.toString(),filmId)
-                       viewModel.createComment(dataComment1)
-                       recyclerView.adapter = null
-                       getComment(filmId)
-                       editTextComment.text.clear()
-                   }else
-                   {
-                       Toast.makeText(this,"Create Comment Fail",Toast.LENGTH_LONG).show()
-                   }
-                val inputManager : InputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE)
-                        as InputMethodManager
+                if (filmId != 0 && editTextComment.text.toString().isNullOrEmpty() == false) {
+                    val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+                    val dataComment1 = RequestComment(editTextComment.text.toString(), filmId)
+                    viewModel.createComment(dataComment1)
+                    adapterComment.notifyDataSetChanged()
+                    getComment(filmId)
+                    editTextComment.text.clear()
+                } else {
+                    Toast.makeText(this, "Create Comment Fail", Toast.LENGTH_LONG).show()
+                }
+                val inputManager: InputMethodManager =
+                    this.getSystemService(Context.INPUT_METHOD_SERVICE)
+                            as InputMethodManager
                 inputManager.hideSoftInputFromWindow(this.editTextComment.windowToken, 0)
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
         }
         btnFavorite = findViewById(R.id.btnFavotite)
-        btnFavorite.setOnClickListener(object : View.OnClickListener{
+        btnFavorite.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 clickBtnFavotite()
             }
 
         })
         //Check if a Loader is running, if it is, reconnect to it
-        if (supportLoaderManager.getLoader<Film>(0)!=null) {
-            supportLoaderManager.initLoader(0,null,this).forceLoad()
+        if (supportLoaderManager.getLoader<Film>(0) != null) {
+            supportLoaderManager.initLoader(0, null, this).forceLoad()
         }
 
         // Google ads
@@ -108,80 +108,99 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
     private fun serviceGoogleAds() {
         var adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712", adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                Log.d(TAG, adError.toString())
-                mInterstitialAd = null
-            }
-
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                Log.d(TAG, "Ad was loaded.")
-                mInterstitialAd = interstitialAd
-                mInterstitialAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
-                    override fun onAdClicked() {
-                        // Called when a click is recorded for an ad.
-                        Log.e(TAG, "Ad was clicked.")
-                    }
-
-                    override fun onAdDismissedFullScreenContent() {
-                        // Called when ad is dismissed.
-                        Log.e(TAG, "Ad dismissed fullscreen content.")
-                    }
-
-                    override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                        // Called when ad fails to show.
-                        Log.e(TAG, "Ad failed to show fullscreen content.")
-                        mInterstitialAd = null
-                    }
-
-                    override fun onAdImpression() {
-                        // Called when an impression is recorded for an ad.
-                        Log.e(TAG, "Ad recorded an impression.")
-                    }
-
-                    override fun onAdShowedFullScreenContent() {
-                        // Called when ad is shown.
-                        Log.e(TAG, "Ad showed fullscreen content.")
-                    }
+        InterstitialAd.load(
+            this,
+            "ca-app-pub-3940256099942544/1033173712",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Log.d(TAG, adError.toString())
+                    mInterstitialAd = null
                 }
-            }
-        })
+
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    Log.d(TAG, "Ad was loaded.")
+                    mInterstitialAd = interstitialAd
+                    mInterstitialAd?.fullScreenContentCallback =
+                        object : FullScreenContentCallback() {
+                            override fun onAdClicked() {
+                                // Called when a click is recorded for an ad.
+                                Log.e(TAG, "Ad was clicked.")
+                            }
+
+                            override fun onAdDismissedFullScreenContent() {
+                                // Called when ad is dismissed.
+                                Log.e(TAG, "Ad dismissed fullscreen content.")
+                            }
+
+                            override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                                // Called when ad fails to show.
+                                Log.e(TAG, "Ad failed to show fullscreen content.")
+                                mInterstitialAd = null
+                            }
+
+                            override fun onAdImpression() {
+                                // Called when an impression is recorded for an ad.
+                                Log.e(TAG, "Ad recorded an impression.")
+                            }
+
+                            override fun onAdShowedFullScreenContent() {
+                                // Called when ad is shown.
+                                Log.e(TAG, "Ad showed fullscreen content.")
+                            }
+                        }
+                }
+            })
 
 
     }
 
-    public fun clickWatch(view:View){
-        addHistory(data)
-//        if (mInterstitialAd != null) {
-//            mInterstitialAd?.show(this)
-//        } else {
-//
-//        }
-        startPlayerActivity()
+    public fun clickWatch(view: View) {
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.show(this)
+            startPlayerActivity()
+            addHistory(data )
+        } else {
+            startPlayerActivity()
+            addHistory(data )
+        }
+    }
 
+
+    private fun checkPremiumFilm() : Boolean{
+        if (checkPremium==true){
+           if (Helper.TokenManager.getRoles(this).isNullOrEmpty()){
+               Log.e("ERRROR","roles null")
+           }else{
+               Log.e("ROLES", Helper.TokenManager.getRoles(this)?.get(0).toString())
+           }
+        }
+        return false
     }
     private fun startPlayerActivity(){
         val intent : Intent =  Intent(this,
             PlayerActivity::class.java);
         val bundle = Bundle()
-        bundle.putString("URL",data.get(0).url)
-        bundle.putString("TITLE",data.get(0).title)
-        intent.putExtra("videoUrl",bundle)
-        startActivity(intent);
+        if (data.isEmpty()==false){
+            bundle.putInt("ID", data.get(0).id)
+            bundle.putString("URL",data.get(0).url)
+            bundle.putString("TITLE",data.get(0).title)
+            intent.putExtra("videoUrl",bundle)
+            startActivity(intent);
+        }else{
+            Toast.makeText(this,"ERROR: NO DATA",Toast.LENGTH_LONG).show()
+        }
+
     }
 
     private fun addHistory(data: MutableList<EsopideDTO>){
         val userId = Helper.TokenManager.getId(this)
-
+        val dbFile = this.getDatabasePath("history")
+        val dataFilePath = dbFile.absolutePath
+        Log.e("database",dataFilePath)
         val dbHelper = DBHelper(this)
 
         if(userId != null){
-           var idRow = dbHelper.getUserID(userId)
-
-            if(idRow == -1L){
-                val userRowId = dbHelper.addUser(userId.toInt())
-                idRow = userRowId
-            }
 
            val resultAddItem = dbHelper.insert(userId, data.get(0).id)
            if(resultAddItem != -1L){
@@ -196,6 +215,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             }
             Log.e("Insert Database ",userId.toString())
        }
+        dbHelper.getAll()
     }
 
     public fun clickBtnFavotite(){
@@ -207,8 +227,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
            val dataFilmFavorite = RequestFilmFavorite(filmId)
            viewModel.postFilmFavoutite(dataFilmFavorite)
 
-       }else
-       {
+       }else {
            btnFavorite.setImageResource(R.drawable.baseline_add_24)
            check = false
            val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
@@ -225,6 +244,11 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             val intent : Intent = intent
             val bundle : Bundle = intent.getBundleExtra("DataID")!!
             val id = bundle.getInt("ID")
+            val check = bundle.getBoolean("IS_PREMIUM")
+            if (check!=null){
+                checkPremium = check
+                Log.e("ISPREMIUM",checkPremium.toString())
+            }
             val bundle2 = Bundle()
             if (id != null) {
                 filmId = id
@@ -271,16 +295,14 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
 
     private fun getComment(id : Int){
         dataComment = mutableListOf()
-        if (dataComment.isEmpty()==false){
-            dataComment.clear()
-        }
         val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
         val commentList : LiveData<Comment> = viewModel.getAllComment(id)
         commentList.observe(this) { comments ->
             val tmp = comments.data.toMutableList()
             dataComment.addAll(tmp)
             recyclerView = findViewById(R.id.recyclerComment)
-            recyclerView.adapter = CommentAdapter(this, dataComment)
+            adapterComment = CommentAdapter(this,dataComment)
+            recyclerView.adapter = adapterComment
             recyclerView.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         }
@@ -317,6 +339,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             val txtMonth = findViewById<TextView>(R.id.txtMonth)
             val txtDescription = findViewById<TextView>(R.id.txtDescription)
             if (data != null){
+                checkPremium = data.data.isRequiredPremium
                 txtTitle.text = data.data.title
                 txtDirect.text = "Director: ${data.data.director}"
                 txtCate.text = "Category: ${data.data.type}"

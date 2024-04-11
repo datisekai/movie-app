@@ -166,7 +166,7 @@ class RegisterActivity : AppCompatActivity() {
                 bundle.putString("password", password)
                 intent.putExtras(bundle)
                 startActivity(intent)
-                loginViewModel.login(username, password, this)
+                loginViewModel.login(username, password, this, "LOGIN", "")
             }
 
         } catch (e: Throwable) {
