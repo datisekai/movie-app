@@ -40,6 +40,7 @@ class EsopideAdapter(private val context: Context, private val data : List<Esopi
         //Check Watched Episode
         val db = DBHelper(context)
         val userId = Helper.TokenManager.getId(context)
+        Log.e("TestUser",userId.toString())
         if(userId != null){
             val listHistory = db.getListId(userId)
             if(!listHistory.isNullOrEmpty()){
@@ -65,6 +66,7 @@ class EsopideAdapter(private val context: Context, private val data : List<Esopi
                 val intent : Intent =  Intent(context,
                     PlayerActivity::class.java);
                 val bundle = Bundle()
+                bundle.putInt("ID",data.get(index).id)
                 bundle.putString("URL",data.get(index).url)
                 bundle.putString("TITLE",data.get(index).title)
                 intent.putExtra("videoUrl",bundle)

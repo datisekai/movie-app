@@ -41,6 +41,10 @@ export class UserDto {
   @IsBoolean()
   @ApiPropertyOptional()
   is_active: boolean;
+
+  @ApiPropertyOptional()
+  @IsString()
+  fcmToken?: string;
 }
 
 export class CreateUserDto {
@@ -73,6 +77,10 @@ export class CreateUserDto {
   @IsBoolean()
   @ApiPropertyOptional()
   is_active: boolean;
+
+  @ApiPropertyOptional()
+  @IsString()
+  fcmToken?: string;
 }
 
 export class RegisterUserDto {
@@ -95,3 +103,10 @@ export class RegisterUserDto {
 }
 
 export class EditUserDto extends PartialType(CreateUserDto) {}
+
+export class EditFcmTokenDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  fcmToken: string;
+}

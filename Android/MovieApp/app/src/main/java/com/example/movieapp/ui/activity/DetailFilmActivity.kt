@@ -231,6 +231,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             PlayerActivity::class.java);
         val bundle = Bundle()
         if (data.isEmpty()==false){
+            bundle.putInt("ID", data.get(0).id)
             bundle.putString("URL",data.get(0).url)
             bundle.putString("TITLE",data.get(0).title)
             intent.putExtra("videoUrl",bundle)
@@ -243,16 +244,12 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
 
     private fun addHistory(data: MutableList<EsopideDTO>){
         val userId = Helper.TokenManager.getId(this)
-
+        val dbFile = this.getDatabasePath("history")
+        val dataFilePath = dbFile.absolutePath
+        Log.e("database",dataFilePath)
         val dbHelper = DBHelper(this)
 
         if(userId != null){
-           var idRow = dbHelper.getUserID(userId)
-
-            if(idRow == -1L){
-                val userRowId = dbHelper.addUser(userId.toInt())
-                idRow = userRowId
-            }
 
            val resultAddItem = dbHelper.insert(userId, data.get(0).id)
            if(resultAddItem != -1L){
@@ -267,6 +264,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             }
             Log.e("Insert Database ",userId.toString())
        }
+        dbHelper.getAll()
     }
 
     public fun clickBtnFavotite(){

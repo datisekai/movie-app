@@ -7,6 +7,7 @@ import {
   Param,
   Body,
   Query,
+  NotFoundException,
 } from '@nestjs/common';
 import { Auth, User } from 'src/common/decorators';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';

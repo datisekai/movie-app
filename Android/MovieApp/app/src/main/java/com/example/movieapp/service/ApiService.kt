@@ -139,4 +139,7 @@ interface ApiService {
     fun getHistory(
         @Body episode_ids: EpisodeIdsWrapper
     ) : Call<List<EpisodeHistoryDTO>>
+
+    @GET("api.auth/google-login")
+    fun getGoogleLogin(@Query("idToken") idToken: String = "") : Call<TokenDTO>
 }
