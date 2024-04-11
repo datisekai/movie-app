@@ -82,14 +82,19 @@ class LoginActivity : AppCompatActivity() {
                 val fullname = Helper.TokenManager.getFullName(this)
                 val isActive = Helper.TokenManager.getIsActive(this)
                 val role = Helper.TokenManager.getRoles(this)
-
-
+                var roles : ArrayList<String> = arrayListOf()
+                val tmp = role?.split(",")
+                if (tmp!=null){
+                    for (o in tmp){
+                        roles.add(o)
+                    }
+                }
                 ClassToken.MY_TOKEN= token.toString()
                 ClassToken.ID= id?: 0
                 ClassToken.EMAIL= email.toString()
                 ClassToken.FULLNAME= fullname.toString()
                 ClassToken.IS_ACTIVE = isActive!!
-                ClassToken.ROLES = role!!
+                ClassToken.ROLES = roles
 //                val checkToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTcxMTI2MTU5MiwiZXhwIjoxNzExMjY4NzkyfQ.ijPEfRK325BP_3ubNSHkoxUWtbxfvPkntaav-zIeL-k"
 //                Helper.TokenManager.saveToken(this, checkToken, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE, ArrayList())
                 val intent = Intent(this, MainActivity::class.java)
