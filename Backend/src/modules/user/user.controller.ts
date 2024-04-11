@@ -14,7 +14,12 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RolesBuilder, InjectRolesBuilder } from 'nest-access-control';
 import { AppResource, AppRoles } from 'src/app.role';
 import { User as UserEntity } from './user.entity';
-import { CreateUserDto, EditUserDto, RegisterUserDto } from './user.dto';
+import {
+  CreateUserDto,
+  EditFcmTokenDto,
+  EditUserDto,
+  RegisterUserDto,
+} from './user.dto';
 
 @ApiTags(AppResource.USER)
 @Controller('api.user')
@@ -114,5 +119,18 @@ export class UserController {
       data = await this.userService.deleteOne(id, user);
     }
     return { message: 'User deleted', data };
+  }
+
+  @Auth({
+    action: 'update',
+    possession: 'own',
+    resource: AppResource.USER,
+  })
+  @Put('/me/fcm')
+  @ApiOperation({
+    summary: 'Update My FCM Token',
+  })
+  async updateFcmToken(@Body() dto: EditFcmTokenDto, @User() user: UserEntity) {
+    return this.userService.editOne(user.id, { fcmToken: dto.fcmToken }, user);
   }
 }

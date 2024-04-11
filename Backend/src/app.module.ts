@@ -16,6 +16,7 @@ import { FilmModule } from './modules/film/film.module';
 import { OrderModule } from './modules/order/order.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { UserModule } from './modules/user/user.module';
+import { FirebaseModule } from './modules/firebase/firebase.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { UserModule } from './modules/user/user.module';
     CommentModule,
     OrderModule,
     FavouriteModule,
+    FirebaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
