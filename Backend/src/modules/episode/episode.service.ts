@@ -17,6 +17,7 @@ import {
   EpisodeUpdatePositionDto,
 } from './episode.dto';
 import { FilmService } from '../film/film.service';
+import { FirebaseService } from '../firebase/firebase.service';
 
 export interface EpisodeFindOne {
   id?: number;
@@ -29,6 +30,7 @@ export class EpisodeService {
     @InjectRepository(Episode)
     private readonly episodeRepository: Repository<Episode>,
     private readonly filmService: FilmService,
+    private readonly firebaseService: FirebaseService,
   ) {}
 
   async getMany(query: any, filmId: number) {
@@ -91,6 +93,8 @@ export class EpisodeService {
     });
 
     const episode = await this.episodeRepository.save(newEpisode);
+
+    this.firebaseService.sendNotificationToFavoriteUsers(currentFilm.id);
 
     return episode;
   }
