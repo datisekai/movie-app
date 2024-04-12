@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.movieapp">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -33,9 +32,6 @@
             android:exported="false" />
         <activity
             android:name=".ui.activity.ProfileDetailsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activity.ProfilePhoneNumberActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.ProfilePasswordActivity"

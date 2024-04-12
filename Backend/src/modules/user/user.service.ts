@@ -107,6 +107,7 @@ export class UserService {
   async editOne(id: number, dto: EditUserDto, userEntity?: User) {
     const user = await this.getOne(id, userEntity);
     user.email = dto.email || user.email;
+    user.fcmToken = dto.fcmToken || user.fcmToken;
     if (dto.fullname) {
       user.fullname = dto.fullname;
       user.fullname_search = removeVietnameseDiacritics(
@@ -139,5 +140,13 @@ export class UserService {
       .where({ ...data, is_deleted: false })
       .addSelect('user.password')
       .getOne();
+  }
+
+  getUsersWhoFavoredMovie(filmId: number) {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.favourites', 'favourite')
+      .where('favourite.film_id = :filmId', { filmId })
+      .getMany();
   }
 }

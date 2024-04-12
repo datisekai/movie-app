@@ -47,6 +47,9 @@ export class User {
   @UpdateDateColumn()
   updated_at: Date;
 
+  @Column({ nullable: true })
+  fcmToken: string;
+
   @OneToMany(() => CommentEntity, (comment) => comment.user)
   comments!: CommentEntity[];
 

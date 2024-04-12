@@ -23,6 +23,7 @@ export enum AppResource {
   COMMENT = 'COMMENT',
   ORDER = 'ORDER',
   FAVOURITE = 'FAVOURITE',
+  FIREBASE = 'FIREBASE',
 }
 
 export const roles: RolesBuilder = new RolesBuilder();
