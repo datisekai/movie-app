@@ -65,7 +65,8 @@ class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCa
         //
         val rolesUser = Helper.TokenManager.getRoles(requireContext())
         if(rolesUser != null){
-            for (role in rolesUser){
+            val roles = rolesUser.split(",")
+            for (role in roles){
                 if (role.equals("free_user")){
                     buttonBuyPremium.visibility = View.VISIBLE
                     break
