@@ -68,12 +68,12 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        SaveCurrentPlayTime();
         simpleExoPlayer.release();
     }
 
     @Override
     public void onBackPressed() {
-        SaveCurrentPlayTime();
         super.onBackPressed();
     }
 
@@ -81,6 +81,9 @@ public class PlayerActivity extends AppCompatActivity {
         try {
             if(simpleExoPlayer != null){
                 Long currenttime = simpleExoPlayer.getCurrentPosition();
+                if(currenttime >= 5000){
+                    currenttime = currenttime - 5000;
+                }
                 Log.e("Current Time",currenttime.toString());
                 DBHelper dbHelper = new DBHelper(this);
                 Long resultUpdate = dbHelper.addTime(userId, Episode_ID, currenttime);
