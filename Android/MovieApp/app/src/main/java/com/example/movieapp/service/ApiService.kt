@@ -27,6 +27,7 @@ import com.example.movieapp.data.model.TokenDTO
 import com.example.movieapp.data.model.User
 import com.example.movieapp.data.model.UserDTO
 import com.example.movieapp.data.model.Register
+import com.example.movieapp.data.model.RequestFcmToken
 import com.example.movieapp.ui.fragment.EpisodeIdsWrapper
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -73,7 +74,7 @@ interface ApiService {
     fun getMyProfile() : Call<Profile>
 
     @GET("api.favourite/me")
-    fun getAllFilmFavourite() : Call<Film1>
+    fun getAllFilmFavourite() : Call<FilmFavorite>
 
     @GET("api.film/view/{id}")
     fun increaseViewById(
@@ -122,6 +123,11 @@ interface ApiService {
         @Path("id") id: Int,
         @Body EditUserDto: EditPasswordUserDTO
     ) : Call<User>
+
+    @PUT("api.user/me/fcm")
+    fun pustFcmToken(
+        @Body Token : RequestFcmToken
+    ) : Call<UserDTO>
 
     //Blog
     @GET("api.article")

@@ -38,6 +38,7 @@ import com.example.movieapp.data.model.EsopideDTO
 import com.example.movieapp.service.DetailFilmLoader
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
+import com.example.movieapp.data.model.FilmFavorite
 import com.example.movieapp.data.model.RequestComment
 import com.example.movieapp.data.model.RequestFilmFavorite
 import com.google.android.gms.ads.AdError
@@ -313,13 +314,14 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
 
     private fun checkFavoriteFilm(id : Int){
         val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
-        val dataList : LiveData<Film1> = viewModel.getAllFilmFavourite()
+        val dataList : LiveData<FilmFavorite> = viewModel.getAllFilmFavourite()
         dataList.observe(this){datas->
             val tmp = datas.data.toMutableList()
+            Log.e("VALUE",id.toString())
             for (i in tmp){
-                if (id == i.id){
-                    val btn = findViewById<ImageButton>(R.id.btnFavotite)
-                    btn.setImageResource(R.drawable.baseline_check_24)
+                Log.e("VALUE2",i.film.id.toString())
+                if (id == i.film.id){
+                    btnFavorite.setImageResource(R.drawable.baseline_check_24)
                     check=true
                 }
             }
