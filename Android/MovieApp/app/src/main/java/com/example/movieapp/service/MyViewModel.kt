@@ -18,6 +18,7 @@ import com.example.movieapp.data.model.Esopide
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
 import com.example.movieapp.data.model.FilmDTO
+import com.example.movieapp.data.model.FilmFavorite
 import com.example.movieapp.data.model.IncreaseViewDTO
 import com.example.movieapp.data.model.PayOrder
 import com.example.movieapp.data.model.Profile
@@ -81,11 +82,11 @@ class MyViewModel() : ViewModel() {
         return commentLiveData
     }
 
-    fun getAllFilmFavourite() : LiveData<Film1>{
-        val favoriteLiveData = MutableLiveData<Film1>()
+    fun getAllFilmFavourite() : LiveData<FilmFavorite>{
+        val favoriteLiveData = MutableLiveData<FilmFavorite>()
         val call = ServiceBuilder().apiService.getAllFilmFavourite()
-        call.enqueue(object : Callback<Film1>{
-            override fun onResponse(call: Call<Film1>, response: Response<Film1>) {
+        call.enqueue(object : Callback<FilmFavorite>{
+            override fun onResponse(call: Call<FilmFavorite>, response: Response<FilmFavorite>) {
                 if(response.isSuccessful){
                     favoriteLiveData.value = response.body()
                     _dataLoaded.value = true
@@ -94,7 +95,7 @@ class MyViewModel() : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<Film1>, t: Throwable) {
+            override fun onFailure(call: Call<FilmFavorite>, t: Throwable) {
                t.printStackTrace()
             }
 

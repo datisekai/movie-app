@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.R
 import com.makeramen.roundedimageview.RoundedImageView
 
 class PaymentsAdapter(private val context: Context,private val dataImage : List<Int>) :
    RecyclerView.Adapter<PaymentsAdapter.PaymentViewHolders>(){
+    private var oldPosition = 0
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -24,8 +26,10 @@ class PaymentsAdapter(private val context: Context,private val dataImage : List<
         holder.iconPay.setImageResource(dataImage.get(position))
         holder.iconPay.setOnClickListener(object : View.OnClickListener{
             override fun onClick(v: View?) {
-                    if ( holder.checkContainer.visibility == View.VISIBLE &&
-                        holder.iconCheck.visibility == View.VISIBLE){
+                if (oldPosition!=indexTmp){
+                    Toast.makeText(context,"Vui lòng chỉ chọn một hình thức thanh toán",Toast.LENGTH_LONG).show()
+                }else{
+                    if ( holder.checkContainer.visibility == View.VISIBLE && holder.iconCheck.visibility == View.VISIBLE){
                         holder.checkContainer.visibility = View.INVISIBLE
                         holder.iconCheck.visibility = View.INVISIBLE
                         check.checkChoose = false
@@ -36,7 +40,9 @@ class PaymentsAdapter(private val context: Context,private val dataImage : List<
                         holder.iconCheck.visibility = View.VISIBLE
                         check.checkChoose = true
                         check.index = indexTmp
+                        oldPosition = indexTmp
                     }
+                }
 
             }
 

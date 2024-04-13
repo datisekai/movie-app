@@ -61,6 +61,7 @@
                     app:layout_constraintStart_toStartOf="@+id/imagePoster" />
 
                 <ImageView
+                    android:elevation="8dp"
                     android:id="@+id/imageView3"
                     android:layout_width="125dp"
                     android:layout_height="175dp"
@@ -241,6 +242,12 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <ProgressBar
+                android:id="@+id/progressBarEsopide"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerEsopide"
                 android:layout_width="match_parent"
@@ -281,6 +288,14 @@
                     android:textColor="#8F8F8F" />
 
             </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBarCmt"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="visible"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerComment"

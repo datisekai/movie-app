@@ -20,6 +20,7 @@ import com.example.movieapp.R
 import com.example.movieapp.data.model.EsopideDTO
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.ui.activity.PlayerActivity
+import com.makeramen.roundedimageview.RoundedImageView
 import java.util.zip.Inflater
 
 class EsopideAdapter(private val context: Context, private val data : List<EsopideDTO>)
@@ -82,7 +83,7 @@ class EsopideAdapter(private val context: Context, private val data : List<Esopi
 
     inner class EsopideViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         val card = itemView.findViewById<CardView>(R.id.cardView)
-        val img = itemView.findViewById<ImageView>(R.id.imageEsopide)
+        val img = itemView.findViewById<RoundedImageView>(R.id.imageEsopide)
         val txt = itemView.findViewById<TextView>(R.id.numberEsopide)
 
     }

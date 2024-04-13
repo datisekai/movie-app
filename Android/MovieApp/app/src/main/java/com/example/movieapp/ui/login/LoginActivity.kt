@@ -29,7 +29,9 @@ import com.example.movieapp.Helper
 import com.example.movieapp.R
 import com.example.movieapp.config
 import com.example.movieapp.data.model.ClassToken
+import com.example.movieapp.data.model.RequestFcmToken
 import com.example.movieapp.databinding.ActivityLoginBinding
+import com.example.movieapp.service.FcmTokenViewModel
 import com.example.movieapp.ui.activity.HomePage_Activity
 import com.example.movieapp.ui.activity.MainActivity
 import com.example.movieapp.ui.activity.RegisterActivity
@@ -39,6 +41,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import java.util.Date
 
 
@@ -273,6 +277,8 @@ class LoginActivity : AppCompatActivity() {
                 }
                 googleBtn.isEnabled = false
             } catch (e: ApiException) {
+                Log.e("ERROR",e.printStackTrace().toString())
+                e.printStackTrace()
                 Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
         }
@@ -289,6 +295,26 @@ class LoginActivity : AppCompatActivity() {
             "$welcome $displayName",
             Toast.LENGTH_LONG
         ).show()
+
+        getFCMToken()
+
+    }
+
+    private fun getFCMToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("MAINACTIVITY", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+            Log.d("MAINACTIVITY", token)
+            val viewModel = ViewModelProvider(this).get(FcmTokenViewModel::class.java)
+            viewModel.putFCMToken(RequestFcmToken(token))
+
+
+        })
     }
 
     private fun showLoginError(@StringRes errorString: Int) {

@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.ProgressBar
 import com.example.movieapp.R
 import android.widget.TextView
 import android.widget.Toast
@@ -37,6 +38,7 @@ import com.example.movieapp.data.model.EsopideDTO
 import com.example.movieapp.service.DetailFilmLoader
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
+import com.example.movieapp.data.model.FilmFavorite
 import com.example.movieapp.data.model.RequestComment
 import com.example.movieapp.data.model.RequestFilmFavorite
 import com.google.android.gms.ads.AdError
@@ -45,6 +47,8 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.makeramen.roundedimageview.RoundedImageView
 
 
@@ -54,6 +58,8 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
     private lateinit var dataComment: MutableList<CommentDTO>
     private lateinit var btnFavorite: ImageButton
     private lateinit var userCommentImg : RoundedImageView
+    private lateinit var progressBarEso : ProgressBar
+    private lateinit var progressBarCmt : ProgressBar
     private var mInterstitialAd: InterstitialAd? = null
     private lateinit var recyclerView: RecyclerView
     private final val TAG = "MainActivity"
@@ -66,6 +72,11 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_film)
 
+        progressBarEso = findViewById(R.id.progressBarEsopide)
+        progressBarCmt = findViewById(R.id.progressBarCmt)
+
+        progressBarEso.visibility = View.VISIBLE
+        progressBarCmt.visibility = View.VISIBLE
         editTextComment = findViewById(R.id.edtComment)
         userCommentImg = findViewById(R.id.imageUserComment)
         if ( editTextComment.visibility == View.GONE){
@@ -303,13 +314,14 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
 
     private fun checkFavoriteFilm(id : Int){
         val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
-        val dataList : LiveData<Film1> = viewModel.getAllFilmFavourite()
+        val dataList : LiveData<FilmFavorite> = viewModel.getAllFilmFavourite()
         dataList.observe(this){datas->
             val tmp = datas.data.toMutableList()
+            Log.e("VALUE",id.toString())
             for (i in tmp){
-                if (id == i.id){
-                    val btn = findViewById<ImageButton>(R.id.btnFavotite)
-                    btn.setImageResource(R.drawable.baseline_check_24)
+                Log.e("VALUE2",i.film.id.toString())
+                if (id == i.film.id){
+                    btnFavorite.setImageResource(R.drawable.baseline_check_24)
                     check=true
                 }
             }
@@ -328,6 +340,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             recyclerView1.adapter = EsopideAdapter(this, data)
             recyclerView1.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            progressBarEso.visibility = View.GONE
         }
 
     }
@@ -344,6 +357,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             recyclerView.adapter = adapterComment
             recyclerView.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            progressBarCmt.visibility = View.GONE
         }
     }
 
