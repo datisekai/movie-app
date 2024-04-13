@@ -65,15 +65,21 @@ class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCa
         //
         val rolesUser = Helper.TokenManager.getRoles(requireContext())
         if(rolesUser != null){
+            var checkRole = true
             val roles = rolesUser.split(",")
             for (role in roles){
-                if (role.equals("free_user")){
-                    buttonBuyPremium.visibility = View.VISIBLE
-                    break
+                if (role.equals("premium_user")){
+                    checkRole = false
                 }
-                else{
-                    buttonBuyPremium.visibility = View.GONE
+                else if(role.equals("admin")){
+                    checkRole = false
                 }
+            }
+
+            if(checkRole){
+                buttonBuyPremium.visibility = View.VISIBLE
+            }else{
+                buttonBuyPremium.visibility = View.GONE
             }
         }
 
