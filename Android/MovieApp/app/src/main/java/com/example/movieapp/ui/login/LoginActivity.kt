@@ -277,8 +277,7 @@ class LoginActivity : AppCompatActivity() {
                 }
                 googleBtn.isEnabled = false
             } catch (e: ApiException) {
-                Log.e("ERROR",e.printStackTrace().toString())
-                e.printStackTrace()
+                Log.e("ERROR",e.toString())
                 Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
         }
