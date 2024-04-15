@@ -69,11 +69,15 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
         button.setOnClickListener(this)
 
         list = ArrayList()
-        list.add(slideItem(R.drawable.premium1))
-        list.add(slideItem(R.drawable.premium2))
-        list.add(slideItem(R.drawable.premium3))
-        list.add(slideItem(R.drawable.premium4))
-        list.add(slideItem(R.drawable.premium5))
+        //list.add(slideItem(R.drawable.premium1))
+        //list.add(slideItem(R.drawable.premium2))
+        //list.add(slideItem(R.drawable.premium3))
+        //list.add(slideItem(R.drawable.premium4))
+        //list.add(slideItem(R.drawable.premium5))
+
+        list.add(slideItem(R.drawable.premium_1))
+        list.add(slideItem(R.drawable.premium_2))
+        list.add(slideItem(R.drawable.premium_3))
 
 
         viewpage = findViewById(R.id.viewPager)

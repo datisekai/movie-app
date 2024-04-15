@@ -40,20 +40,12 @@ class ArticleBlogAdapter (var ds:List<Article>, private val listener: BlogItemCl
             //layoutParams.width = desiredWidth
             //article_img.layoutParams = layoutParams
 
-            if(item.thumbnail.isNullOrBlank()){
-                Glide.with(itemView.context)
-                    .load(R.drawable.default_esopide)
-                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                    .apply(RequestOptions().override(desiredWidth, Integer.MAX_VALUE))
-                    .into(article_img)
-            }
-            else{
-                Glide.with(itemView.context)
-                    .load(item.thumbnail)
-                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                    .apply(RequestOptions().override(desiredWidth, Integer.MAX_VALUE))
-                    .into(article_img)
-            }
+            Glide.with(itemView.context)
+                .load(item.thumbnail)
+                .error(R.drawable.default_esopide)
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                .apply(RequestOptions().override(desiredWidth, Integer.MAX_VALUE))
+                .into(article_img)
         }
     }
 

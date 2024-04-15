@@ -24,8 +24,8 @@ class ServiceBuilder {
     var loggingInterceptor : HttpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
     var okBuilder : OkHttpClient.Builder = OkHttpClient.Builder()
-        .readTimeout(30,TimeUnit.SECONDS)
-        .connectTimeout(30,TimeUnit.SECONDS)
+        .readTimeout(60,TimeUnit.SECONDS)
+        .connectTimeout(60,TimeUnit.SECONDS)
         .retryOnConnectionFailure(true)
         .addInterceptor(interceptor)
         .addInterceptor(loggingInterceptor)

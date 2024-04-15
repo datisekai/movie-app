@@ -181,12 +181,12 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
         if (checkPremiumFilmToWatch==true){
             if (mInterstitialAd != null) {
                 mInterstitialAd?.show(this)
-                startPlayerActivity()
                 addHistory(data )
+                startPlayerActivity()
                 increaseView()
             } else {
-                startPlayerActivity()
                 addHistory(data )
+                startPlayerActivity()
                 increaseView()
             }
         }else{

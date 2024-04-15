@@ -30,25 +30,23 @@ class BlogDetailActivity : AppCompatActivity() {
                 binding.articleProgressBar.visibility = View.GONE
                 binding.articleTitle.text = newData.data.title
                 //Set Image for ImageView
-                if(newData.data.thumbnail.isNullOrBlank()){
-                    Glide.with(this)
-                        .load(R.drawable.default_esopide)
-                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                        .apply(RequestOptions().override(600, Integer.MAX_VALUE))
-                        .into(binding.articleImg)
-                }
-                else{
-                    Glide.with(this)
-                        .load(newData.data.thumbnail)
-                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                        .apply(RequestOptions().override(800, Integer.MAX_VALUE))
-                        .into(binding.articleImg)
-                }
+                Glide.with(this)
+                    .load(newData.data.thumbnail)
+                    .error(R.drawable.default_esopide)
+                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                    .apply(RequestOptions().override(800, Integer.MAX_VALUE))
+                    .into(binding.articleImg)
                 //Set content for WebView
                 val webView = binding.blogDetailWebview
-                webView.loadData(newData.data.content,"text/html", "UTF-8")
+                val contentWebView = newData.data.content
+                webView.loadData(contentWebView,"text/html", "UTF-8")
                 //Handle links in webview without open another browser
                 webView.webViewClient = WebViewClient()
+                webView.settings.domStorageEnabled = true
+                //Set CSS for webview
+                val css = "<style type='text/css'>body { color: #ffffff; background-color:#18181B;}</style>"
+                val webViewContent = "<html><head>$css</head><body>$contentWebView</body></html>"
+                webView.loadDataWithBaseURL(null, webViewContent, "text/html", "UTF-8", null)
             }else{
                 BackToBlogFragment()
             }
