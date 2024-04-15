@@ -91,12 +91,13 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
                 if (filmId != 0 && editTextComment.text.toString().isNullOrEmpty() == false) {
                     val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
                     val dataComment1 = RequestComment(editTextComment.text.toString(), filmId)
-                    viewModel.createComment(dataComment1)
-                    adapterComment.notifyDataSetChanged()
-                    getComment(filmId)
+                    val request = viewModel.createComment(dataComment1)
+                    request.observe(this){data->
+                        adapterComment.notifyDataSetChanged()
+                        getComment(filmId)
+                        editTextComment.clearFocus()
+                    }
                     editTextComment.text.clear()
-                } else {
-                    Toast.makeText(this, "Create Comment Fail", Toast.LENGTH_LONG).show()
                 }
                 val inputManager: InputMethodManager =
                     this.getSystemService(Context.INPUT_METHOD_SERVICE)
@@ -394,8 +395,8 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             if (data != null){
                 checkPremium = data.data.isRequiredPremium
                 txtTitle.text = data.data.title
-                txtDirect.text = "Director: ${data.data.director}"
-                txtCate.text = "Category: ${data.data.type}"
+                txtDirect.text = "Đạo diễn: ${data.data.director}"
+                txtCate.text = "Thể loại: ${data.data.type}"
                 txtCountry.text = data.data.location
                 txtView.text = data.data.view.toString()
                 val tmp = data.data.createAt.split("-")
