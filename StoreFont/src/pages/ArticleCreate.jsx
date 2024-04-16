@@ -169,12 +169,13 @@ function ArticleCreate() {
             <input
               type="text"
               name="title"
+              placeholder="Enter your title"
               className="rounded p-2 border border-gray-600  max-w-[250px]"
               {...register("title")}
             />
           </div>
         </div>
-        <div className="pb-20 z-10 ">
+        <div className="py-5 z-10 ">
           <label htmlFor="">Genres:</label>
           <MultiSelect
             value={currentGenre}
@@ -188,6 +189,7 @@ function ArticleCreate() {
             setContents={content}
             onChange={(content) => setContent(content)}
             height="10rem"
+            placeholder="Enter the content..."
           />
         </div>
 

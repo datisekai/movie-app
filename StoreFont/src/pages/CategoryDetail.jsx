@@ -101,9 +101,13 @@ function CategoryDetail() {
     >
       {/* left side */}
       <div className="w-1/3">
-        <div className="flex items-center justify-center w-full h-full">
+        <div className="flex items-center justify-center w-full ">
           <label className="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-            <img src={imgUrl} alt="Preview" className="w-full h-full" />
+            <img
+              src={imgUrl}
+              alt="Preview"
+              className="w-full object-contain"
+            />
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
               <svg
                 className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
@@ -138,12 +142,13 @@ function CategoryDetail() {
         </div>
       </div>
       {/* right side */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-y-2 w-2/3">
+      <div className="flex flex-col gap-y-2 w-2/3">
         <div className="flex flex-col">
           <label htmlFor="title">Title:</label>
           <input
             type="text"
             name="title"
+            placeholder="Enter your title..."
             className="rounded p-2 border border-gray-600  max-w-[250px]"
             {...register("title")}
             defaultValue={category.title}
@@ -152,11 +157,12 @@ function CategoryDetail() {
 
         <div className="flex flex-col md:col-span-3 w-full">
           <label htmlFor="description">Description:</label>
-          <SunEditor
-            setContents={description}
-            onChange={(content) => setDescription(content)}
+          <textarea
+            placeholder="Enter description..."
+            rows={6}
+            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             defaultValue={category.description}
-            height="10rem"
+            {...register("description")}
           />
         </div>
         <div className="flex flex-col col-span-3">

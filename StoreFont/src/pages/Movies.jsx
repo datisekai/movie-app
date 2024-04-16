@@ -51,6 +51,7 @@ export default function Movies() {
         setLoading(false)
       })
   }, [page]);
+  
   function deleteFilm(id) {
     console.log("delete", id);
     Swal.fire({
@@ -107,19 +108,22 @@ export default function Movies() {
                   ID
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Title
+                  Tiêu đề
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Type
+                  Loại phim
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Status
+                  Lượt xem
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Is Active
+                  Tình trạng
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Action
+                  Hiển thị
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Hành động
                 </th>
               </tr>
             </thead>
@@ -134,6 +138,7 @@ export default function Movies() {
                   </th>
                   <td className="px-6 py-4">{movie.title}</td>
                   <td className="px-6 py-4">{movie.type}</td>
+                  <td className="px-6 py-4">{movie.view}</td>
                   <td className="px-6 py-4">{movie.status}</td>
                   <td className="px-6 py-4">{movie.is_active.toString()}</td>
                   <td className="space-x-2 flex justify-start">

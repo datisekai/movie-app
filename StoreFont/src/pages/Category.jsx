@@ -98,19 +98,19 @@ function Category() {
             Id
           </th>
           <th scope="col" className="px-6 py-3">
-            Title
+            Tiêu đề
           </th>
           <th scope="col" className="px-6 py-3">
-            Is Active
+            Hiển thị
           </th>
           <th scope="col" className="px-6 py-3">
-            Updated At
+            Ngày cập nhật
           </th>
           <th scope="col" className="px-6 py-3">
-            Created At
+            Ngày tạo
           </th>
           <th scope="col" className="px-6 py-3">
-            Action
+            Hành động
           </th>
         </tr>
       </thead>

@@ -61,6 +61,7 @@ function UserDetail() {
           <input
             type="text"
             name="email"
+            placeholder="Enter your email..."
             className="rounded p-2 border border-gray-600  max-w-[250px]"
             defaultValue={user.email}
             {...register("email")}
@@ -71,6 +72,7 @@ function UserDetail() {
           <input
             type="text"
             name="fullname"
+            placeholder="Enter your fullname..."
             className="rounded p-2 border border-gray-600  max-w-[250px]"
             defaultValue={user.fullname}
             {...register("fullname")}
@@ -81,6 +83,7 @@ function UserDetail() {
           <input
             type="password"
             name="password"
+            placeholder="Enter your password..."
             className="rounded p-2 border border-gray-600  max-w-[250px]"
             defaultValue={user.password}
             {...register("password")}
@@ -93,8 +96,8 @@ function UserDetail() {
             name="role"
             id=""
             className="rounded p-2 border border-gray-600  max-w-[250px]"
-            defaultValue={user.role}
-            {...register("role")}
+            defaultValue={user.roles[0]}
+            {...register("roles")}
           >
             <option value="free_user">Free User</option>
             <option value="premium_user">Premium User</option>

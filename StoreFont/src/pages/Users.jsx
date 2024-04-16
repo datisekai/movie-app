@@ -101,13 +101,13 @@ function Users() {
               Email
             </th>
             <th scope="col" className="px-6 py-3">
-              FullName
+              Tên đầy đủ
             </th>
             <th scope="col" className="px-6 py-3">
-              isActive
+              Hiển thị
             </th>
             <th scope="col" className="px-6 py-3">
-              Action
+              Hành động
             </th>
           </tr>
         </thead>

@@ -10,7 +10,7 @@ import { MultiSelect } from "react-multi-select-component";
 function MovieDetail() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit,getValues,setValue } = useForm();
   const location = useLocation();
   const movie = location.state;
   const [currentGenre, setCurrentGenre] = useState(movie.categories || []);
@@ -18,6 +18,22 @@ function MovieDetail() {
   const initialImg = movie.thumbnail; // Initial image
   const [imgUrl, setImgUrl] = useState(initialImg);
 
+  const handleCreateSlug = () => {
+    const title = getValues("title");
+    // Create a slug using a function (can be customized)
+    const slug = createSlug(title);
+
+    // Update the slug field using setValue
+    setValue("slug", slug, { shouldDirty: true }); // Mark slug as dirty for validation
+  };
+
+  // Function to create a slug (replace with your preferred logic)
+  const createSlug = (title) => {
+    const lowercasedTitle = title.toLowerCase();
+    const replacedSpaces = lowercasedTitle.replace(/\s+/g, "-");
+    const removedSpecialChars = replacedSpaces.replace(/[^a-z0-9-]/g, "");
+    return removedSpecialChars.slice(0, 255); // Limit slug length (optional)
+  };
   const handleFileChange = (event) => {
     const newImage = event.target.files[0];
 
@@ -131,11 +147,7 @@ function MovieDetail() {
         <div className="p-2 space-y-2 w-1/3">
           <div className="flex items-center justify-center w-full h-full">
             <label className="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-              <img
-                src={imgUrl}
-                alt="Preview"
-                className="w-full h-full"
-              />
+              <img src={imgUrl} alt="Preview" className="w-full h-full" />
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
                 <svg
                   className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
@@ -160,7 +172,12 @@ function MovieDetail() {
                   SVG, PNG, JPG or GIF (MAX. 800x400px)
                 </p>
               </div>
-              <input id="dropzone-file" type="file" className="hidden" {...register("thumbnail", { onChange: handleFileChange })} />
+              <input
+                id="dropzone-file"
+                type="file"
+                className="hidden"
+                {...register("thumbnail", { onChange: handleFileChange })}
+              />
             </label>
           </div>
         </div>
@@ -173,6 +190,7 @@ function MovieDetail() {
               <input
                 type="text"
                 name="title"
+                placeholder="Enter title..."
                 className="rounded p-2 border border-gray-600  max-w-[250px]"
                 {...register("title")}
                 defaultValue={movie.title}
@@ -183,6 +201,7 @@ function MovieDetail() {
               <label htmlFor="director">Director:</label>
               <input
                 type="text"
+                placeholder="Enter director..."
                 name="director"
                 className="rounded p-2 border border-gray-600 max-w-[250px]"
                 {...register("director")}
@@ -194,17 +213,36 @@ function MovieDetail() {
               <input
                 type="text"
                 name="location"
+                placeholder="Enter location..."
                 className="rounded p-2 border border-gray-600 max-w-[250px]"
                 {...register("location")}
                 defaultValue={movie.location}
               />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="location">Slug:</label>
+              <input
+                type="text"
+                placeholder="Enter your location..."
+                name="slug"
+                className="rounded p-2 border border-gray-600 max-w-[250px]"
+                defaultValue={movie.slug}
+                {...register("slug")}
+              />
+              <button
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-fit"
+                type="button"
+                onClick={handleCreateSlug}
+              >
+                Generate Slug
+              </button>
             </div>
 
             <div className="flex flex-col">
               <label htmlFor="is_required_premium">Film type:</label>
               <select
                 type="text"
-                name="location"
+                name="type"
                 className="rounded p-2 border border-gray-600 max-w-[250px]"
                 {...register("type")}
               >

@@ -10,12 +10,29 @@ import { MultiSelect } from "react-multi-select-component";
 function MovieCreate() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit,setValue,getValues } = useForm();
   const [currentGenre, setCurrentGenre] = useState([]);
   const [allGenre, setAllGenres] = useState([]);
   const initialImg =
     "https://image.tmdb.org/t/p/w500//A4j8S6moJS2zNtRR8oWF08gRnL5.jpg"; // Initial image
   const [imgUrl, setImgUrl] = useState(initialImg);
+  const handleCreateSlug = () => {
+
+    const title = getValues("title");
+    // Create a slug using a function (can be customized)
+    const slug = createSlug(title);
+
+    // Update the slug field using setValue
+    setValue("slug", slug, { shouldDirty: true }); // Mark slug as dirty for validation
+  };
+
+  // Function to create a slug (replace with your preferred logic)
+  const createSlug = (title) => {
+    const lowercasedTitle = title.toLowerCase();
+    const replacedSpaces = lowercasedTitle.replace(/\s+/g, "-");
+    const removedSpecialChars = replacedSpaces.replace(/[^a-z0-9-]/g, "");
+    return removedSpecialChars.slice(0, 255); // Limit slug length (optional)
+  };
   const handleFileChange = (event) => {
     const newImage = event.target.files[0];
 
@@ -171,8 +188,9 @@ function MovieCreate() {
               <input
                 type="text"
                 name="title"
+                placeholder="Enter your title..."
                 className="rounded p-2 border border-gray-600  max-w-[250px]"
-                {...register("title")}
+                {...register("title", { defaultValue: "" })}
               />
             </div>
 
@@ -181,6 +199,7 @@ function MovieCreate() {
               <input
                 type="text"
                 name="director"
+                placeholder="Enter your director..."
                 className="rounded p-2 border border-gray-600 max-w-[250px]"
                 {...register("director")}
               />
@@ -189,10 +208,28 @@ function MovieCreate() {
               <label htmlFor="location">Location:</label>
               <input
                 type="text"
+                placeholder="Enter your location..."
                 name="location"
                 className="rounded p-2 border border-gray-600 max-w-[250px]"
                 {...register("location")}
               />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="location">Slug:</label>
+              <input
+                type="text"
+                placeholder="Enter your location..."
+                name="slug"
+                className="rounded p-2 border border-gray-600 max-w-[250px]"
+                {...register("slug")}
+              />
+              <button
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-fit"
+                type="button"
+                onClick={handleCreateSlug}
+              >
+                Generate Slug
+              </button>
             </div>
 
             <div className="flex flex-col">
@@ -211,7 +248,7 @@ function MovieCreate() {
               <label htmlFor="is_required_premium">Status:</label>
               <select
                 type="text"
-                name="location"
+                name="status"
                 className="rounded p-2 border border-gray-600 max-w-[250px]"
                 {...register("status")}
               >

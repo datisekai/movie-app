@@ -62,13 +62,13 @@ function Payment() {
               Id
             </th>
             <th scope="col" className="px-6 py-3">
-              Amount
+              Số lượng
             </th>
             <th scope="col" className="px-6 py-3">
-              Status
+              Tình trạng
             </th>
             <th scope="col" className="px-6 py-3">
-              Type
+              Loại
             </th>
             <th scope="col" className="px-6 py-3">
               Trans_ID
