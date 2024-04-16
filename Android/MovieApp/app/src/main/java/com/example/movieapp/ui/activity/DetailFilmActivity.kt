@@ -122,6 +122,11 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
 
         // Google ads
         serviceGoogleAds()
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.show(this)
+        } else {
+            Log.d("TAG", "The interstitial ad wasn't ready yet.")
+        }
 
         getDetailFilm()
 
@@ -180,16 +185,9 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
 
     public fun clickWatch(view: View) {
         if (checkPremiumFilmToWatch==true){
-            if (mInterstitialAd != null) {
-                mInterstitialAd?.show(this)
                 addHistory(data )
                 startPlayerActivity()
                 increaseView()
-            } else {
-                addHistory(data )
-                startPlayerActivity()
-                increaseView()
-            }
         }else{
             Toast.makeText(this,"Vui lòng đăng ký Premium để xem được phim",Toast.LENGTH_LONG).show()
         }
