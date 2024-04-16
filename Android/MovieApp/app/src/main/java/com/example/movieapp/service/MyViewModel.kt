@@ -145,12 +145,14 @@ class MyViewModel() : ViewModel() {
 
     }
 
-    fun createComment(requestComment: RequestComment){
+    fun createComment(requestComment: RequestComment) : LiveData<CommentCreate>{
+        val request  = MutableLiveData<CommentCreate>()
         val call = ServiceBuilder().apiService.createComment(requestComment)
         call.enqueue(object : Callback<CommentCreate>{
             override fun onResponse(call: Call<CommentCreate>, response: Response<CommentCreate>) {
                 if (response.isSuccessful){
                     Log.e("RESULT", "Success")
+                    request.value = response.body()
                 }else
                 {
                     Log.e("ERROR",  "fail")
@@ -162,6 +164,7 @@ class MyViewModel() : ViewModel() {
             }
 
         })
+        return request
     }
 
     fun postFilmFavoutite(requestFilmFavorite: RequestFilmFavorite){
