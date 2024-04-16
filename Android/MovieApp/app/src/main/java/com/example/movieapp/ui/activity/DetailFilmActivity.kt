@@ -60,9 +60,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
     private lateinit var userCommentImg : RoundedImageView
     private lateinit var progressBarEso : ProgressBar
     private lateinit var progressBarCmt : ProgressBar
-    private var mInterstitialAd: InterstitialAd? = null
     private lateinit var recyclerView: RecyclerView
-    private final val TAG = "MainActivity"
     private lateinit var adapterComment: CommentAdapter
     var check: Boolean = false
     var checkPremium: Boolean = false
@@ -91,12 +89,13 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
                 if (filmId != 0 && editTextComment.text.toString().isNullOrEmpty() == false) {
                     val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
                     val dataComment1 = RequestComment(editTextComment.text.toString(), filmId)
-                    viewModel.createComment(dataComment1)
-                    adapterComment.notifyDataSetChanged()
-                    getComment(filmId)
+                    val request = viewModel.createComment(dataComment1)
+                    request.observe(this){data->
+                        adapterComment.notifyDataSetChanged()
+                        getComment(filmId)
+                        editTextComment.clearFocus()
+                    }
                     editTextComment.text.clear()
-                } else {
-                    Toast.makeText(this, "Create Comment Fail", Toast.LENGTH_LONG).show()
                 }
                 val inputManager: InputMethodManager =
                     this.getSystemService(Context.INPUT_METHOD_SERVICE)
@@ -119,76 +118,18 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             supportLoaderManager.initLoader(0, null, this).forceLoad()
         }
 
-        // Google ads
-        serviceGoogleAds()
 
         getDetailFilm()
 
         checkPremiumFilmToWatch = checkPremiumFilm()
     }
 
-    private fun serviceGoogleAds() {
-        var adRequest = AdRequest.Builder().build()
-
-        InterstitialAd.load(
-            this,
-            "ca-app-pub-3940256099942544/1033173712",
-            adRequest,
-            object : InterstitialAdLoadCallback() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    Log.d(TAG, adError.toString())
-                    mInterstitialAd = null
-                }
-
-                override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                    Log.d(TAG, "Ad was loaded.")
-                    mInterstitialAd = interstitialAd
-                    mInterstitialAd?.fullScreenContentCallback =
-                        object : FullScreenContentCallback() {
-                            override fun onAdClicked() {
-                                // Called when a click is recorded for an ad.
-                                Log.e(TAG, "Ad was clicked.")
-                            }
-
-                            override fun onAdDismissedFullScreenContent() {
-                                // Called when ad is dismissed.
-                                Log.e(TAG, "Ad dismissed fullscreen content.")
-                            }
-
-                            override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                                // Called when ad fails to show.
-                                Log.e(TAG, "Ad failed to show fullscreen content.")
-                                mInterstitialAd = null
-                            }
-
-                            override fun onAdImpression() {
-                                // Called when an impression is recorded for an ad.
-                                Log.e(TAG, "Ad recorded an impression.")
-                            }
-
-                            override fun onAdShowedFullScreenContent() {
-                                // Called when ad is shown.
-                                Log.e(TAG, "Ad showed fullscreen content.")
-                            }
-                        }
-                }
-            })
-
-
-    }
 
     public fun clickWatch(view: View) {
         if (checkPremiumFilmToWatch==true){
-            if (mInterstitialAd != null) {
-                mInterstitialAd?.show(this)
                 addHistory(data )
                 startPlayerActivity()
                 increaseView()
-            } else {
-                addHistory(data )
-                startPlayerActivity()
-                increaseView()
-            }
         }else{
             Toast.makeText(this,"Vui lòng đăng ký Premium để xem được phim",Toast.LENGTH_LONG).show()
         }
@@ -394,8 +335,8 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             if (data != null){
                 checkPremium = data.data.isRequiredPremium
                 txtTitle.text = data.data.title
-                txtDirect.text = "Director: ${data.data.director}"
-                txtCate.text = "Category: ${data.data.type}"
+                txtDirect.text = "Đạo diễn: ${data.data.director}"
+                txtCate.text = "Thể loại: ${data.data.type}"
                 txtCountry.text = data.data.location
                 txtView.text = data.data.view.toString()
                 val tmp = data.data.createAt.split("-")

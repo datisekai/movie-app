@@ -25,12 +25,15 @@ export class FirebaseService {
     const favoriteUsers =
       await this.userService.getUsersWhoFavoredMovie(filmId);
 
+    console.log('film', film);
+    console.log('favourite user', favoriteUsers);
+
     for (const user of favoriteUsers) {
       if (user.fcmToken) {
         await this.sendNotificationToUser(
-          'New Movie Added',
-          `${film.title} has been added to the catalog.`,
-          film,
+          'Phim yêu thích của bạn vừa có tập mới! Vào xem nhanh nào!!!!!',
+          `${film.title} - đầy hấp dẫn`,
+          film.id.toString(),
           user.fcmToken,
         );
       }
@@ -59,17 +62,17 @@ export class FirebaseService {
     data: any,
     token: string,
   ) {
-    const message = {
-      notification: {
-        title,
-        body,
-      },
-      data,
-      token,
-    };
-
     try {
-      await admin.messaging().send(message);
+      await admin.messaging().send({
+        token: token,
+        notification: {
+          title,
+          body,
+        },
+        data: {
+          id: data,
+        },
+      });
       console.log('Notification sent successfully');
     } catch (error) {
       console.error('Error sending notification:', error);

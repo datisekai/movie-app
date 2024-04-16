@@ -239,10 +239,10 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
                     if (PaymentsAdapter.check.index==0){
                         requestZaloPay()
                     }else{
-                        Toast.makeText(this,"Please choose payments another",Toast.LENGTH_LONG).show()
+                        Toast.makeText(this,"Hình thức thanh toán chưa hỗ trọ",Toast.LENGTH_SHORT).show()
                     }
                 }else{
-                    Toast.makeText(this,"Please choose payments",Toast.LENGTH_LONG).show()
+                    Toast.makeText(this,"Vui lòng chọn hình thức thanh toán",Toast.LENGTH_SHORT).show()
                 }
             }
 
