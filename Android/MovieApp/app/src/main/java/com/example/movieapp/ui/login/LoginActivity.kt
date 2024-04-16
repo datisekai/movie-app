@@ -29,7 +29,9 @@ import com.example.movieapp.Helper
 import com.example.movieapp.R
 import com.example.movieapp.config
 import com.example.movieapp.data.model.ClassToken
+import com.example.movieapp.data.model.RequestFcmToken
 import com.example.movieapp.databinding.ActivityLoginBinding
+import com.example.movieapp.service.FcmTokenViewModel
 import com.example.movieapp.ui.activity.HomePage_Activity
 import com.example.movieapp.ui.activity.MainActivity
 import com.example.movieapp.ui.activity.RegisterActivity
@@ -39,6 +41,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import java.util.Date
 
 
@@ -82,14 +86,19 @@ class LoginActivity : AppCompatActivity() {
                 val fullname = Helper.TokenManager.getFullName(this)
                 val isActive = Helper.TokenManager.getIsActive(this)
                 val role = Helper.TokenManager.getRoles(this)
-
-
+                var roles : ArrayList<String> = arrayListOf()
+                val tmp = role?.split(",")
+                if (tmp!=null){
+                    for (o in tmp){
+                        roles.add(o)
+                    }
+                }
                 ClassToken.MY_TOKEN= token.toString()
                 ClassToken.ID= id?: 0
                 ClassToken.EMAIL= email.toString()
                 ClassToken.FULLNAME= fullname.toString()
                 ClassToken.IS_ACTIVE = isActive!!
-                ClassToken.ROLES = role!!
+                ClassToken.ROLES = roles
 //                val checkToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTcxMTI2MTU5MiwiZXhwIjoxNzExMjY4NzkyfQ.ijPEfRK325BP_3ubNSHkoxUWtbxfvPkntaav-zIeL-k"
 //                Helper.TokenManager.saveToken(this, checkToken, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE, ArrayList())
                 val intent = Intent(this, MainActivity::class.java)
@@ -268,6 +277,7 @@ class LoginActivity : AppCompatActivity() {
                 }
                 googleBtn.isEnabled = false
             } catch (e: ApiException) {
+                Log.e("ERROR",e.toString())
                 Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
         }
@@ -284,6 +294,26 @@ class LoginActivity : AppCompatActivity() {
             "$welcome $displayName",
             Toast.LENGTH_LONG
         ).show()
+
+        getFCMToken()
+
+    }
+
+    private fun getFCMToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("MAINACTIVITY", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+            Log.d("MAINACTIVITY", token)
+            val viewModel = ViewModelProvider(this).get(FcmTokenViewModel::class.java)
+            viewModel.putFCMToken(RequestFcmToken(token))
+
+
+        })
     }
 
     private fun showLoginError(@StringRes errorString: Int) {

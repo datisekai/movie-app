@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -66,7 +67,10 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation(platform("androidx.compose:compose-bom:2023.08.00"))
+
+    implementation("com.google.firebase:firebase-messaging:23.4.1")
+    implementation("androidx.activity:activity:1.8.0")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -85,9 +89,9 @@ dependencies {
 
     //border radius image
     implementation("com.github.bumptech.glide:glide:4.12.0")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
+
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
+
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
@@ -97,13 +101,13 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.1.0")
     implementation("com.squareup.retrofit2:converter-gson:2.1.0")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+
     implementation("com.squareup.okhttp3:okhttp:3.12.1")
     implementation("com.squareup.okhttp3:logging-interceptor:3.6.0")
 
 
     implementation("androidx.fragment:fragment-ktx:1.4.0")
-//    implementation ("org.sufficientlysecure:html-textview:3.10")
+
 
     //zalo pay
     implementation(files("libs/zpdk-release-v3.1.aar"))
@@ -111,11 +115,7 @@ dependencies {
     implementation("com.squareup.picasso:picasso:2.71828")
 
     implementation("com.google.android.gms:play-services-auth:21.0.0")
-    implementation("androidx.credentials:credentials:1.0.0-alpha02")
 
-    // optional - needed for credentials support from play services, for devices running
-    // Android 13 and below.
-    implementation("androidx.credentials:credentials-play-services-auth:1.0.0-alpha02")
     // Google ads
     implementation ("com.google.android.gms:play-services-ads:23.0.0")
 }

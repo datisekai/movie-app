@@ -18,6 +18,8 @@ import com.example.movieapp.data.model.Esopide
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
 import com.example.movieapp.data.model.FilmDTO
+import com.example.movieapp.data.model.FilmFavorite
+import com.example.movieapp.data.model.IncreaseViewDTO
 import com.example.movieapp.data.model.PayOrder
 import com.example.movieapp.data.model.Profile
 import com.example.movieapp.data.model.RequestComment
@@ -38,28 +40,6 @@ class MyViewModel() : ViewModel() {
     private val _dataLoaded = MutableLiveData<Boolean>()
     val dataLoaded : LiveData<Boolean>
         get() = _dataLoaded
-    fun getListFilm(): LiveData<Film1> {
-        val filmLiveData = MutableLiveData<Film1>()
-        // Gửi yêu cầu mạng và nhận kết quả
-        val call = ServiceBuilder().apiService.getListFilm()
-        call.enqueue(object : Callback<Film1> {
-            override fun onResponse(call: Call<Film1>, response: Response<Film1>) {
-                if (response.isSuccessful) {
-                    val filmList = response.body()
-                    filmLiveData.value = filmList
-                    _dataLoaded.value = true
-                } else {
-                   Log.e("ERROR",  "fail")
-                }
-            }
-
-            override fun onFailure(call: Call<Film1>, t: Throwable) {
-               t.printStackTrace()
-            }
-        })
-
-        return filmLiveData
-    }
 
     fun getAllEsopide(id : Int): LiveData<Esopide>{
         val esopideLiveData = MutableLiveData<Esopide>()
@@ -102,11 +82,11 @@ class MyViewModel() : ViewModel() {
         return commentLiveData
     }
 
-    fun getAllFilmFavourite() : LiveData<Film1>{
-        val favoriteLiveData = MutableLiveData<Film1>()
+    fun getAllFilmFavourite() : LiveData<FilmFavorite>{
+        val favoriteLiveData = MutableLiveData<FilmFavorite>()
         val call = ServiceBuilder().apiService.getAllFilmFavourite()
-        call.enqueue(object : Callback<Film1>{
-            override fun onResponse(call: Call<Film1>, response: Response<Film1>) {
+        call.enqueue(object : Callback<FilmFavorite>{
+            override fun onResponse(call: Call<FilmFavorite>, response: Response<FilmFavorite>) {
                 if(response.isSuccessful){
                     favoriteLiveData.value = response.body()
                     _dataLoaded.value = true
@@ -115,7 +95,7 @@ class MyViewModel() : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<Film1>, t: Throwable) {
+            override fun onFailure(call: Call<FilmFavorite>, t: Throwable) {
                t.printStackTrace()
             }
 
@@ -204,6 +184,29 @@ class MyViewModel() : ViewModel() {
             }
 
         })
+    }
+
+    fun increaseView(id : Int){
+        val call = ServiceBuilder().apiService.increaseViewById(id)
+        call.enqueue(object : Callback<IncreaseViewDTO>{
+            override fun onResponse(
+                call: Call<IncreaseViewDTO>,
+                response: Response<IncreaseViewDTO>
+            ) {
+                if (response.isSuccessful){
+                    val result = response.body().success
+                    Log.e("RESULT",result.toString())
+                }else{
+                    Log.e("ERROR",  "fail")
+                }
+            }
+
+            override fun onFailure(call: Call<IncreaseViewDTO>, t: Throwable) {
+               t.printStackTrace()
+            }
+
+        })
+
     }
 
 

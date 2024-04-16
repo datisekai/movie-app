@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.ProgressBar
 import com.example.movieapp.R
 import android.widget.TextView
 import android.widget.Toast
@@ -37,6 +38,7 @@ import com.example.movieapp.data.model.EsopideDTO
 import com.example.movieapp.service.DetailFilmLoader
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
+import com.example.movieapp.data.model.FilmFavorite
 import com.example.movieapp.data.model.RequestComment
 import com.example.movieapp.data.model.RequestFilmFavorite
 import com.google.android.gms.ads.AdError
@@ -45,6 +47,9 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
+import com.makeramen.roundedimageview.RoundedImageView
 
 
 class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Film> {
@@ -52,18 +57,32 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
     private lateinit var data: MutableList<EsopideDTO>
     private lateinit var dataComment: MutableList<CommentDTO>
     private lateinit var btnFavorite: ImageButton
+    private lateinit var userCommentImg : RoundedImageView
+    private lateinit var progressBarEso : ProgressBar
+    private lateinit var progressBarCmt : ProgressBar
     private var mInterstitialAd: InterstitialAd? = null
     private lateinit var recyclerView: RecyclerView
     private final val TAG = "MainActivity"
     private lateinit var adapterComment: CommentAdapter
     var check: Boolean = false
     var checkPremium: Boolean = false
+    var checkPremiumFilmToWatch = false
     var filmId: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_film)
 
+        progressBarEso = findViewById(R.id.progressBarEsopide)
+        progressBarCmt = findViewById(R.id.progressBarCmt)
+
+        progressBarEso.visibility = View.VISIBLE
+        progressBarCmt.visibility = View.VISIBLE
         editTextComment = findViewById(R.id.edtComment)
+        userCommentImg = findViewById(R.id.imageUserComment)
+        if ( editTextComment.visibility == View.GONE){
+            editTextComment.visibility = View.VISIBLE
+            userCommentImg.visibility = View.GONE
+        }
         editTextComment.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE ||
                 (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) ||
@@ -87,6 +106,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             }
             return@setOnEditorActionListener false
         }
+
         btnFavorite = findViewById(R.id.btnFavotite)
         btnFavorite.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
@@ -103,6 +123,8 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
         serviceGoogleAds()
 
         getDetailFilm()
+
+        checkPremiumFilmToWatch = checkPremiumFilm()
     }
 
     private fun serviceGoogleAds() {
@@ -156,15 +178,30 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
     }
 
     public fun clickWatch(view: View) {
-        if (mInterstitialAd != null) {
-            mInterstitialAd?.show(this)
-            startPlayerActivity()
-            addHistory(data )
-        } else {
-            startPlayerActivity()
-            addHistory(data )
+        if (checkPremiumFilmToWatch==true){
+            if (mInterstitialAd != null) {
+                mInterstitialAd?.show(this)
+                addHistory(data )
+                startPlayerActivity()
+                increaseView()
+            } else {
+                addHistory(data )
+                startPlayerActivity()
+                increaseView()
+            }
+        }else{
+            Toast.makeText(this,"Vui lòng đăng ký Premium để xem được phim",Toast.LENGTH_LONG).show()
         }
     }
+
+    private fun increaseView(){
+       if (filmId!=0){
+           val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+           viewModel.increaseView(filmId)
+
+       }
+    }
+
 
 
     private fun checkPremiumFilm() : Boolean{
@@ -172,8 +209,21 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
            if (Helper.TokenManager.getRoles(this).isNullOrEmpty()){
                Log.e("ERRROR","roles null")
            }else{
-               Log.e("ROLES", Helper.TokenManager.getRoles(this)?.get(0).toString())
+               Helper.TokenManager.getRoles(this)?.let { Log.e("ROLES", it) }
+               val tmp = Helper.TokenManager.getRoles(this)?.split(",")
+               if (tmp != null) {
+                   for (role in tmp){
+                       Log.e("DATA",role)
+                       if (role.equals("premium_user")){
+                           return true
+                       }
+                       editTextComment.visibility = View.GONE
+                       userCommentImg.visibility = View.GONE
+                   }
+               }
            }
+        }else{
+            return true
         }
         return false
     }
@@ -264,13 +314,14 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
 
     private fun checkFavoriteFilm(id : Int){
         val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
-        val dataList : LiveData<Film1> = viewModel.getAllFilmFavourite()
+        val dataList : LiveData<FilmFavorite> = viewModel.getAllFilmFavourite()
         dataList.observe(this){datas->
             val tmp = datas.data.toMutableList()
+            Log.e("VALUE",id.toString())
             for (i in tmp){
-                if (id == i.id){
-                    val btn = findViewById<ImageButton>(R.id.btnFavotite)
-                    btn.setImageResource(R.drawable.baseline_check_24)
+                Log.e("VALUE2",i.film.id.toString())
+                if (id == i.film.id){
+                    btnFavorite.setImageResource(R.drawable.baseline_check_24)
                     check=true
                 }
             }
@@ -289,6 +340,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             recyclerView1.adapter = EsopideAdapter(this, data)
             recyclerView1.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            progressBarEso.visibility = View.GONE
         }
 
     }
@@ -305,6 +357,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             recyclerView.adapter = adapterComment
             recyclerView.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            progressBarCmt.visibility = View.GONE
         }
     }
 
