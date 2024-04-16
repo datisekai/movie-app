@@ -88,7 +88,7 @@ export class EpisodeService {
       ...dto,
       slug: dto.slug
         ? convertToSlug(dto.slug)
-        : `${convertToSlug(dto.title)}_${Date.now()}`,
+        : `${convertToSlug(dto.title)}-${Date.now()}`,
       title_search: removeVietnameseDiacritics(dto.title),
       position: dto.position || 1,
       film: currentFilm,

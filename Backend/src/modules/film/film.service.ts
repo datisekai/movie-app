@@ -81,7 +81,9 @@ export class FilmService {
 
     const newFilm = this.filmRepository.create({
       ...dto,
-      slug: dto.slug ? convertToSlug(dto.slug) : convertToSlug(dto.title),
+      slug: dto.slug
+        ? convertToSlug(dto.slug)
+        : `${convertToSlug(dto.title)}-${Date.now()}`,
       title_search: removeVietnameseDiacritics(dto.title),
     });
 
