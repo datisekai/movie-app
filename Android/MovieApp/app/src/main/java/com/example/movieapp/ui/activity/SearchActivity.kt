@@ -84,7 +84,7 @@ class SearchActivity : AppCompatActivity() {
         })
 
 
-        adapter = CustomAdapter(dataList, R.layout.card, 480, 480, true)
+        adapter = CustomAdapter(this,dataList, R.layout.card, 480, 480, true)
         recyclerView.adapter = adapter
 
         textSearch.setOnEditorActionListener { _, actionId, event ->

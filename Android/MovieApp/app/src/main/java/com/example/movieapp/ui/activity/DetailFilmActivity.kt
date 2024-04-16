@@ -60,9 +60,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
     private lateinit var userCommentImg : RoundedImageView
     private lateinit var progressBarEso : ProgressBar
     private lateinit var progressBarCmt : ProgressBar
-    private var mInterstitialAd: InterstitialAd? = null
     private lateinit var recyclerView: RecyclerView
-    private final val TAG = "MainActivity"
     private lateinit var adapterComment: CommentAdapter
     var check: Boolean = false
     var checkPremium: Boolean = false
@@ -120,68 +118,12 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             supportLoaderManager.initLoader(0, null, this).forceLoad()
         }
 
-        // Google ads
-        serviceGoogleAds()
-        if (mInterstitialAd != null) {
-            mInterstitialAd?.show(this)
-        } else {
-            Log.d("TAG", "The interstitial ad wasn't ready yet.")
-        }
 
         getDetailFilm()
 
         checkPremiumFilmToWatch = checkPremiumFilm()
     }
 
-    private fun serviceGoogleAds() {
-        var adRequest = AdRequest.Builder().build()
-
-        InterstitialAd.load(
-            this,
-            "ca-app-pub-3940256099942544/1033173712",
-            adRequest,
-            object : InterstitialAdLoadCallback() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    Log.d(TAG, adError.toString())
-                    mInterstitialAd = null
-                }
-
-                override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                    Log.d(TAG, "Ad was loaded.")
-                    mInterstitialAd = interstitialAd
-                    mInterstitialAd?.fullScreenContentCallback =
-                        object : FullScreenContentCallback() {
-                            override fun onAdClicked() {
-                                // Called when a click is recorded for an ad.
-                                Log.e(TAG, "Ad was clicked.")
-                            }
-
-                            override fun onAdDismissedFullScreenContent() {
-                                // Called when ad is dismissed.
-                                Log.e(TAG, "Ad dismissed fullscreen content.")
-                            }
-
-                            override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                                // Called when ad fails to show.
-                                Log.e(TAG, "Ad failed to show fullscreen content.")
-                                mInterstitialAd = null
-                            }
-
-                            override fun onAdImpression() {
-                                // Called when an impression is recorded for an ad.
-                                Log.e(TAG, "Ad recorded an impression.")
-                            }
-
-                            override fun onAdShowedFullScreenContent() {
-                                // Called when ad is shown.
-                                Log.e(TAG, "Ad showed fullscreen content.")
-                            }
-                        }
-                }
-            })
-
-
-    }
 
     public fun clickWatch(view: View) {
         if (checkPremiumFilmToWatch==true){

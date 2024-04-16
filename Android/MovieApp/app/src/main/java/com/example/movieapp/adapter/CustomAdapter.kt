@@ -1,5 +1,7 @@
 package com.example.movieapp.adapter
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
@@ -18,6 +20,12 @@ import com.example.movieapp.adapter.model.Movie
 import com.example.movieapp.adapter.model.PaymentHistory
 import com.example.movieapp.ui.activity.DetailFilmActivity
 import com.example.movieapp.ui.activity.ResultGenreActivity
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -26,7 +34,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class CustomAdapter(private val dataList: List<Any>, private val view: Int, private val widthCard: Int, private val heightCard: Int, private val isBorderImage: Boolean) :
+class CustomAdapter(private val activity: Activity,private val dataList: List<Any>, private val view: Int, private val widthCard: Int, private val heightCard: Int, private val isBorderImage: Boolean) :
     RecyclerView.Adapter<CustomAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -43,10 +51,87 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
         return dataList.size
     }
 
+    private var mInterstitialAd: InterstitialAd? = null
+    private final val TAG = "MainActivity"
+
+    private fun showInerAd(itemView : View,data : Movie){
+        if (mInterstitialAd != null){
+            mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback(){
+                override fun onAdClicked() {
+                    super.onAdClicked()
+                    Log.d(TAG, "onAdClicked: ")
+                }
+
+                override fun onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent()
+                    Log.d(TAG, "onAdDismissedFullScreenContent: ")
+                    val intent : Intent =  Intent(itemView.context, DetailFilmActivity::class.java)
+                    val bundle = Bundle()
+                    val movie = data as Movie
+                    bundle.putInt("ID",movie.id)
+                    Log.e("PRMIUM",movie.is_required_premium.toString())
+                    bundle.putBoolean("IS_PREMIUM",movie.is_required_premium)
+                    intent.putExtra("DataID",bundle)
+                    intent.putExtras(bundle)
+                    itemView.context.startActivity(intent);
+                }
+
+                override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                    super.onAdFailedToShowFullScreenContent(p0)
+                    Log.d(TAG, "onAdFailedToShowFullScreenContent: ")
+                    val intent : Intent =  Intent(itemView.context, DetailFilmActivity::class.java)
+                    val bundle = Bundle()
+                    val movie = data as Movie
+                    bundle.putInt("ID",movie.id)
+                    Log.e("PRMIUM",movie.is_required_premium.toString())
+                    bundle.putBoolean("IS_PREMIUM",movie.is_required_premium)
+                    intent.putExtra("DataID",bundle)
+                    intent.putExtras(bundle)
+                    itemView.context.startActivity(intent);
+                }
+
+                override fun onAdImpression() {
+                    super.onAdImpression()
+                    Log.d(TAG, "onAdImpression: ")
+                }
+            }
+            mInterstitialAd!!.show(activity)
+        }else{
+            val intent : Intent =  Intent(itemView.context, DetailFilmActivity::class.java)
+            val bundle = Bundle()
+            val movie = data as Movie
+            bundle.putInt("ID",movie.id)
+            Log.e("PRMIUM",movie.is_required_premium.toString())
+            bundle.putBoolean("IS_PREMIUM",movie.is_required_premium)
+            intent.putExtra("DataID",bundle)
+            intent.putExtras(bundle)
+            itemView.context.startActivity(intent);
+        }
+    }
+
+    private fun loadInerAd(){
+        var adRequest = AdRequest.Builder().build()
+        InterstitialAd.load(activity.applicationContext,"ca-app-pub-3940256099942544/1033173712",adRequest,
+            object : InterstitialAdLoadCallback(){
+                override fun onAdFailedToLoad(p0: LoadAdError) {
+                    super.onAdFailedToLoad(p0)
+                    Log.d(TAG, "onAdFailedToLoad: ")
+                    mInterstitialAd = null
+                }
+
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    super.onAdLoaded(interstitialAd)
+                    Log.d(TAG, "onAdLoaded: ")
+                    mInterstitialAd = interstitialAd
+                }
+            })
+    }
+
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindData(data: Any) {
             when (data) {
                 is Movie -> {
+                    loadInerAd()
                     val container: LinearLayout = itemView.findViewById(R.id.containerCard)
                     val image: RoundedImageView = itemView.findViewById(R.id.imageCard)
                     val title: TextView = itemView.findViewById(R.id.title)
@@ -90,15 +175,7 @@ class CustomAdapter(private val dataList: List<Any>, private val view: Int, priv
                     }
 
                     container.setOnClickListener{
-                        val intent : Intent =  Intent(itemView.context, DetailFilmActivity::class.java)
-                        val bundle = Bundle()
-                        val movie = data as Movie
-                        bundle.putInt("ID",movie.id)
-                        Log.e("PRMIUM",movie.is_required_premium.toString())
-                        bundle.putBoolean("IS_PREMIUM",movie.is_required_premium)
-                        intent.putExtra("DataID",bundle)
-                        intent.putExtras(bundle)
-                        itemView.context.startActivity(intent);
+                      showInerAd(itemView,movieItem)
                     }
                 }
                 is Genre -> {

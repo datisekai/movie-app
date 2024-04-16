@@ -156,6 +156,7 @@ class HomePageFragment : Fragment() {
 
             val adapter = dataListMovie?.let {
                 CustomAdapter(
+                    this.requireActivity(),
                     it,
                     R.layout.card, data.widthCard, data.heightCard, data.isBorderImage
                 )
