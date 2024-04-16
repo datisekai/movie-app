@@ -37,6 +37,11 @@ export class ArticleService {
       .take(limit)
       .skip((page - 1) * limit);
 
+    const sort = query.sort || 'DESC';
+    const order_by = query.order_by || 'created_at';
+
+    queryBuilder.orderBy(`article.${order_by}`, sort);
+
     if (query.title) {
       queryBuilder.andWhere('article.title_search like :title', {
         title: `%${query.title.toLowerCase()}%`,
