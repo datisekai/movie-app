@@ -32,6 +32,14 @@ export class OrderService {
       .take(limit)
       .skip((page - 1) * limit);
 
+    if (query.from) {
+      queryBuilder.andWhere('order.created_at >= :from', { from: query.from });
+    }
+
+    if (query.to) {
+      queryBuilder.andWhere('order.created_at <= :to', { to: query.to });
+    }
+
     const [data, totalEntries] = await queryBuilder.getManyAndCount();
 
     return { data, totalEntries, page, limit };
