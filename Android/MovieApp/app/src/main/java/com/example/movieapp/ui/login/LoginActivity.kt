@@ -279,6 +279,7 @@ class LoginActivity : AppCompatActivity() {
             } catch (e: ApiException) {
                 Log.e("ERROR",e.toString())
                 e.printStackTrace()
+
                 Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
         }

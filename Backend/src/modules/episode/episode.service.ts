@@ -86,7 +86,9 @@ export class EpisodeService {
 
     const newEpisode = this.episodeRepository.create({
       ...dto,
-      slug: dto.slug ? convertToSlug(dto.slug) : convertToSlug(dto.title),
+      slug: dto.slug
+        ? convertToSlug(dto.slug)
+        : `${convertToSlug(dto.title)}_${Date.now()}`,
       title_search: removeVietnameseDiacritics(dto.title),
       position: dto.position || 1,
       film: currentFilm,
