@@ -95,7 +95,7 @@ class PaymentHistoryFragment : Fragment() {
             }
         })
 
-        adapter = dataList?.let { CustomAdapter(it, R.layout.payment_history, 0, 0, true) }!!
+        adapter = dataList?.let { CustomAdapter(this.requireActivity(),it, R.layout.payment_history, 0, 0, true) }!!
         recyclerView.adapter = adapter
 
         return view

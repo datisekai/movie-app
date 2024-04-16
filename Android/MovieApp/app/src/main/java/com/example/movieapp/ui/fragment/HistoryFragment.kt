@@ -88,7 +88,7 @@ class HistoryFragment : Fragment() {
             if(!listEpHistory.isNullOrEmpty()){
                 viewModel.getListHistory().observe(viewLifecycleOwner){ newData ->
                     callAPI(progressbar, newData)
-                    val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }
+                    val adapter = dataList?.let { CustomAdapter(this.requireActivity(),it, R.layout.card, 480, 480, true) }
                     recyclerView.adapter = adapter
                     adapter?.notifyDataSetChanged()
                 }

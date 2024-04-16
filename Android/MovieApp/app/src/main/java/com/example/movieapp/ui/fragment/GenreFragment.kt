@@ -93,7 +93,7 @@ class GenreFragment : Fragment() {
         })
 
 
-        adapter = dataList?.let { CustomAdapter(it, R.layout.genre, 0, 0, true) }!!
+        adapter = dataList?.let { CustomAdapter(this.requireActivity(),it, R.layout.genre, 0, 0, true) }!!
         recyclerView.adapter = adapter
 
         return view
