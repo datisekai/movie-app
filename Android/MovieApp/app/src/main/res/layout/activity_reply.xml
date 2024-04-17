@@ -16,17 +16,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="clickBack"
-            android:background="@drawable/baseline_keyboard_arrow_left_24"
+            android:background="@drawable/baseline_arrow_back_24"
             />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="30dp">
+            android:gravity="right"
+            android:layout_marginEnd="30dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reply"
+                android:text="Phản hồi"
                 android:textSize="24dp"
                 android:textStyle="bold"
                 android:textColor="@color/white"/>
@@ -45,7 +45,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:layout_margin="8dp"
+            />
     </ScrollView>
 
 </LinearLayout>
