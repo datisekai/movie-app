@@ -109,13 +109,12 @@ export class OrderService {
     if (result.return_code == 1) {
       order.order_status = OrderStatus.Completed;
       if (!user.roles.includes(AppRoles.PREMIUM)) {
-        await this.userService.editOne(order.user.id, {
+        await this.userService.editOne(user.id, {
           roles: [...user.roles, AppRoles.PREMIUM],
         });
       }
-
-      await this.orderRepository.save(order);
     }
+    await this.orderRepository.save(order);
 
     return order;
   }
