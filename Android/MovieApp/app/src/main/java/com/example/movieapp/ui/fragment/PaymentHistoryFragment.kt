@@ -126,7 +126,11 @@ class PaymentHistoryFragment : Fragment() {
             totalEntries= payments.totalEntries
 
             for (o in payments.data){
-                dataList.add(PaymentHistory(o.id , o.description.toString(), o.createdAt, o.amount, o.orderStatus))
+                var title = "Thanh toán gói Premium"
+                if(o.description.toString()!== null){
+                    title= o.description.toString()
+                }
+                dataList.add(PaymentHistory(o.id , title, o.createdAt, o.amount, o.orderStatus))
             }
 
             progressbar.visibility = View.GONE
