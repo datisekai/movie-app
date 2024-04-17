@@ -235,15 +235,7 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
             }
             R.id.buttonPay -> showBottomSheet()
             R.id.btnPayInSheet ->{
-                if (PaymentsAdapter.check.checkChoose==true){
-                    if (PaymentsAdapter.check.index==0){
-                        requestZaloPay()
-                    }else{
-                        Toast.makeText(this,"Hình thức thanh toán chưa hỗ trọ",Toast.LENGTH_SHORT).show()
-                    }
-                }else{
-                    Toast.makeText(this,"Vui lòng chọn hình thức thanh toán",Toast.LENGTH_SHORT).show()
-                }
+                requestZaloPay()
             }
 
         }

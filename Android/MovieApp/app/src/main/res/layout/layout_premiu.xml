@@ -61,8 +61,10 @@
             android:text="Điều khoản dịch vụ"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:paddingHorizontal="5dp"
             android:layout_marginTop="15dp"/>
         <TextView
+            android:paddingHorizontal="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Thanh toán với ZaloPay"/>
