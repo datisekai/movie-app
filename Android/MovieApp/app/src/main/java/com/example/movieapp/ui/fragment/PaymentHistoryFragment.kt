@@ -127,7 +127,7 @@ class PaymentHistoryFragment : Fragment() {
 
             for (o in payments.data){
                 var title = "Thanh toán gói Premium"
-                if(o.description.toString()!== null){
+                if(o.description!== null){
                     title= o.description.toString()
                 }
                 dataList.add(PaymentHistory(o.id , title, o.createdAt, o.amount, o.orderStatus))
