@@ -3,9 +3,13 @@ package com.example.movieapp.adapter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +17,14 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.R
 import com.example.movieapp.adapter.model.Genre
 import com.example.movieapp.adapter.model.Movie
 import com.example.movieapp.adapter.model.PaymentHistory
+import com.example.movieapp.service.NetworkManager
 import com.example.movieapp.ui.activity.DetailFilmActivity
 import com.example.movieapp.ui.activity.ResultGenreActivity
 import com.google.android.gms.ads.AdError
@@ -26,6 +33,7 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -127,6 +135,33 @@ class CustomAdapter(private val activity: Activity,private val dataList: List<An
             })
     }
 
+    fun isNetworkConnected(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork ?: return false
+            val networkCapabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        } else {
+            val networkInfo = connectivityManager.activeNetworkInfo ?: return false
+            return networkInfo.isConnected
+        }
+    }
+
+    private fun customeToast(message : String){
+        val inflater = activity.layoutInflater
+        val view = inflater.inflate(R.layout.custome_toast,activity.findViewById(R.id.CustomToast))
+        val toast = Toast(activity)
+        toast.duration = Toast.LENGTH_SHORT
+        toast.view = view
+        val txt : TextView = view.findViewById(R.id.txtMessage)
+        txt.text = message
+        toast.setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, 100)
+        toast.show()
+    }
+
+
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindData(data: Any) {
             when (data) {
@@ -175,7 +210,11 @@ class CustomAdapter(private val activity: Activity,private val dataList: List<An
                     }
 
                     container.setOnClickListener{
-                      showInerAd(itemView,movieItem)
+                      if (isNetworkConnected(activity)){
+                          showInerAd(itemView,movieItem)
+                      }else{
+                          customeToast("Đã có lỗi xảy ra")
+                      }
                     }
                 }
                 is Genre -> {
