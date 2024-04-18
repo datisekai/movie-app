@@ -32,6 +32,14 @@ export class OrderService {
       .take(limit)
       .skip((page - 1) * limit);
 
+    if (query.from) {
+      queryBuilder.andWhere('order.created_at >= :from', { from: query.from });
+    }
+
+    if (query.to) {
+      queryBuilder.andWhere('order.created_at <= :to', { to: query.to });
+    }
+
     const [data, totalEntries] = await queryBuilder.getManyAndCount();
 
     return { data, totalEntries, page, limit };
@@ -100,12 +108,13 @@ export class OrderService {
 
     if (result.return_code == 1) {
       order.order_status = OrderStatus.Completed;
-      if (user.roles.includes(AppRoles.FREE)) {
-        await this.userService.editOne(order.user.id, {
-          roles: [AppRoles.PREMIUM],
+      if (!user.roles.includes(AppRoles.PREMIUM)) {
+        await this.userService.editOne(user.id, {
+          roles: [...user.roles, AppRoles.PREMIUM],
         });
       }
     }
+    await this.orderRepository.save(order);
 
     return order;
   }

@@ -146,7 +146,7 @@ export class UserService {
     return this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.favourites', 'favourite')
-      .where('favourite.film_id = :filmId', { filmId })
+      .where('favourite.film.id = :filmId', { filmId })
       .getMany();
   }
 }

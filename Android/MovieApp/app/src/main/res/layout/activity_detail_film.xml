@@ -165,7 +165,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
                     android:gravity="center"
-                    android:text="view"
+                    android:text="lượt xem"
                     android:textColor="#8F8F8F" />
 
                 <LinearLayout
@@ -176,8 +176,8 @@
 
                     <ImageButton
                         android:id="@+id/btnFavotite"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:gravity="center"
                         android:src="@drawable/baseline_add_24"
                         app:backgroundTint="@null" />
@@ -186,7 +186,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="Add Favourite Film"
+                        android:text="Thêm vào yêu thích"
+                        android:layout_gravity="center_vertical"
                         android:textColor="#8F8F8F" />
                 </LinearLayout>
             </LinearLayout>
@@ -216,7 +217,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Director: "
+                android:text="Đạo diễn: "
                 android:textColor="#8F8F8F" />
 
             <TextView
@@ -224,7 +225,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Category: "
+                android:text="Thể loại: "
                 android:textColor="#8F8F8F" />
 
             <LinearLayout
@@ -236,7 +237,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="List of episodes"
+                    android:text="Danh sách tập"
                     android:textColor="#8F8F8F"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -258,7 +259,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Comment"
+                android:text="Bình luận"
                 android:textColor="#8F8F8F"
                 android:textSize="26sp"
                 android:textStyle="bold" />
@@ -281,7 +282,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:hint="Add comment here"
+                    android:hint="Thêm bình luận"
                     android:textColorHint="@color/white"
                     android:imeOptions="actionDone"
                     android:inputType="text"

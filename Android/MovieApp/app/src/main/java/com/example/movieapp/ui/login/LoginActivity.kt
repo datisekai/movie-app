@@ -262,7 +262,6 @@ class LoginActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1000) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-
             try {
                 val account = task.getResult(ApiException::class.java)
                 if (account != null) {
@@ -277,8 +276,9 @@ class LoginActivity : AppCompatActivity() {
                 }
                 googleBtn.isEnabled = false
             } catch (e: ApiException) {
-                Log.e("ERROR",e.printStackTrace().toString())
+                Log.e("ERROR",e.toString())
                 e.printStackTrace()
+
                 Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
         }

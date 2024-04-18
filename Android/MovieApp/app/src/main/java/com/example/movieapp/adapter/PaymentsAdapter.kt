@@ -26,15 +26,14 @@ class PaymentsAdapter(private val context: Context,private val dataImage : List<
         holder.iconPay.setImageResource(dataImage.get(position))
         holder.iconPay.setOnClickListener(object : View.OnClickListener{
             override fun onClick(v: View?) {
-                if (oldPosition!=indexTmp){
-                    Toast.makeText(context,"Vui lòng chỉ chọn một hình thức thanh toán",Toast.LENGTH_LONG).show()
+                if (oldPosition!=indexTmp && check.checkChoose==true){
+                    Toast.makeText(context,"Vui lòng chỉ chọn một hình thức thanh toán",Toast.LENGTH_SHORT).show()
                 }else{
                     if ( holder.checkContainer.visibility == View.VISIBLE && holder.iconCheck.visibility == View.VISIBLE){
                         holder.checkContainer.visibility = View.INVISIBLE
                         holder.iconCheck.visibility = View.INVISIBLE
                         check.checkChoose = false
-                        check.index=-1
-
+                        oldPosition = indexTmp
                     }else{
                         holder.checkContainer.visibility = View.VISIBLE
                         holder.iconCheck.visibility = View.VISIBLE

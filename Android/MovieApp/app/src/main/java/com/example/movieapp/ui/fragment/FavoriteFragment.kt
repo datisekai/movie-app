@@ -95,7 +95,7 @@ class FavoriteFragment : Fragment() {
         })
 
 
-        adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }!!
+        adapter = dataList?.let { CustomAdapter(this.requireActivity(),it, R.layout.card, 480, 480, true) }!!
         recyclerView.adapter = adapter
 
         return view

@@ -95,7 +95,7 @@ class PaymentHistoryFragment : Fragment() {
             }
         })
 
-        adapter = dataList?.let { CustomAdapter(it, R.layout.payment_history, 0, 0, true) }!!
+        adapter = dataList?.let { CustomAdapter(this.requireActivity(),it, R.layout.payment_history, 0, 0, true) }!!
         recyclerView.adapter = adapter
 
         return view
@@ -126,7 +126,11 @@ class PaymentHistoryFragment : Fragment() {
             totalEntries= payments.totalEntries
 
             for (o in payments.data){
-                dataList.add(PaymentHistory(o.id , o.description.toString(), o.createdAt, o.amount, o.orderStatus))
+                var title = "Thanh toán gói Premium"
+                if(o.description!== null){
+                    title= o.description.toString()
+                }
+                dataList.add(PaymentHistory(o.id , title, o.createdAt, o.amount, o.orderStatus))
             }
 
             progressbar.visibility = View.GONE

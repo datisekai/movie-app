@@ -37,6 +37,11 @@ export class ArticleService {
       .take(limit)
       .skip((page - 1) * limit);
 
+    const sort = query.sort || 'DESC';
+    const order_by = query.order_by || 'created_at';
+
+    queryBuilder.orderBy(`article.${order_by}`, sort);
+
     if (query.title) {
       queryBuilder.andWhere('article.title_search like :title', {
         title: `%${query.title.toLowerCase()}%`,
@@ -75,7 +80,9 @@ export class ArticleService {
 
     const newArticle = this.articleRepository.create({
       ...dto,
-      slug: dto.slug ? convertToSlug(dto.slug) : convertToSlug(dto.title),
+      slug: dto.slug
+        ? convertToSlug(dto.slug)
+        : `${convertToSlug(dto.title)}-${Date.now()}`,
       title_search: removeVietnameseDiacritics(dto.title),
     });
 
