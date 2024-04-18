@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -60,17 +61,20 @@ class EsopideAdapter(private val context: Context, private val data : List<Esopi
         }
         holder.img.setOnClickListener(object :View.OnClickListener{
             override fun onClick(v: View?) {
+                if (data.get(index).url==null){
+                    Toast.makeText(context,"Dữ liệu bị lỗi, vui lòng quay lại sau !", Toast.LENGTH_SHORT).show()
+                }else{
+                    addHistory(data.get(index),context)
 
-                addHistory(data.get(index),context)
-
-                val intent : Intent =  Intent(context,
-                    PlayerActivity::class.java);
-                val bundle = Bundle()
-                bundle.putInt("ID",data.get(index).id)
-                bundle.putString("URL",data.get(index).url)
-                bundle.putString("TITLE",data.get(index).title)
-                intent.putExtra("videoUrl",bundle)
-                context.startActivity(intent);
+                    val intent : Intent =  Intent(context,
+                        PlayerActivity::class.java);
+                    val bundle = Bundle()
+                    bundle.putInt("ID",data.get(index).id)
+                    bundle.putString("URL",data.get(index).url)
+                    bundle.putString("TITLE",data.get(index).title)
+                    intent.putExtra("videoUrl",bundle)
+                    context.startActivity(intent);
+                }
             }
 
         })

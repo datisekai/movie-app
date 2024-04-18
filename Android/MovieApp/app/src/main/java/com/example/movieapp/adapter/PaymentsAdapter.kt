@@ -11,7 +11,7 @@ import com.example.movieapp.R
 import com.makeramen.roundedimageview.RoundedImageView
 
 class PaymentsAdapter(private val context: Context,private val dataImage : List<Int>) :
-   RecyclerView.Adapter<PaymentsAdapter.PaymentViewHolders>(){
+    RecyclerView.Adapter<PaymentsAdapter.PaymentViewHolders>(){
     private var oldPosition = 0
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -24,25 +24,39 @@ class PaymentsAdapter(private val context: Context,private val dataImage : List<
     override fun onBindViewHolder(holder: PaymentsAdapter.PaymentViewHolders, position: Int) {
         var indexTmp = position
         holder.iconPay.setImageResource(dataImage.get(position))
+        // update when full payments
+//        holder.iconPay.setOnClickListener(object : View.OnClickListener{
+//            override fun onClick(v: View?) {
+//                if (oldPosition!=indexTmp && check.checkChoose==true){
+//                    Toast.makeText(context,"Vui lòng chỉ chọn một hình thức thanh toán",Toast.LENGTH_SHORT).show()
+//                }else{
+//                    if ( holder.checkContainer.visibility == View.VISIBLE && holder.iconCheck.visibility == View.VISIBLE){
+//                        holder.checkContainer.visibility = View.INVISIBLE
+//                        holder.iconCheck.visibility = View.INVISIBLE
+//                        check.checkChoose = false
+//                        oldPosition = indexTmp
+//                    }else{
+//                        holder.checkContainer.visibility = View.VISIBLE
+//                        holder.iconCheck.visibility = View.VISIBLE
+//                        check.checkChoose = true
+//                        check.index = indexTmp
+//                        oldPosition = indexTmp
+//                    }
+//                }
+//
+//            }
+//
+//        })
+        if (indexTmp==0){
+            holder.checkContainer.visibility = View.VISIBLE
+            holder.iconCheck.visibility = View.VISIBLE
+            check.checkChoose = true
+        }
         holder.iconPay.setOnClickListener(object : View.OnClickListener{
             override fun onClick(v: View?) {
-                if (oldPosition!=indexTmp && check.checkChoose==true){
-                    Toast.makeText(context,"Vui lòng chỉ chọn một hình thức thanh toán",Toast.LENGTH_SHORT).show()
-                }else{
-                    if ( holder.checkContainer.visibility == View.VISIBLE && holder.iconCheck.visibility == View.VISIBLE){
-                        holder.checkContainer.visibility = View.INVISIBLE
-                        holder.iconCheck.visibility = View.INVISIBLE
-                        check.checkChoose = false
-                        oldPosition = indexTmp
-                    }else{
-                        holder.checkContainer.visibility = View.VISIBLE
-                        holder.iconCheck.visibility = View.VISIBLE
-                        check.checkChoose = true
-                        check.index = indexTmp
-                        oldPosition = indexTmp
-                    }
+                if (indexTmp!=0){
+                    Toast.makeText(context,"Hình thức thanh toán chưa hỗ trọ",Toast.LENGTH_SHORT).show()
                 }
-
             }
 
         })

@@ -199,7 +199,6 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/custome_button"
                 android:drawablePadding="10dp"
-                android:onClick="clickWatch"
                 android:text="WATCH NOW"
                 android:textColor="@color/white"
                 app:backgroundTint="@null" />

@@ -8,8 +8,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -62,6 +64,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
     private lateinit var progressBarCmt : ProgressBar
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapterComment: CommentAdapter
+    private lateinit var buttonWatch : Button
     var check: Boolean = false
     var checkPremium: Boolean = false
     var checkPremiumFilmToWatch = false
@@ -69,6 +72,14 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_film)
+
+        buttonWatch = findViewById(R.id.buttonWatch)
+        buttonWatch.setOnClickListener(object : OnClickListener{
+            override fun onClick(v: View?) {
+                clickWatch()
+            }
+
+        })
 
         progressBarEso = findViewById(R.id.progressBarEsopide)
         progressBarCmt = findViewById(R.id.progressBarCmt)
@@ -87,6 +98,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
                 (actionId == EditorInfo.IME_ACTION_DONE)
             ) {
                 if (filmId != 0 && editTextComment.text.toString().isNullOrEmpty() == false) {
+                    progressBarCmt.visibility = View.VISIBLE
                     val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
                     val dataComment1 = RequestComment(editTextComment.text.toString(), filmId)
                     val request = viewModel.createComment(dataComment1)
@@ -94,6 +106,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
                         adapterComment.notifyDataSetChanged()
                         getComment(filmId)
                         editTextComment.clearFocus()
+                        progressBarCmt.visibility = View.GONE
                     }
                     editTextComment.text.clear()
                 }
@@ -125,11 +138,16 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
     }
 
 
-    public fun clickWatch(view: View) {
+    private fun clickWatch() {
         if (checkPremiumFilmToWatch==true){
-                addHistory(data )
-                startPlayerActivity()
-                increaseView()
+           if (!data.isEmpty()){
+                   addHistory(data )
+                   startPlayerActivity()
+                   increaseView()
+           }else{
+               Toast.makeText(this,"Dữ liệu bị lỗi, vui lòng quay lại sau !",Toast.LENGTH_SHORT).show()
+           }
+
         }else{
             Toast.makeText(this,"Vui lòng đăng ký Premium để xem được phim",Toast.LENGTH_LONG).show()
         }
@@ -139,7 +157,6 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
        if (filmId!=0){
            val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
            viewModel.increaseView(filmId)
-
        }
     }
 
