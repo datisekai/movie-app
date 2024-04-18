@@ -11,14 +11,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="10dp"
+        android:layout_marginVertical="15dp"
         >
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="clickBack"
-            android:background="@drawable/baseline_keyboard_arrow_left_24"
-            />
+            android:backgroundTint="@color/white"
+            android:background="@drawable/baseline_arrow_back_24"
+            android:layout_marginLeft="10dp"
+            android:layout_marginVertical="4dp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -28,10 +30,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Term Of Use"
+                android:text="Điều khoản sử dụng"
                 android:textSize="24dp"
                 android:textStyle="bold"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                />
         </LinearLayout>
 
     </LinearLayout>
@@ -46,7 +49,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="25dp"/>
             <TextView
                 android:id="@+id/term_of_user_TvContent"
                 android:layout_width="wrap_content"

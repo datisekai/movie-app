@@ -2,6 +2,7 @@ package com.example.movieapp.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import com.example.movieapp.R
@@ -11,8 +12,11 @@ class TermOfUseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_term_of_use)
 
-        val text: String = "     Terms of Use\n" +
-                "\n" +
+        var textViewTitle = findViewById<TextView>(R.id.tvTitle)
+        val textTitle = "Terms of Use"
+        textViewTitle.text = textTitle
+
+        val text: String =
                 "     Welcome to our movie streaming application! These Terms of Use govern your use of the application and its services. By accessing or using the application, you agree to comply with these Terms of Use. If you do not agree with any part of these terms, please refrain from using the application.\n" +
                 "\n" +
                 "     Eligibility\n" +
@@ -30,13 +34,13 @@ class TermOfUseActivity : AppCompatActivity() {
                 "      Prohibited Conduct\n" +
                 "You agree not to engage in any of the following prohibited activities:\n" +
                 "\n" +
-                "Violating any applicable laws or regulations\n" +
-                "Interfering with the operation of the application\n" +
-                "Attempting to gain unauthorized access to the application or its servers\n" +
-                "Uploading or transmitting any malicious software or harmful content\n" +
-                "Engaging in any fraudulent or deceptive activities\n" +
-                "Disclaimer of Warranties\n" +
-                "The application and its services are provided on an \"as is\" and \"as available\" basis without any warranties or representations, express or implied. The application provider disclaims any warranties of merchantability, fitness for a particular purpose, or non-infringement.\n" +
+                "     Violating any applicable laws or regulations\n" +
+                "     Interfering with the operation of the application\n" +
+                "     Attempting to gain unauthorized access to the application or its servers\n" +
+                "     Uploading or transmitting any malicious software or harmful content\n" +
+                "     Engaging in any fraudulent or deceptive activities\n" +
+                "     Disclaimer of Warranties\n" +
+                "     The application and its services are provided on an \"as is\" and \"as available\" basis without any warranties or representations, express or implied. The application provider disclaims any warranties of merchantability, fitness for a particular purpose, or non-infringement.\n" +
                 "\n" +
                 "     Limitation of Liability\n" +
                 "To the maximum extent permitted by law, the application provider shall not be liable for any indirect, incidental, consequential, or punitive damages arising out of or in connection with your use of the application or its services.\n" +
@@ -47,9 +51,11 @@ class TermOfUseActivity : AppCompatActivity() {
                 "     Governing Law and Jurisdiction\n" +
                 "These Terms of Use shall be governed by and construed in accordance with the laws of [Jurisdiction]. Any disputes arising out of or relating to these terms shall be subject to the exclusive jurisdiction of the courts of [Jurisdiction].\n" +
                 "\n" +
-                "If you have any questions or concerns regarding these Terms of Use, please contact us at datly030102@gmail.com"
+                "     If you have any questions or concerns regarding these Terms of Use, please contact us at datly030102@gmail.com"
         var textViewContent = findViewById<TextView>(R.id.term_of_user_TvContent)
         textViewContent.text = text
+        textViewContent.gravity = Gravity.CENTER_HORIZONTAL
+        textViewContent.textAlignment = View.TEXT_ALIGNMENT_TEXT_START
     }
 
     fun clickBack(view: View){

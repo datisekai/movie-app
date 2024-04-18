@@ -4,19 +4,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import com.example.movieapp.Api.MyViewModel
-import com.example.movieapp.data.model.Film
+import com.example.movieapp.Helper
 import com.example.movieapp.R
-import com.example.movieapp.data.model.FilmDTO
-import com.example.movieapp.ui.fragment.BlogFragment
-import com.example.movieapp.ui.fragment.ProfileFragment
 import com.google.android.material.navigation.NavigationView
+import com.makeramen.roundedimageview.RoundedImageView
+import com.squareup.picasso.Picasso
 
 class HomePage_Activity : AppCompatActivity() {
 
@@ -60,6 +58,18 @@ class HomePage_Activity : AppCompatActivity() {
                 typeFragment = null
             }
         }
+
+        //Set name & image Profile in menu
+        val navigationView = findViewById<NavigationView>(R.id.navigationView)
+        val headerView = navigationView.getHeaderView(0)
+        val imgProfile = headerView.findViewById<RoundedImageView>(R.id.imageProflie)
+        val userName = headerView.findViewById<TextView>(R.id.menu_username_tv)
+        val currentUserName = Helper.TokenManager.getFullName(this)
+        userName.text = currentUserName
+        val urlAvt = "https://ui-avatars.com/api/?name=" + currentUserName
+        Picasso.get()
+            .load(urlAvt)
+            .into(imgProfile)
     }
 
 

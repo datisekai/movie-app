@@ -24,7 +24,9 @@
         app:layout_constraintEnd_toEndOf="@id/imageProflie"
         app:layout_constraintStart_toStartOf="@id/imageProflie"
         app:layout_constraintTop_toTopOf="@id/imageProflie"/>
+
     <TextView
+        android:id="@+id/menu_username_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"

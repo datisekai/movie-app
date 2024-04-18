@@ -26,6 +26,8 @@ import com.example.movieapp.ui.activity.RegisterPremiumActivity
 import com.example.movieapp.ui.activity.ProfileDetailsActivity
 import com.example.movieapp.ui.activity.ReplyActivity
 import com.example.movieapp.ui.activity.TermOfUseActivity
+import com.makeramen.roundedimageview.RoundedImageView
+import com.squareup.picasso.Picasso
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -46,6 +48,7 @@ class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCa
     private lateinit var tvFullname: TextView
     private lateinit var tvEmail: TextView
     private lateinit var linearLayout: LinearLayout
+    private lateinit var imgAvtProfile : RoundedImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -98,6 +101,7 @@ class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCa
         tvFullname = view.findViewById(R.id.profile_username_textview)
         tvEmail = view.findViewById<TextView>(R.id.profile_email_textview)
         linearLayout = view.findViewById<LinearLayout>(R.id.main_layout_fragment_profile)
+        imgAvtProfile = view.findViewById(R.id.imgSettingProflie)
 
         //Init Loader
         loaderManager.initLoader(0, null, this)
@@ -174,8 +178,12 @@ class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCa
 
                 ClassToken.FULLNAME = fullname
                 ClassToken.EMAIL = email
-                tvFullname?.setText(fullname)
-                tvEmail?.setText(email)
+                tvFullname.setText(fullname)
+                tvEmail.setText(email)
+                val urlAvt = "https://ui-avatars.com/api/?name=" + data.data.fullname
+                Picasso.get()
+                    .load(urlAvt)
+                    .into(imgAvtProfile)
             }
 
 
