@@ -183,20 +183,27 @@ class CustomAdapter(private val activity: Activity,private val dataList: List<An
 
                     //Custom
                     val layoutParams = image.layoutParams
-                    layoutParams.width = widthCard
-                    layoutParams.height = heightCard
+
+
                     image.layoutParams = layoutParams
 
-                    image.minimumWidth= widthCard
-                    image.maxWidth = widthCard;
-                    image.maxHeight = heightCard
-                    image.minimumHeight = heightCard
 
-                    title.minimumWidth = widthCard
-                    title.maxWidth = widthCard
+                    if(widthCard !== 0){
+                        layoutParams.width = widthCard
+                        image.minimumWidth= widthCard
+                        image.maxWidth = widthCard;
 
-                    textView2.minimumWidth = widthCard
-                    textView2.maxWidth = widthCard
+                        title.minimumWidth = widthCard
+                        title.maxWidth = widthCard
+
+                        textView2.minimumWidth = widthCard
+                        textView2.maxWidth = widthCard
+                    }
+                    if(heightCard !== 0){
+                        layoutParams.height = heightCard
+                        image.maxHeight = heightCard
+                        image.minimumHeight = heightCard
+                    }
 
                     if(isBorderImage){
                         val cornerRadius = itemView.context.resources.getDimensionPixelSize(R.dimen.corner_radius)
