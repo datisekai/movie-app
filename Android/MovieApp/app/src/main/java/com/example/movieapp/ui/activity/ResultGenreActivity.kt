@@ -80,7 +80,7 @@ class ResultGenreActivity : AppCompatActivity() {
 
         }
 
-        adapter = dataList?.let { CustomAdapter(this,it, R.layout.card, 480, 480, true) }!!
+        adapter = dataList?.let { CustomAdapter(this,it, R.layout.card, 0, 0, true) }!!
         recyclerView.adapter = adapter
         val imageView = findViewById<ImageView>(R.id.back)
 
