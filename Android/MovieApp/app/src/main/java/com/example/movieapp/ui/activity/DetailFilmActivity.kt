@@ -4,9 +4,12 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.View.OnClickListener
@@ -16,10 +19,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
+import android.widget.ScrollView
 import com.example.movieapp.R
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
@@ -44,6 +51,7 @@ import com.example.movieapp.data.model.Film1
 import com.example.movieapp.data.model.FilmFavorite
 import com.example.movieapp.data.model.RequestComment
 import com.example.movieapp.data.model.RequestFilmFavorite
+import com.example.movieapp.service.NetworkManager
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -51,11 +59,14 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.messaging.FirebaseMessaging
 import com.makeramen.roundedimageview.RoundedImageView
 
 
 class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Film> {
+    private lateinit var layoutTop : RelativeLayout
+    private lateinit var scrollView : ScrollView
     private lateinit var editTextComment: EditText
     private lateinit var data: MutableList<EsopideDTO>
     private lateinit var dataComment: MutableList<CommentDTO>
@@ -63,32 +74,51 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
     private lateinit var userCommentImg : RoundedImageView
     private lateinit var progressBarEso : ProgressBar
     private lateinit var progressBarCmt : ProgressBar
+    private lateinit var progressBarAll : ProgressBar
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapterComment: CommentAdapter
     private lateinit var buttonWatch : Button
+    private lateinit var linearlayout : LinearLayout
     var check: Boolean = false
     var checkPremium: Boolean = false
     var checkPremiumFilmToWatch = false
     var filmId: Int = 0
+    var count : Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_film)
 
+        linearlayout = findViewById(R.id.layoutDetailFilm)
         buttonWatch = findViewById(R.id.buttonWatch)
+        progressBarEso = findViewById(R.id.progressBarEsopide)
+        progressBarCmt = findViewById(R.id.progressBarCmt)
+        progressBarAll = findViewById(R.id.progressBarAll)
+        editTextComment = findViewById(R.id.edtComment)
+        userCommentImg = findViewById(R.id.imageUserComment)
+        btnFavorite = findViewById(R.id.btnFavotite)
+        layoutTop = findViewById(R.id.layoutTop)
+        scrollView = findViewById(R.id.scrollViewOfDetailFilm)
+
+
         buttonWatch.setOnClickListener(object : OnClickListener{
             override fun onClick(v: View?) {
-                clickWatch()
+                if (v != null) {
+                    if (isNetworkConnected(v.context)){
+                        clickWatch()
+                    }else{
+                        customeToast("Đã có lỗi xảy ra! Vui lòng thử lại")
+                    }
+                }
             }
 
         })
 
-        progressBarEso = findViewById(R.id.progressBarEsopide)
-        progressBarCmt = findViewById(R.id.progressBarCmt)
+
 
         progressBarEso.visibility = View.VISIBLE
         progressBarCmt.visibility = View.VISIBLE
-        editTextComment = findViewById(R.id.edtComment)
-        userCommentImg = findViewById(R.id.imageUserComment)
+        progressBarAll.visibility = View.VISIBLE
+
         if ( editTextComment.visibility == View.GONE){
             editTextComment.visibility = View.VISIBLE
             userCommentImg.visibility = View.GONE
@@ -120,10 +150,16 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             return@setOnEditorActionListener false
         }
 
-        btnFavorite = findViewById(R.id.btnFavotite)
+
         btnFavorite.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
-                clickBtnFavotite()
+                if (v != null) {
+                    if (isNetworkConnected(v.context)){
+                        clickBtnFavotite()
+                    }else{
+                        customeToast("Đã có lỗi xảy ra! Vui lòng thử lại")
+                    }
+                }
             }
 
         })
@@ -132,10 +168,53 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             supportLoaderManager.initLoader(0, null, this).forceLoad()
         }
 
-
         getDetailFilm()
 
         checkPremiumFilmToWatch = checkPremiumFilm()
+
+        checkConnect()
+    }
+
+    private lateinit var cld : NetworkManager
+    private fun checkConnect(){
+        cld = NetworkManager(application)
+        cld.observe(this){
+            if (it){
+               if (count!=0){
+                   customeToast("Đã có kết nối trở lại")
+               }else{
+                   count++
+               }
+            }else{
+                customeToast("Không có kết nối Internet")
+            }
+        }
+    }
+
+    fun isNetworkConnected(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork ?: return false
+            val networkCapabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        } else {
+            val networkInfo = connectivityManager.activeNetworkInfo ?: return false
+            return networkInfo.isConnected
+        }
+    }
+
+    private fun customeToast(message : String){
+        val inflater = layoutInflater
+        val view = inflater.inflate(R.layout.custome_toast,this.findViewById(R.id.CustomToast))
+        val toast = Toast(this)
+        toast.duration = Toast.LENGTH_SHORT
+        toast.view = view
+        val txt : TextView = view.findViewById(R.id.txtMessage)
+        txt.text = message
+        toast.setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, 100)
+        toast.show()
     }
 
 
@@ -146,11 +225,11 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
                    startPlayerActivity()
                    increaseView()
            }else{
-               Toast.makeText(this,"Dữ liệu bị lỗi, vui lòng quay lại sau !",Toast.LENGTH_SHORT).show()
+               customeToast("Dữ liệu bị lỗi")
            }
 
         }else{
-            Toast.makeText(this,"Vui lòng đăng ký Premium để xem được phim",Toast.LENGTH_LONG).show()
+            customeToast("Vui lòng đăng ký Premium để xem được phim")
         }
     }
 
@@ -247,9 +326,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
     }
     
     public fun getDetailFilm(){
-       val connMgr : ConnectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-       val networkInfo = connMgr.activeNetworkInfo
-        if (networkInfo != null && networkInfo.isConnected) {
+        if (isNetworkConnected(this)) {
             val intent : Intent = intent
             val bundle : Bundle = intent.getBundleExtra("DataID")!!
             val id = bundle.getInt("ID")
@@ -373,6 +450,8 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
                     .load(data.data.thumbnail)
                     .apply(requestOption)
                     .into(imgMain)
+
+                progressBarAll.visibility = View.GONE
 
             }
         }catch (e : Exception){

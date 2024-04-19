@@ -3,8 +3,13 @@ package com.example.movieapp.ui.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.Navigation
@@ -12,22 +17,23 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.movieapp.Helper
 import com.example.movieapp.R
+import com.example.movieapp.data.model.FilmDTO
+import com.example.movieapp.service.NetworkManager
+import com.example.movieapp.ui.fragment.BlogFragment
+import com.example.movieapp.ui.fragment.ProfileFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Picasso
 
 class HomePage_Activity : AppCompatActivity() {
+    private lateinit var layout : ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
 
-//        val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
-//        viewModel.getListFilm().observe(this, { films ->
-//            Log.e("DATA",films.data.get(0).title)
-//            filmData.listFilm.addAll(films.data)
-//
-//        })
+        checkConnect()
 
         val drawerlayout = findViewById<DrawerLayout>(R.id.myDrawer)
         findViewById<ImageView>(R.id.imgMenu).setOnClickListener {
@@ -72,12 +78,33 @@ class HomePage_Activity : AppCompatActivity() {
             .into(imgProfile)
     }
 
+    private lateinit var cld : NetworkManager
+    private var count : Int = 0
+    private fun checkConnect(){
+        cld = NetworkManager(application)
+        cld.observe(this){
+            if (it){
+                if (count!=0){
+                    customeToast("Đã có kết nối trở lại")
+                }else{
+                    count++
+                }
+            }else{
+                customeToast("Không có kết nối Internet")
+            }
+        }
+    }
+    private fun customeToast(message : String){
+        val inflater = layoutInflater
+        val view = inflater.inflate(R.layout.custome_toast,this.findViewById(R.id.CustomToast))
+        val toast = Toast(this)
+        toast.duration = Toast.LENGTH_SHORT
+        toast.view = view
+        val txt : TextView = view.findViewById(R.id.txtMessage)
+        txt.text = message
+        toast.setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, 100)
+        toast.show()
+    }
 
-//    public class filmData(){
-//        companion object{
-//            val listFilm : MutableList<FilmDTO> = mutableListOf()
-//        }
-//
-//    }
 
 }
