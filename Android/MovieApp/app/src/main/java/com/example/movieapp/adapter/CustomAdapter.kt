@@ -202,22 +202,24 @@ class CustomAdapter(private val activity: Activity,private val dataList: List<An
 
                     }
 
-                    layoutParams.height = layoutParams.width
-                    image.maxHeight = image.width
-                    image.minimumHeight = image.width
-
                     if(heightCard !== 0){
                         layoutParams.height = heightCard
                         image.maxHeight = heightCard
                         image.minimumHeight = heightCard
+                    }else{
+                        layoutParams.height = layoutParams.width
+                        image.maxHeight = image.width
+                        image.minimumHeight = image.width
                     }
+
+                    image.requestLayout()
 
                     if(isBorderImage){
                         val cornerRadius = itemView.context.resources.getDimensionPixelSize(R.dimen.corner_radius)
                         image.cornerRadius = cornerRadius.toFloat()
                     }
 
-                    if(movieItem.is_required_premium==false){
+                    if(!movieItem.is_required_premium){
                         iconPremium.visibility = View.GONE
                     }else{
                         iconPremium.visibility = View.VISIBLE
