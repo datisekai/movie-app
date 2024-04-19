@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -76,8 +77,12 @@ class HistoryFragment : Fragment() {
 
         val spacing = 24
         recyclerView.addItemDecoration(GridSpacingItemDecoration(2, spacing, false))
-
         recyclerView.layoutManager = GridLayoutManager(view.context, 2)
+
+        val layoutParams = GridLayout.LayoutParams()
+        layoutParams.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f)
+        layoutParams.rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f)
+        recyclerView.layoutParams =layoutParams
 
         val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
         //Check Database Has History

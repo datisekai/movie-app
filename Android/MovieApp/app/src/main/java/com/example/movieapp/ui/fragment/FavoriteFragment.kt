@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
@@ -64,6 +65,11 @@ class FavoriteFragment : Fragment() {
         recyclerView.addItemDecoration(GridSpacingItemDecoration(2, spacing, false))
 
         recyclerView.layoutManager = GridLayoutManager(view.context, 2)
+
+        val layoutParams = GridLayout.LayoutParams()
+        layoutParams.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f)
+        layoutParams.rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f)
+        recyclerView.layoutParams =layoutParams
 
         callAPI(viewModel, view,  progressbar)
 

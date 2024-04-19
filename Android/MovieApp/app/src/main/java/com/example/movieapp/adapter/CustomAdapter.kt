@@ -206,9 +206,6 @@ class CustomAdapter(private val activity: Activity,private val dataList: List<An
                         layoutParams.height = heightCard
                         image.maxHeight = heightCard
                         image.minimumHeight = heightCard
-                    }else{
-                        image.maxHeight = image.width
-                        image.minimumHeight = image.width
                     }
 
                     if(isBorderImage){

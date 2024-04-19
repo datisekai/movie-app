@@ -4,6 +4,7 @@ import com.example.movieapp.adapter.CustomAdapter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -47,6 +48,11 @@ class ResultGenreActivity : AppCompatActivity() {
         recyclerView.addItemDecoration(GridSpacingItemDecoration(2, spacing, false))
 
         recyclerView.layoutManager = GridLayoutManager(this, 2)
+
+        val layoutParams = GridLayout.LayoutParams()
+        layoutParams.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f)
+        layoutParams.rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f)
+        recyclerView.layoutParams =layoutParams
 
         if(id !== -1){
             callAPI(viewModel, id,  progressbar)
