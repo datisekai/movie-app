@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.movieapp.DBHelper;
 import com.example.movieapp.Helper;
@@ -15,6 +16,8 @@ import com.example.movieapp.R;
 import com.example.movieapp.data.model.HistoryDTO;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.PlaybackException;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.PlayerView;
 
 public class PlayerActivity extends AppCompatActivity {
@@ -58,6 +61,14 @@ public class PlayerActivity extends AppCompatActivity {
         simpleExoPlayer.setMediaItem(mediaItem);
         simpleExoPlayer.prepare();
         simpleExoPlayer.setPlayWhenReady(true);
+
+        simpleExoPlayer.addListener(new Player.Listener() {
+            @Override
+            public void onPlayerError(PlaybackException error) {
+                //Player.Listener.super.onPlayerError(error);
+                Toast.makeText(PlayerActivity.this, "Lỗi Video", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         Long saveTime = GetSaveTime(userId, Episode_ID);
         if(saveTime != 0){

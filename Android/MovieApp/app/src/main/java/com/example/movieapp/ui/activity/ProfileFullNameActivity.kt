@@ -20,7 +20,7 @@ import com.example.movieapp.service.ServiceBuilder
 import java.util.concurrent.Executors
 
 
-class ProfileFullNameActivity : AppCompatActivity() {
+class ProfileFullNameActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_profile_detail_fullname)
@@ -33,17 +33,23 @@ class ProfileFullNameActivity : AppCompatActivity() {
         btnSave.setOnClickListener {
             val Fullname = editText.text.toString()
             if (Fullname?.isNotEmpty() == true){
-                val result = executeEditFullname(Fullname)
-                editText.setText("")
-                if(result){
-                    Toast.makeText(this, "Update FullName Successfully!!", Toast.LENGTH_LONG).show()
-                    oldTv.setText(ClassToken.FULLNAME)
-                    //Return To Profile Fragment
-                    val intent = Intent(this, HomePage_Activity::class.java)
-                    intent.putExtra("typeFragment",1)
-                    startActivity(intent)
-                }else{
-                    Toast.makeText(this, "Update Fail Successfully!!", Toast.LENGTH_LONG).show()
+                if(validateFullname(Fullname)){
+                    val result = executeEditFullname(Fullname)
+                    editText.setText("")
+                    if(result){
+                        Toast.makeText(this, "Update FullName Successfully!!", Toast.LENGTH_LONG).show()
+                        oldTv.setText(ClassToken.FULLNAME)
+                        //Return To Profile Fragment
+                        val intent = Intent(this, HomePage_Activity::class.java)
+                        intent.putExtra("typeFragment",1)
+                        startActivity(intent)
+                    }else{
+                        Toast.makeText(this, "Update Fail Successfully!!", Toast.LENGTH_LONG).show()
+                    }
+                }
+                else{
+                    editText.setText("")
+                    Toast.makeText(this, "Tên phải từ 2 chữ trở lên", Toast.LENGTH_LONG).show()
                 }
             } else{
                 val alertDialog = AlertDialog.Builder(this)
@@ -91,5 +97,10 @@ class ProfileFullNameActivity : AppCompatActivity() {
 
     public fun clickBack(view: View){
         finish()
+    }
+
+    private fun validateFullname(fullname: String): Boolean{
+        val words = fullname.trim().split("\\s+".toRegex())
+        return words.size >= 2
     }
 }
