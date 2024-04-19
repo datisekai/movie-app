@@ -165,7 +165,7 @@ class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCa
     }
 
     override fun onLoaderReset(loader: Loader<GetUser>) {
-        TODO("Not yet implemented")
+
     }
 
     override fun onLoadFinished(loader: Loader<GetUser>, data: GetUser?) {
