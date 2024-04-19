@@ -172,15 +172,23 @@ class ProfileFragment : Fragment(), View.OnClickListener, LoaderManager.LoaderCa
         try {
             linearLayout.visibility = View.VISIBLE
             progressBar.visibility = View.GONE
+            var fullname = ""
+            var email = ""
             if(data != null){
-                val fullname = data.data.fullname
-                val email = data.data.email
+                fullname = data.data.fullname
+                email = data.data.email
 
-                ClassToken.FULLNAME = fullname
-                ClassToken.EMAIL = email
                 tvFullname.setText(fullname)
                 tvEmail.setText(email)
-                val urlAvt = "https://ui-avatars.com/api/?name=" + data.data.fullname
+                val urlAvt = "https://ui-avatars.com/api/?name=" + fullname
+                Picasso.get()
+                    .load(urlAvt)
+                    .into(imgAvtProfile)
+            }else{
+                fullname = ClassToken.FULLNAME
+                email = ClassToken.EMAIL
+
+                val urlAvt = "https://ui-avatars.com/api/?name=" + fullname
                 Picasso.get()
                     .load(urlAvt)
                     .into(imgAvtProfile)
