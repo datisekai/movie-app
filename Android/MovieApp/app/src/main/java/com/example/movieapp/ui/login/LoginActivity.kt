@@ -1,6 +1,7 @@
 package com.example.movieapp.ui.login
 
 import android.app.Activity
+import android.app.Application
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -47,7 +48,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import java.util.Date
 
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(){
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
