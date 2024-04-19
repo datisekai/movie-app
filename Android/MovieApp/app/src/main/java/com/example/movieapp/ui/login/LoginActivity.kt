@@ -1,6 +1,7 @@
 package com.example.movieapp.ui.login
 
 import android.app.Activity
+import android.app.Application
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -47,7 +48,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import java.util.Date
 
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(){
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
@@ -266,6 +267,10 @@ class LoginActivity : AppCompatActivity() {
         if (requestCode == 1000) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
+                if (FirebaseApp.getApps(this).isEmpty()){
+                    Log.e("ERROR", "onActivityResult: Firebase don't init ", )
+                    FirebaseApp.initializeApp(this)
+                }
                 val account = task.getResult(ApiException::class.java)
                 if (account != null) {
                     val idToken =account.idToken
@@ -276,6 +281,17 @@ class LoginActivity : AppCompatActivity() {
                         "GOOGLE",
                         idToken.toString()
                         )
+                    FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val fcmToken = task.result
+                            val viewModel = ViewModelProvider(this).get(FcmTokenViewModel::class.java)
+                            viewModel.putFCMToken(RequestFcmToken(fcmToken))
+
+                        } else {
+                            Log.e("ERROR", "Failed to get FCM token: ${task.exception}")
+                            // Xử lý khi không lấy được FCM token
+                        }
+                    }
                 }
                 googleBtn.isEnabled = false
             } catch (e: ApiException) {
