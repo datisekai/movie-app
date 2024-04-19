@@ -3,10 +3,9 @@ package com.example.movieapp.ui.activity
 import com.example.movieapp.adapter.CustomAdapter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.GridLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
@@ -47,11 +46,8 @@ class ResultGenreActivity : AppCompatActivity() {
 
         val spacing = 24
         recyclerView.addItemDecoration(GridSpacingItemDecoration(2, spacing, false))
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
 
-        val layoutParams = recyclerView.layoutParams as LinearLayout.LayoutParams
-        layoutParams.weight = 1f
-        recyclerView.layoutParams = layoutParams
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         if(id !== -1){
             callAPI(viewModel, id,  progressbar)

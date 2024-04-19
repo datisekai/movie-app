@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -186,8 +187,6 @@ class CustomAdapter(private val activity: Activity,private val dataList: List<An
                     val layoutParams = image.layoutParams
 
 
-                    image.layoutParams = layoutParams
-
 
                     if(widthCard !== 0){
                         layoutParams.width = widthCard
@@ -206,7 +205,17 @@ class CustomAdapter(private val activity: Activity,private val dataList: List<An
                         layoutParams.height = heightCard
                         image.maxHeight = heightCard
                         image.minimumHeight = heightCard
+                        image.layoutParams = layoutParams
+                    }else{
+                        val displayMetrics = itemView.context.resources.displayMetrics
+                        val screenWidth = displayMetrics.widthPixels
+                        val layoutParams = image.layoutParams
+                        layoutParams.width = screenWidth / 2 // hoặc bất kỳ giá trị chiều rộng nào bạn muốn
+                        layoutParams.height = layoutParams.width // Đặt chiều cao bằng với chiều rộng
+                        image.layoutParams = layoutParams
                     }
+
+
 
                     if(isBorderImage){
                         val cornerRadius = itemView.context.resources.getDimensionPixelSize(R.dimen.corner_radius)

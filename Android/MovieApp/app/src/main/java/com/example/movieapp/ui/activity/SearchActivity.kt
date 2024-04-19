@@ -9,9 +9,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.widget.GridLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
@@ -53,11 +51,8 @@ class SearchActivity : AppCompatActivity() {
 
         val spacing = 24
         recyclerView.addItemDecoration(GridSpacingItemDecoration(2, spacing, false))
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
 
-        val layoutParams = recyclerView.layoutParams as LinearLayout.LayoutParams
-        layoutParams.weight = 1f
-        recyclerView.layoutParams = layoutParams
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         callAPI(viewModel, receivedValue.toString(), progressbar)
 
