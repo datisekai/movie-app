@@ -174,6 +174,11 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
         checkConnect()
     }
 
+    override fun onResume() {
+        super.onResume()
+        count = 0
+    }
+
     private lateinit var cld : NetworkManager
     private fun checkConnect(){
         cld = NetworkManager(application)
