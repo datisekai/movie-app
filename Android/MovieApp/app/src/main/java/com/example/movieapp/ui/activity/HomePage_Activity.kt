@@ -78,6 +78,11 @@ class HomePage_Activity : AppCompatActivity() {
             .into(imgProfile)
     }
 
+    override fun onResume() {
+        super.onResume()
+        count = 0
+    }
+
     private lateinit var cld : NetworkManager
     private var count : Int = 0
     private fun checkConnect(){
