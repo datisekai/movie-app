@@ -34,7 +34,7 @@
         android:textColor="@color/bg1"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/viewSuport"
+        app:layout_constraintBaseline_toBottomOf="@id/viewSuport"
         app:layout_constraintStart_toEndOf="@id/imageProflie"
 
         />

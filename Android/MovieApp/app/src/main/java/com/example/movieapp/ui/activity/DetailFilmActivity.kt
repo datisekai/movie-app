@@ -7,6 +7,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.Gravity
 import android.view.KeyEvent
@@ -436,7 +437,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
                 val tmp = data.data.createAt.split("-")
                 txtYear.text = tmp[0]
                 txtMonth.text = "T"+tmp[1]
-                txtDescription.text = data.data.description
+                txtDescription.text = Html.fromHtml(data.data.description)
                 // load poster
                 val requestOption = RequestOptions().placeholder(R.drawable.default_movie)
                     .error(R.drawable.default_movie)
