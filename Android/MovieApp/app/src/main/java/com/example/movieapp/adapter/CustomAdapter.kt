@@ -18,6 +18,7 @@ import com.example.movieapp.R
 import com.example.movieapp.adapter.model.Genre
 import com.example.movieapp.adapter.model.Movie
 import com.example.movieapp.adapter.model.PaymentHistory
+import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.ui.activity.DetailFilmActivity
 import com.example.movieapp.ui.activity.ResultGenreActivity
 import com.google.android.gms.ads.AdError
@@ -199,6 +200,11 @@ class CustomAdapter(private val activity: Activity,private val dataList: List<An
                     val status: TextView= itemView.findViewById(R.id.textStatus)
                     val paymentHistoryItem = data as PaymentHistory
                     title.text = paymentHistoryItem.title
+
+                    val imageavt: RoundedImageView = itemView.findViewById(R.id.image)
+                    Picasso.get()
+                        .load("https://ui-avatars.com/api/?name=" + ClassToken.FULLNAME)
+                        .into(imageavt)
 
                     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                     val dateTime: LocalDateTime = LocalDateTime.parse(paymentHistoryItem.date, formatter)
