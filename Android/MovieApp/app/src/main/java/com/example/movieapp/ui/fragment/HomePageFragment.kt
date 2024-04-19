@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,8 +27,10 @@ import com.example.movieapp.adapter.model.CardHome
 import com.example.movieapp.adapter.model.Movie
 import com.example.movieapp.service.GenreMovieViewModel
 import com.example.movieapp.service.GenreViewModel
+import com.example.movieapp.service.NetworkManager
 import com.example.movieapp.ui.activity.ResultGenreActivity
 import com.example.movieapp.ui.activity.SearchActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -58,6 +61,7 @@ class HomePageFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home_page, container, false)
+
 
         val viewModelGenre = ViewModelProvider(this).get(GenreViewModel::class.java)
         viewModelGenre.getListGenre(1).observe(viewLifecycleOwner){genre->

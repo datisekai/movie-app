@@ -42,6 +42,7 @@ import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import java.util.Date
 
@@ -56,6 +57,8 @@ class LoginActivity : AppCompatActivity() {
     lateinit var googleBtn: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
+
         val bundle = intent.extras
         if (bundle != null) {
             val username = bundle.getString("username")

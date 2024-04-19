@@ -3,12 +3,15 @@ package com.example.movieapp.ui.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +22,7 @@ import com.example.movieapp.adapter.ArticleBlogAdapter
 import com.example.movieapp.adapter.model.Article
 import com.example.movieapp.data.model.Articles
 import com.example.movieapp.service.BlogViewModel
+import com.example.movieapp.service.NetworkManager
 import com.example.movieapp.ui.activity.BlogDetailActivity
 
 // TODO: Rename parameter arguments, choose names that match
@@ -121,6 +125,8 @@ class BlogFragment : Fragment(), BlogItemClickListener {
         intent.putExtras(bundle)
         startActivity(intent)
     }
+
+
 
     companion object {
         /**
