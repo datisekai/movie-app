@@ -207,12 +207,9 @@ class CustomAdapter(private val activity: Activity,private val dataList: List<An
                         image.maxHeight = heightCard
                         image.minimumHeight = heightCard
                     }else{
-                        layoutParams.height = layoutParams.width
                         image.maxHeight = image.width
                         image.minimumHeight = image.width
                     }
-
-                    image.requestLayout()
 
                     if(isBorderImage){
                         val cornerRadius = itemView.context.resources.getDimensionPixelSize(R.dimen.corner_radius)
