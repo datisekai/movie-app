@@ -1,5 +1,5 @@
-import {  useLocation, useNavigate } from "react-router-dom";
-import {  useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
@@ -18,7 +18,7 @@ function EpisodeCreate() {
   const [loading, setLoading] = useState(false);
   const playerRef = useRef(null);
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue, getValues } = useForm();
   const location = useLocation();
   const [description, setDescription] = useState("");
 
@@ -37,6 +37,23 @@ function EpisodeCreate() {
         type: "video/mp4",
       },
     ],
+  };
+
+  const handleCreateSlug = () => {
+    const title = getValues("title");
+    // Create a slug using a function (can be customized)
+    const slug = createSlug(title);
+
+    // Update the slug field using setValue
+    setValue("slug", slug, { shouldDirty: true }); // Mark slug as dirty for validation
+  };
+
+  // Function to create a slug (replace with your preferred logic)
+  const createSlug = (title) => {
+    const lowercasedTitle = title.toLowerCase();
+    const replacedSpaces = lowercasedTitle.replace(/\s+/g, "-");
+    const removedSpecialChars = replacedSpaces.replace(/[^a-z0-9-]/g, "");
+    return removedSpecialChars.slice(0, 255); // Limit slug length (optional)
   };
 
   const handleFileChange = (event) => {
@@ -178,7 +195,7 @@ function EpisodeCreate() {
         <div className="p-2 space-y-2 w-1/3">
           <div className="flex items-center justify-center w-full h-full">
             <label className="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-              <img src={imgUrl} alt="Preview" className="w-full h-full" />
+              <img src={imgUrl} alt="Preview" className="w-full h-full object-contain" />
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
                 <svg
                   className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
@@ -220,6 +237,7 @@ function EpisodeCreate() {
               <label htmlFor="title">Title:</label>
               <input
                 type="text"
+                placeholder="Enter title..."
                 name="title"
                 className="rounded p-2 border border-gray-600  max-w-[250px]"
                 {...register("title", { required: true })}
@@ -233,16 +251,15 @@ function EpisodeCreate() {
                 className="rounded p-2 border border-gray-600 max-w-[250px]"
                 {...register("slug")}
               />
+              <button
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-fit"
+                type="button"
+                onClick={handleCreateSlug}
+              >
+                Generate Slug
+              </button>
             </div>
-            <div className="flex flex-col">
-              <label htmlFor="position">Position:</label>
-              <input
-                type="number"
-                name="position"
-                className="rounded p-2 border border-gray-600 max-w-[250px]"
-                {...register("position", { required: true })}
-              />
-            </div>
+            
           </div>
           <div className="flex flex-col">
             <label htmlFor="description">Description:</label>
@@ -251,6 +268,7 @@ function EpisodeCreate() {
               setContents={description}
               onChange={(content) => setDescription(content)}
               height="10rem"
+              placeholder="Enter description..."
             />
           </div>
           <div className="flex flex-col gap-2">

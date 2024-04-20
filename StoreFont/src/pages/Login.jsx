@@ -27,17 +27,28 @@ function Login() {
     axios
       .post(`${API_URL}.auth/login`, loginState)
       .then((res) => {
-        localStorage.setItem("accessToken", res.data.data.accessToken);
-        localStorage.setItem("user", JSON.stringify(res.data.data.user));
-        Swal.fire({
-          title: "Success!",
-          text: "Login Successfully!",
-          icon: "success",
-        }).then(result=>{
-          if(result.isConfirmed){
-            navigate("/");
-          }
-        })
+        const user = res.data.data.user;
+        if (user.roles.includes("admin")) {
+          console.log(user.roles.includes("admin"))
+          localStorage.setItem("accessToken", res.data.data.accessToken);
+          localStorage.setItem("user", JSON.stringify(res.data.data.user));
+          Swal.fire({
+            title: "Success!",
+            text: "Login Successfully!",
+            icon: "success",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              navigate("/");
+            }
+          });
+        }
+        else{
+          Swal.fire({
+            title: "Error!",
+            text: "Unauthorized!",
+            icon: "error",
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -46,17 +57,15 @@ function Login() {
           text: err.response.data.message,
           icon: "error",
         });
+        
+      })
+      .finally(() => {
         setLoading(false);
-      });
+      })
   };
   return (
     <div className="h-screen justify-center flex-col items-center flex">
-      <Header
-        heading="Login to your account"
-        paragraph="Don't have an account yet? "
-        linkName="Signup"
-        linkUrl="/signup"
-      />
+      <Header heading="Login to your account" />
       <div className="flex flex-col items-center w-1/3">
         <form className="space-y-6 grow w-full">
           <div className="-space-y-px">
@@ -76,32 +85,6 @@ function Login() {
             ))}
           </div>
 
-          {/* extra */}
-          <div className="flex items-center justify-between w-full py-2 mt-5 ">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
-              />
-              <label
-                htmlFor="remember-me"
-                className="ml-2 block text-sm text-gray-900"
-              >
-                Remember me
-              </label>
-            </div>
-
-            <div className="text-sm">
-              <a
-                href="#"
-                className="font-medium text-purple-600 hover:text-purple-500"
-              >
-                Forgot your password?
-              </a>
-            </div>
-          </div>
           <button
             type="submit"
             className="group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 mt-5 w-full"

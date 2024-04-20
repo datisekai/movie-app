@@ -61,6 +61,7 @@ function CreateUser() {
           <input
             type="text"
             name="email"
+            placeholder="Enter your email..."
             className="rounded p-2 border border-gray-600  max-w-[250px]"
             {...register("email", { required: true })}
           />
@@ -70,6 +71,7 @@ function CreateUser() {
           <input
             type="text"
             name="fullname"
+            placeholder="Enter your fullname..."
             className="rounded p-2 border border-gray-600  max-w-[250px]"
             {...register("fullname",{required: true})}
           />
@@ -79,6 +81,7 @@ function CreateUser() {
           <input
             type="password"
             name="password"
+            placeholder="Enter your password..."
             className="rounded p-2 border border-gray-600  max-w-[250px]"
             {...register("password", { required: true })}
           />

@@ -196,7 +196,7 @@ function ArticleDetail() {
           </div>
         </div>
 
-        <div className="pb-20 z-10 ">
+        <div className="py-5 z-10 ">
           <label htmlFor="">Genres:</label>
           <MultiSelect
             value={currentGenre}

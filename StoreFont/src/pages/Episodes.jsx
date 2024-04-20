@@ -110,7 +110,6 @@ const Episodes = () => {
         .catch((err) => {
           console.log(err);
           if(flag){
-
             Swal.fire("Error updating position!", "", "error");
           }
         }).finally(()=>setFlag(true))

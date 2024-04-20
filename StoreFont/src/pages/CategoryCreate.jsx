@@ -10,7 +10,6 @@ import ClipLoader from "react-spinners/ClipLoader";
 function CategoryCreate() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false);
-  const [description, setDescription] = useState("");
   const { register, handleSubmit } = useForm();
   const initialImg =
     "https://image.tmdb.org/t/p/w500//A4j8S6moJS2zNtRR8oWF08gRnL5.jpg"; // Initial image
@@ -141,6 +140,7 @@ function CategoryCreate() {
           <input
             type="text"
             name="title"
+            placeholder="Enter your title..."
             className="rounded p-2 border border-gray-600  max-w-[250px]"
             {...register("title")}
           />
@@ -148,10 +148,12 @@ function CategoryCreate() {
         
         <div className="flex flex-col md:col-span-3">
           <label htmlFor="description">Description:</label>
-          <SunEditor
-            setContents={description}
-            onChange={(content) => setDescription(content)}
-            height="10rem"
+          <textarea
+            placeholder="Enter description..."
+            rows={6}
+            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+
+            {...register("description")}
           />
         </div>
         <div className="flex flex-col col-span-3">
