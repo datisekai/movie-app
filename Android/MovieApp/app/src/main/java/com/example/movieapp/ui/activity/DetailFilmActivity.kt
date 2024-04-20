@@ -88,6 +88,8 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_film)
 
+        intent.extras?.clear()
+
         linearlayout = findViewById(R.id.layoutDetailFilm)
         buttonWatch = findViewById(R.id.buttonWatch)
         progressBarEso = findViewById(R.id.progressBarEsopide)
