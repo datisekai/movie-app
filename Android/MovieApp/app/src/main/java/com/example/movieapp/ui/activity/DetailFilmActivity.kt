@@ -230,7 +230,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
                    startPlayerActivity()
                    increaseView()
            }else{
-               customeToast("Dữ liệu bị lỗi")
+               customeToast("Phim chưa sẵn sàng")
            }
 
         }else{
@@ -258,6 +258,8 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
                    for (role in tmp){
                        Log.e("DATA",role)
                        if (role.equals("premium_user")){
+                           editTextComment.visibility = View.VISIBLE
+                           userCommentImg.visibility = View.VISIBLE
                            return true
                        }
                        editTextComment.visibility = View.GONE

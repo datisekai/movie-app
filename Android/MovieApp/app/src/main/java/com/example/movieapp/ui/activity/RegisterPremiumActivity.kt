@@ -18,11 +18,13 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.get
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.LiveData
@@ -52,12 +54,15 @@ import java.lang.Math.abs
 class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
     private var Slidehandler : Handler = Handler()
     lateinit var viewpage : ViewPager2
+    private lateinit var layout: ConstraintLayout
     private lateinit var list : ArrayList<slideItem>
     private lateinit var recyclerView : RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_premium)
 
+        layout = findViewById(R.id.layoutLoading)
+        layout.visibility = View.INVISIBLE
         // Payments
         recyclerView = findViewById<RecyclerView>(R.id.recyclerPayment)
         val data : List<Int> = mutableListOf(R.drawable.zaloimg,R.drawable.qr_img,R.drawable.gate_img,R.drawable.momo_img,
@@ -123,12 +128,14 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
     }
 
     private fun requestZaloPay(){
+        layout.visibility = View.VISIBLE
         val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
         val tmp : LiveData<PayOrder> = viewModel.getTokenCreateOrder()
         var token : String
         tmp.observe(this) { tokens ->
             token = tokens.data.token
             Log.e("TOKEN",token)
+            layout.visibility = View.VISIBLE
             ZaloPaySDK.getInstance().payOrder(this, token, "demozpdk://app", object : PayOrderListener {
                     override fun onPaymentSucceeded(transactionId: String, transToken: String, appTransID: String) {
                         val viewModel = ViewModelProvider(this@RegisterPremiumActivity).get(MyViewModel::class.java)

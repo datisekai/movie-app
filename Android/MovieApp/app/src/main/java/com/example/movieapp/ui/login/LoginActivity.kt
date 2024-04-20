@@ -2,13 +2,18 @@ package com.example.movieapp.ui.login
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -121,7 +126,12 @@ class LoginActivity : AppCompatActivity(){
         googleBtn = findViewById(R.id.loginGoogle)
 
         googleBtn.setOnClickListener {
-            signIn()
+            if (isNetworkConnected(this)){
+                signIn()
+            }else{
+                customeToast("Không có kết nối mạng")
+            }
+
         }
 
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -203,13 +213,17 @@ class LoginActivity : AppCompatActivity(){
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->{
-                        loginViewModel.login(
-                            username.text.toString(),
-                            password.text.toString(),
-                            contextView,
-                            "LOGIN",
-                            ""
-                        )
+                        if (isNetworkConnected(this@LoginActivity)){
+                            loginViewModel.login(
+                                username.text.toString(),
+                                password.text.toString(),
+                                contextView,
+                                "LOGIN",
+                                ""
+                            )
+                        }else{
+                            customeToast("Không có kết nối mạng")
+                        }
                     }
 
                 }
@@ -217,22 +231,56 @@ class LoginActivity : AppCompatActivity(){
             }
 
             login.setOnClickListener {
-                loading.visibility = View.VISIBLE
+              if (isNetworkConnected(this@LoginActivity)){
+                  loading.visibility = View.VISIBLE
 
-                loginViewModel.login(
-                    username.text.toString(),
-                    password.text.toString(),
-                    contextView,
-                    "LOGIN",
-                    ""
-                )
+                  loginViewModel.login(
+                      username.text.toString(),
+                      password.text.toString(),
+                      contextView,
+                      "LOGIN",
+                      ""
+                  )
+              }else{
+                  customeToast("Không có kết nối mạng")
+              }
             }
         }
         val underlinedTextView: TextView = findViewById(R.id.linkRegister)
         underlinedTextView.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+           if (isNetworkConnected(this)){
+               val intent = Intent(this, RegisterActivity::class.java)
+               startActivity(intent)
+           }else{
+               customeToast("Không có kết nối mạng")
+           }
         }
+    }
+
+    fun isNetworkConnected(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork ?: return false
+            val networkCapabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        } else {
+            val networkInfo = connectivityManager.activeNetworkInfo ?: return false
+            return networkInfo.isConnected
+        }
+    }
+
+    private fun customeToast(message : String){
+        val inflater = layoutInflater
+        val view = inflater.inflate(R.layout.custome_toast,this.findViewById(R.id.CustomToast))
+        val toast = Toast(this)
+        toast.duration = Toast.LENGTH_SHORT
+        toast.view = view
+        val txt : TextView = view.findViewById(R.id.txtMessage)
+        txt.text = message
+        toast.setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, 100)
+        toast.show()
     }
 
     fun isTokenExpired(jwtToken: String): Boolean {
