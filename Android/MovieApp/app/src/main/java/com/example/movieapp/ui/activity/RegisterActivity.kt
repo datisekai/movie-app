@@ -199,7 +199,12 @@ class RegisterActivity : AppCompatActivity() {
         return password.length > 5
     }
     private fun isFullNameValid(fullName: String): Boolean {
-        return fullName.isNotEmpty()
+        val words = fullName.trim().split("\\s+".toRegex())
+        return if(fullName.isEmpty()){
+            false
+        }else{
+            words.size >= 2
+        }
     }
 
 }
