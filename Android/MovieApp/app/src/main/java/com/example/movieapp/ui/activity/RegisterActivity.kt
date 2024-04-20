@@ -1,6 +1,8 @@
 package com.example.movieapp.ui.activity
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -58,6 +60,13 @@ class RegisterActivity : AppCompatActivity() {
 
             // disable login button unless both username / password is valid
             btn_register.isEnabled = registerState.isDataValid
+
+            if(registerState.isDataValid){
+                btn_register.setBackgroundColor(resources.getColor(android.R.color.black))
+            }else{
+                btn_register.setBackgroundColor(resources.getColor(android.R.color.transparent))
+            }
+
 
             if (registerState.usernameError != null) {
                 textUserName.error = getString(registerState.usernameError)
@@ -157,7 +166,7 @@ class RegisterActivity : AppCompatActivity() {
                 bundle.putString("password", password)
                 intent.putExtras(bundle)
                 startActivity(intent)
-                loginViewModel.login(username, password, this)
+                loginViewModel.login(username, password, this, "LOGIN", "")
             }
 
         } catch (e: Throwable) {

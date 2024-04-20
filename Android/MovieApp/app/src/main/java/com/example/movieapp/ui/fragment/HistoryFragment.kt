@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModelProvider
@@ -79,14 +80,27 @@ class HistoryFragment : Fragment() {
         recyclerView.layoutManager = GridLayoutManager(view.context, 2)
 
         val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
-        viewModel.getListHistory().observe(viewLifecycleOwner){ newData ->
-            callAPI(progressbar, newData)
-            val adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }
-            recyclerView.adapter = adapter
-            adapter?.notifyDataSetChanged()
-        }
-        if(viewModel.getListHistory().value == null){
-            viewModel.CallGetHistory(requireContext())
+        //Check Database Has History
+        val checkUserId = Helper.TokenManager.getId(requireContext())
+        val db = DBHelper(requireContext())
+        if(checkUserId != null){
+            val listEpHistory = db.getListId(checkUserId)
+            if(!listEpHistory.isNullOrEmpty()){
+                viewModel.getListHistory().observe(viewLifecycleOwner){ newData ->
+                    callAPI(progressbar, newData)
+                    val adapter = dataList?.let { CustomAdapter(this.requireActivity(),it, R.layout.card, 0, 0, true) }
+                    recyclerView.adapter = adapter
+                    adapter?.notifyDataSetChanged()
+                }
+                if(viewModel.getListHistory().value == null){
+                    viewModel.CallGetHistory(requireContext())
+                }
+            }
+            else{
+                val viewNoItem: TextView = view.findViewById(R.id.viewNoItem)
+                viewNoItem.visibility = View.VISIBLE
+                progressbar.visibility = View.GONE
+            }
         }
         //callAPI(progressbar)
 
@@ -117,12 +131,12 @@ class HistoryFragment : Fragment() {
             }
     }
     fun callAPI( progressbar: ProgressBar, list: List<FilmDTO>){
-            Log.e("CALL HISTORY API12",list.toString())
-            for (o in list){
-                dataList.add(Movie(o.id, o.thumbnail, o.title, o.description.toString(), o.isRequiredPremium))
-            }
+        Log.e("CALL HISTORY API12",list.toString())
+        for (o in list){
+            dataList.add(Movie(o.id, o.thumbnail, o.title, o.description.toString(), o.isRequiredPremium))
+        }
 
-            progressbar.visibility = View.GONE
+        progressbar.visibility = View.GONE
 
     }
 }

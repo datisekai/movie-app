@@ -32,7 +32,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:textAppearance="?attr/textAppearanceHeadline5"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:textAlignment="textEnd" />
@@ -47,7 +47,18 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:layout_marginTop="200dp"/>
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/viewNoItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Không có phim nào!!!"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:layout_marginTop="200dp"
+            android:textAppearance="?attr/textAppearanceHeadline6"/>
     </LinearLayout>
 
 </LinearLayout>

@@ -9,6 +9,7 @@ class UserDTO {
     @SerializedName("roles")
     var roles: ArrayList<String> = arrayListOf()
     var is_active : Boolean = false
+    var fcmToken : String = ""
 
 
     constructor(){}

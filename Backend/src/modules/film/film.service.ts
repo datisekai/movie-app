@@ -37,6 +37,11 @@ export class FilmService {
       .take(limit)
       .skip((page - 1) * limit);
 
+    const sort = query.sort || 'DESC';
+    const order_by = query.order_by || 'created_at';
+
+    queryBuilder.orderBy(`film.${order_by}`, sort);
+
     if (query.title) {
       queryBuilder.andWhere('film.title_search like :title', {
         title: `%${query.title.toLowerCase()}%`,
@@ -81,7 +86,9 @@ export class FilmService {
 
     const newFilm = this.filmRepository.create({
       ...dto,
-      slug: dto.slug ? convertToSlug(dto.slug) : convertToSlug(dto.title),
+      slug: dto.slug
+        ? convertToSlug(dto.slug)
+        : `${convertToSlug(dto.title)}-${Date.now()}`,
       title_search: removeVietnameseDiacritics(dto.title),
     });
 
@@ -153,5 +160,14 @@ export class FilmService {
       .where({ ...data, is_deleted: false })
       .leftJoinAndSelect('film.categories', 'category')
       .getOne();
+  }
+
+  async increaseViewCount(filmId: number) {
+    const film = await this.getOne(filmId);
+    if (film) {
+      film.view += 1;
+      return this.filmRepository.save(film);
+    }
+    return null;
   }
 }

@@ -8,12 +8,11 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.example.movieapp.BlogItemClickListener
 import com.example.movieapp.R
+import com.example.movieapp.RoundCornerTransformationPicasso
 import com.example.movieapp.adapter.model.Article
+import com.squareup.picasso.Picasso
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -35,25 +34,21 @@ class ArticleBlogAdapter (var ds:List<Article>, private val listener: BlogItemCl
                 listener.onItemClicked(i)
             }
             //Set image Blog
-            val layoutParams = article_img.layoutParams as ViewGroup.LayoutParams
-            val desiredWidth = (screenWidth * 0.8).toInt() // Ví dụ: 50% chiều rộng màn hình
+            val desiredWidth = (screenWidth * 0.8).toInt()
             //layoutParams.width = desiredWidth
             //article_img.layoutParams = layoutParams
-
-            if(item.thumbnail.isNullOrBlank()){
-                Glide.with(itemView.context)
-                    .load(R.drawable.default_esopide)
-                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                    .apply(RequestOptions().override(desiredWidth, Integer.MAX_VALUE))
-                    .into(article_img)
-            }
-            else{
-                Glide.with(itemView.context)
-                    .load(item.thumbnail)
-                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                    .apply(RequestOptions().override(desiredWidth, Integer.MAX_VALUE))
-                    .into(article_img)
-            }
+            //Get dp from 2 px by Scale screen
+            val scale: Float = itemView.resources.displayMetrics.density
+            val borderWidthdp = (2 * scale + 0.5f).toInt()
+            //Convert Long Color into Int
+            val whiteColor = 0xFFFFFFFF.toInt()
+            Picasso.get()
+                .load(item.thumbnail)
+                .error(R.drawable.default_esopide)
+                .resize(desiredWidth, 0)
+                .centerCrop()
+                .transform(RoundCornerTransformationPicasso(30f, borderWidthdp.toFloat(), whiteColor))
+                .into(article_img)
         }
     }
 

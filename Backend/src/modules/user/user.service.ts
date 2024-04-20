@@ -89,9 +89,25 @@ export class UserService {
     return user;
   }
 
+  async create(dto: CreateUserDto) {
+    const newUser = this.userRepository.create({
+      email: dto.email,
+      roles: dto.roles,
+      fullname: dto.fullname,
+      is_active: dto.is_active,
+      password: dto.password,
+      fullname_search: removeVietnameseDiacritics(dto.fullname),
+    });
+    const user = await this.userRepository.save(newUser);
+
+    delete user.password;
+    return user;
+  }
+
   async editOne(id: number, dto: EditUserDto, userEntity?: User) {
     const user = await this.getOne(id, userEntity);
     user.email = dto.email || user.email;
+    user.fcmToken = dto.fcmToken || user.fcmToken;
     if (dto.fullname) {
       user.fullname = dto.fullname;
       user.fullname_search = removeVietnameseDiacritics(
@@ -124,5 +140,13 @@ export class UserService {
       .where({ ...data, is_deleted: false })
       .addSelect('user.password')
       .getOne();
+  }
+
+  getUsersWhoFavoredMovie(filmId: number) {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.favourites', 'favourite')
+      .where('favourite.film.id = :filmId', { filmId })
+      .getMany();
   }
 }

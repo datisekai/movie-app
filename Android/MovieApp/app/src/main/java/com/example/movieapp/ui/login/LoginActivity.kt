@@ -1,61 +1,87 @@
 package com.example.movieapp.ui.login
 
 import android.app.Activity
+import android.app.Application
 import android.content.Intent
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ReportFragment.Companion.reportFragment
+import androidx.lifecycle.ViewModelProvider
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.SignatureVerificationException
 import com.auth0.jwt.exceptions.TokenExpiredException
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.example.movieapp.Helper
-
-import com.example.movieapp.data.model.LoginDTO
-import java.util.concurrent.Executors
-import com.example.movieapp.ui.activity.MainActivity
-import com.example.movieapp.databinding.ActivityLoginBinding
-
 import com.example.movieapp.R
+import com.example.movieapp.config
 import com.example.movieapp.data.model.ClassToken
-import com.example.movieapp.data.model.DataDTO
-import com.example.movieapp.data.model.UserDTO
-import com.example.movieapp.service.ServiceBuilder
+import com.example.movieapp.data.model.RequestFcmToken
+import com.example.movieapp.databinding.ActivityLoginBinding
+import com.example.movieapp.service.FcmTokenViewModel
+import com.example.movieapp.ui.activity.HomePage_Activity
+import com.example.movieapp.ui.activity.MainActivity
 import com.example.movieapp.ui.activity.RegisterActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.Scopes
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.FirebaseApp
+import com.google.firebase.messaging.FirebaseMessaging
 import java.util.Date
 
-class LoginActivity : AppCompatActivity() {
+
+class LoginActivity : AppCompatActivity(){
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
-
+    lateinit var gso: GoogleSignInOptions
+    lateinit var gsc: GoogleSignInClient
+    private val contextView= this
+    lateinit var googleBtn: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val contextView= this
+        FirebaseApp.initializeApp(this)
+
         val bundle = intent.extras
         if (bundle != null) {
             val username = bundle.getString("username")
             val password = bundle.getString("password")
-            Log.e("check1", username.toString())
             loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
                 .get(LoginViewModel::class.java)
             loginViewModel.login(
                 username.toString(),
                 password.toString(),
-                this
+                this,
+                "LOGIN",
+                ""
             )
         }
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val username = binding.username
+        val password = binding.password
+        val login = binding.login
+        val loading = binding.loading
+
         try {
             val token = Helper.TokenManager.getToken(this)
             if (token != null && !isTokenExpired(token)) {
@@ -64,14 +90,19 @@ class LoginActivity : AppCompatActivity() {
                 val fullname = Helper.TokenManager.getFullName(this)
                 val isActive = Helper.TokenManager.getIsActive(this)
                 val role = Helper.TokenManager.getRoles(this)
-
-
+                var roles : ArrayList<String> = arrayListOf()
+                val tmp = role?.split(",")
+                if (tmp!=null){
+                    for (o in tmp){
+                        roles.add(o)
+                    }
+                }
                 ClassToken.MY_TOKEN= token.toString()
                 ClassToken.ID= id?: 0
                 ClassToken.EMAIL= email.toString()
                 ClassToken.FULLNAME= fullname.toString()
                 ClassToken.IS_ACTIVE = isActive!!
-                ClassToken.ROLES = role!!
+                ClassToken.ROLES = roles
 //                val checkToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTcxMTI2MTU5MiwiZXhwIjoxNzExMjY4NzkyfQ.ijPEfRK325BP_3ubNSHkoxUWtbxfvPkntaav-zIeL-k"
 //                Helper.TokenManager.saveToken(this, checkToken, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE, ArrayList())
                 val intent = Intent(this, MainActivity::class.java)
@@ -86,13 +117,24 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        googleBtn = findViewById(R.id.loginGoogle)
 
-        val username = binding.username
-        val password = binding.password
-        val login = binding.login
-        val loading = binding.loading
+        googleBtn.setOnClickListener {
+            signIn()
+        }
+
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestIdToken(config.WEB_CLIENT_ID)
+            .build()
+
+        gsc = GoogleSignIn.getClient(this, gso)
+
+//        val acct = GoogleSignIn.getLastSignedInAccount(this)
+//        if (acct != null) {
+//            navigateToSecondActivity()
+//        }
+
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
@@ -102,6 +144,12 @@ class LoginActivity : AppCompatActivity() {
 
             // disable login button unless both username / password is valid
             login.isEnabled = loginState.isDataValid
+
+            if(loginState.isDataValid){
+                login.setBackgroundColor(resources.getColor(android.R.color.black))
+            }else{
+                login.setBackgroundColor(resources.getColor(android.R.color.transparent))
+            }
 
             if (loginState.usernameError != null) {
                 username.error = getString(loginState.usernameError)
@@ -157,7 +205,9 @@ class LoginActivity : AppCompatActivity() {
                         loginViewModel.login(
                             username.text.toString(),
                             password.text.toString(),
-                            contextView
+                            contextView,
+                            "LOGIN",
+                            ""
                         )
                     }
 
@@ -171,7 +221,9 @@ class LoginActivity : AppCompatActivity() {
                 loginViewModel.login(
                     username.text.toString(),
                     password.text.toString(),
-                    contextView
+                    contextView,
+                    "LOGIN",
+                    ""
                 )
             }
         }
@@ -204,6 +256,37 @@ class LoginActivity : AppCompatActivity() {
 
         return true
     }
+    fun signIn() {
+        googleBtn.isEnabled = true
+        val signInIntent = gsc.signInIntent
+        startActivityForResult(signInIntent, 1000)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1000) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                if (account != null) {
+                    val idToken =account.idToken
+                    loginViewModel.login(
+                        "",
+                        "",
+                        contextView,
+                        "GOOGLE",
+                        idToken.toString()
+                        )
+                }
+                googleBtn.isEnabled = false
+            } catch (e: ApiException) {
+                Log.e("ERROR",e.toString())
+                e.printStackTrace()
+
+                Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
@@ -216,6 +299,26 @@ class LoginActivity : AppCompatActivity() {
             "$welcome $displayName",
             Toast.LENGTH_LONG
         ).show()
+
+        getFCMToken()
+
+    }
+
+    private fun getFCMToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("MAINACTIVITY", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+            Log.d("MAINACTIVITY", token)
+            val viewModel = ViewModelProvider(this).get(FcmTokenViewModel::class.java)
+            viewModel.putFCMToken(RequestFcmToken(token))
+
+
+        })
     }
 
     private fun showLoginError(@StringRes errorString: Int) {

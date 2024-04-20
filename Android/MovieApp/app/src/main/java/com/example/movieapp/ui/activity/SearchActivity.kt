@@ -42,7 +42,7 @@ class SearchActivity : AppCompatActivity() {
         textSearch.setText(receivedValue)
 
         val textResultSearch= findViewById<TextView>(R.id.textResultSearch)
-        textResultSearch.text="Search Results: " + receivedValue.toString()
+        textResultSearch.text="Tìm kiếm: " + receivedValue.toString()
 
         val progressbar: ProgressBar = findViewById(R.id.progressBar)
         val viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
@@ -84,7 +84,7 @@ class SearchActivity : AppCompatActivity() {
         })
 
 
-        adapter = CustomAdapter(dataList, R.layout.card, 480, 480, true)
+        adapter = CustomAdapter(this,dataList, R.layout.card, 0, 0, true)
         recyclerView.adapter = adapter
 
         textSearch.setOnEditorActionListener { _, actionId, event ->
@@ -117,7 +117,10 @@ class SearchActivity : AppCompatActivity() {
             }
 
             progressbar.visibility = View.GONE
-
+            if(totalEntries ==0 ){
+                val viewNoItem: TextView = findViewById(R.id.viewNoItem)
+                viewNoItem.visibility = View.VISIBLE
+            }
             adapter?.notifyDataSetChanged()
         }
     }

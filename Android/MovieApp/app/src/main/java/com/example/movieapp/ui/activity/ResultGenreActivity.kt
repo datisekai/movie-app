@@ -3,6 +3,7 @@ package com.example.movieapp.ui.activity
 import com.example.movieapp.adapter.CustomAdapter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -32,7 +33,7 @@ class ResultGenreActivity : AppCompatActivity() {
             id = bundle.getInt("id")
             val name = bundle.getString("name")
             val textViewResultGenre= findViewById<TextView>(R.id.textViewResultGenre)
-            textViewResultGenre.text ="Genre: " +name.toString()
+            textViewResultGenre.text ="Thể loại: " +name.toString()
         }
 
         dataList.clear()
@@ -80,7 +81,7 @@ class ResultGenreActivity : AppCompatActivity() {
 
         }
 
-        adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }!!
+        adapter = dataList?.let { CustomAdapter(this,it, R.layout.card, 0, 0, true) }!!
         recyclerView.adapter = adapter
         val imageView = findViewById<ImageView>(R.id.back)
 
@@ -99,7 +100,10 @@ class ResultGenreActivity : AppCompatActivity() {
             }
 
             progressbar.visibility = View.GONE
-
+            if(totalEntries ==0 ){
+                val viewNoItem: TextView = findViewById(R.id.viewNoItem)
+                viewNoItem.visibility = View.VISIBLE
+            }
             adapter?.notifyDataSetChanged()
         }
     }

@@ -21,7 +21,13 @@ class Helper {
             editor.putString(KEY_EMAIL,email)
             editor.putString(KEY_FULLNAME,fullname)
             editor.putBoolean(KEY_IS_ACTIVE,isActive)
-            editor.putStringSet(KEY_ROLES, roles.toSet())
+
+            // parse Roles to String
+            var roleString : String = ""
+                for(role in roles){
+                roleString = roleString + ","+role
+            }
+            editor.putString(KEY_ROLES,roleString)
             editor.apply()
         }
 
@@ -46,11 +52,10 @@ class Helper {
             return sharedPreferences.getBoolean(KEY_IS_ACTIVE, false)
         }
 
-        fun getRoles(context: Context) : ArrayList<String>?{
+
+        fun getRoles(context: Context) : String?{
             val sharedPreferences = context.getSharedPreferences(TOKEN_PREFS_NAME,Context.MODE_PRIVATE)
-            val tmp = sharedPreferences.getStringSet(KEY_ROLES,null)
-            val result = ArrayList(tmp)
-            return result
+            return sharedPreferences.getString(KEY_ROLES,null)
         }
 
 
@@ -65,5 +70,6 @@ class Helper {
             editor.remove(KEY_ROLES)
             editor.apply()
         }
+
     }
 }

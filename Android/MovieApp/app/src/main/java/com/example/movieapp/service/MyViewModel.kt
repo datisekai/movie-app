@@ -18,6 +18,8 @@ import com.example.movieapp.data.model.Esopide
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
 import com.example.movieapp.data.model.FilmDTO
+import com.example.movieapp.data.model.FilmFavorite
+import com.example.movieapp.data.model.IncreaseViewDTO
 import com.example.movieapp.data.model.PayOrder
 import com.example.movieapp.data.model.Profile
 import com.example.movieapp.data.model.RequestComment
@@ -38,28 +40,6 @@ class MyViewModel() : ViewModel() {
     private val _dataLoaded = MutableLiveData<Boolean>()
     val dataLoaded : LiveData<Boolean>
         get() = _dataLoaded
-    fun getListFilm(): LiveData<Film1> {
-        val filmLiveData = MutableLiveData<Film1>()
-        // Gửi yêu cầu mạng và nhận kết quả
-        val call = ServiceBuilder().apiService.getListFilm()
-        call.enqueue(object : Callback<Film1> {
-            override fun onResponse(call: Call<Film1>, response: Response<Film1>) {
-                if (response.isSuccessful) {
-                    val filmList = response.body()
-                    filmLiveData.value = filmList
-                    _dataLoaded.value = true
-                } else {
-                   Log.e("ERROR",  "fail")
-                }
-            }
-
-            override fun onFailure(call: Call<Film1>, t: Throwable) {
-               t.printStackTrace()
-            }
-        })
-
-        return filmLiveData
-    }
 
     fun getAllEsopide(id : Int): LiveData<Esopide>{
         val esopideLiveData = MutableLiveData<Esopide>()
@@ -100,6 +80,27 @@ class MyViewModel() : ViewModel() {
 
         })
         return commentLiveData
+    }
+
+    fun getAllFilmFavourite() : LiveData<FilmFavorite>{
+        val favoriteLiveData = MutableLiveData<FilmFavorite>()
+        val call = ServiceBuilder().apiService.getAllFilmFavourite()
+        call.enqueue(object : Callback<FilmFavorite>{
+            override fun onResponse(call: Call<FilmFavorite>, response: Response<FilmFavorite>) {
+                if(response.isSuccessful){
+                    favoriteLiveData.value = response.body()
+                    _dataLoaded.value = true
+                }else{
+                    Log.e("ERROR",  "fail")
+                }
+            }
+
+            override fun onFailure(call: Call<FilmFavorite>, t: Throwable) {
+               t.printStackTrace()
+            }
+
+        })
+        return favoriteLiveData
     }
 
     fun getTokenCreateOrder() : LiveData<PayOrder>{
@@ -144,12 +145,14 @@ class MyViewModel() : ViewModel() {
 
     }
 
-    fun createComment(requestComment: RequestComment){
+    fun createComment(requestComment: RequestComment) : LiveData<CommentCreate>{
+        val request  = MutableLiveData<CommentCreate>()
         val call = ServiceBuilder().apiService.createComment(requestComment)
         call.enqueue(object : Callback<CommentCreate>{
             override fun onResponse(call: Call<CommentCreate>, response: Response<CommentCreate>) {
                 if (response.isSuccessful){
                     Log.e("RESULT", "Success")
+                    request.value = response.body()
                 }else
                 {
                     Log.e("ERROR",  "fail")
@@ -161,6 +164,7 @@ class MyViewModel() : ViewModel() {
             }
 
         })
+        return request
     }
 
     fun postFilmFavoutite(requestFilmFavorite: RequestFilmFavorite){
@@ -183,6 +187,29 @@ class MyViewModel() : ViewModel() {
             }
 
         })
+    }
+
+    fun increaseView(id : Int){
+        val call = ServiceBuilder().apiService.increaseViewById(id)
+        call.enqueue(object : Callback<IncreaseViewDTO>{
+            override fun onResponse(
+                call: Call<IncreaseViewDTO>,
+                response: Response<IncreaseViewDTO>
+            ) {
+                if (response.isSuccessful){
+                    val result = response.body().success
+                    Log.e("RESULT",result.toString())
+                }else{
+                    Log.e("ERROR",  "fail")
+                }
+            }
+
+            override fun onFailure(call: Call<IncreaseViewDTO>, t: Throwable) {
+               t.printStackTrace()
+            }
+
+        })
+
     }
 
 
@@ -249,12 +276,17 @@ class MyViewModel() : ViewModel() {
                                         Log.e("CALL HISTORY API",temp.toString())
                                     }
                                     else{
+                                        var checkAdd = true
                                         for(film in temp){
-                                            if(film.id != ep.film.id){
-                                                temp.add(ep.film)
-                                                Log.e("CALL HISTORY API",temp.toString())
+                                            if(film.id == ep.film.id){
+                                                checkAdd = false
+                                                break
                                             }
                                         }
+                                        if(checkAdd){
+                                            temp.add(ep.film)
+                                        }
+                                        Log.e("CALL HISTORY API Check",temp.toString())
                                     }
                                 }
                                 ListFilmHistory.value = temp!!.toList()

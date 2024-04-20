@@ -10,9 +10,11 @@ import com.example.movieapp.data.model.ConfirmOrder
 import com.example.movieapp.data.model.Esopide
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.data.model.Film1
+import com.example.movieapp.data.model.FilmFavorite
 import com.example.movieapp.data.model.Genre
 import com.example.movieapp.data.model.GetArticle
 import com.example.movieapp.data.model.GetUser
+import com.example.movieapp.data.model.IncreaseViewDTO
 import com.example.movieapp.data.model.LoginDTO
 import com.example.movieapp.data.model.Payment
 import com.example.movieapp.data.model.PaymentDTO
@@ -25,6 +27,7 @@ import com.example.movieapp.data.model.TokenDTO
 import com.example.movieapp.data.model.User
 import com.example.movieapp.data.model.UserDTO
 import com.example.movieapp.data.model.Register
+import com.example.movieapp.data.model.RequestFcmToken
 import com.example.movieapp.ui.fragment.EpisodeIdsWrapper
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -47,7 +50,6 @@ interface ApiService {
 
     @GET("api.film")
     fun getListFilm() : Call<Film1>
-
     @GET("api.film")
     fun getListFilmSearch(@Query("title") title: String, @Query("page") page: Int) : Call<Film1>
 
@@ -55,7 +57,7 @@ interface ApiService {
     fun getListFilmGenre(@Query("category_id") title: String, @Query("page") page: Int) : Call<Film1>
 
     @GET("api.favourite/me")
-    fun getListFilmFavorite(@Query("page") page: Int) : Call<Film1>
+    fun getListFilmFavorite(@Query("page") page: Int) : Call<FilmFavorite>
 
     @GET("api.order/me")
     fun getListPayment(@Query("page") page: Int) : Call<Payment>
@@ -71,6 +73,14 @@ interface ApiService {
     @GET("api.auth/profile")
     fun getMyProfile() : Call<Profile>
 
+    @GET("api.favourite/me")
+    fun getAllFilmFavourite() : Call<FilmFavorite>
+
+    @GET("api.film/view/{id}")
+    fun increaseViewById(
+        @Path("id") id:Int
+    ) : Call<IncreaseViewDTO>
+
     @POST("api.auth/login")
     fun login(
         @Body loginDto : LoginDTO
@@ -79,7 +89,6 @@ interface ApiService {
     fun register(
         @Body registerDto : RegisterDTO
     ) : Call<Register>
-
     //User
     @GET("api.user/{id}")
     fun getUserById(
@@ -108,11 +117,17 @@ interface ApiService {
         @Path("id") id: Int,
         @Body EditUserDto: UserDTO
     ) : Call<User>
+
     @PUT("api.user/{id}")
     fun editPasswordUser(
         @Path("id") id: Int,
         @Body EditUserDto: EditPasswordUserDTO
     ) : Call<User>
+
+    @PUT("api.user/me/fcm")
+    fun pustFcmToken(
+        @Body Token : RequestFcmToken
+    ) : Call<UserDTO>
 
     //Blog
     @GET("api.article")
@@ -130,4 +145,7 @@ interface ApiService {
     fun getHistory(
         @Body episode_ids: EpisodeIdsWrapper
     ) : Call<List<EpisodeHistoryDTO>>
+
+    @GET("api.auth/google-login")
+    fun getGoogleLogin(@Query("idToken") idToken: String = "") : Call<TokenDTO>
 }

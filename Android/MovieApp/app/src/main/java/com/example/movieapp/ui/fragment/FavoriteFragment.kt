@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -64,7 +65,7 @@ class FavoriteFragment : Fragment() {
 
         recyclerView.layoutManager = GridLayoutManager(view.context, 2)
 
-        callAPI(viewModel,  progressbar)
+        callAPI(viewModel, view,  progressbar)
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -88,13 +89,13 @@ class FavoriteFragment : Fragment() {
                 if (dy > 0 && visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
                     // Đã cuộn đến cuối danh sách, gọi hàm loadMoreData để tải dữ liệu trang tiếp theo
                     currentPage++
-                    callAPI(viewModel,  progressbar)
+                    callAPI(viewModel, view ,  progressbar)
                 }
             }
         })
 
 
-        adapter = dataList?.let { CustomAdapter(it, R.layout.card, 480, 480, true) }!!
+        adapter = dataList?.let { CustomAdapter(this.requireActivity(),it, R.layout.card, 0, 0, true) }!!
         recyclerView.adapter = adapter
 
         return view
@@ -119,17 +120,20 @@ class FavoriteFragment : Fragment() {
                 }
             }
     }
-    fun callAPI(viewModel: FavoriteViewModel, progressbar: ProgressBar){
+    fun callAPI(viewModel: FavoriteViewModel,view: View,  progressbar: ProgressBar){
         viewModel.getListGenreMovie(currentPage).observe(viewLifecycleOwner) { films ->
 
             totalEntries= films.totalEntries
 
             for (o in films.data){
-                dataList.add(Movie(o.id, o.thumbnail, o.title, o.description.toString(), o.isRequiredPremium))
+                dataList.add(Movie(o.film.id, o.film.thumbnail, o.film.title, o.film.description.toString(), o.film.isRequiredPremium))
             }
 
             progressbar.visibility = View.GONE
-
+            if(totalEntries ==0 ){
+                val viewNoItem: TextView = view.findViewById(R.id.viewNoItem)
+                viewNoItem.visibility = View.VISIBLE
+            }
             adapter?.notifyDataSetChanged()
         }
     }

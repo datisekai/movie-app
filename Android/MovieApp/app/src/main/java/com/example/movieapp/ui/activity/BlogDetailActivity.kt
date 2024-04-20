@@ -11,8 +11,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.movieapp.R
+import com.example.movieapp.RoundCornerTransformationPicasso
 import com.example.movieapp.databinding.FragmentBlogDetailBinding
 import com.example.movieapp.service.ArticleDetailsViewModel
+import com.squareup.picasso.Picasso
 
 class BlogDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,25 +32,33 @@ class BlogDetailActivity : AppCompatActivity() {
                 binding.articleProgressBar.visibility = View.GONE
                 binding.articleTitle.text = newData.data.title
                 //Set Image for ImageView
-                if(newData.data.thumbnail.isNullOrBlank()){
-                    Glide.with(this)
-                        .load(R.drawable.default_esopide)
-                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                        .apply(RequestOptions().override(600, Integer.MAX_VALUE))
-                        .into(binding.articleImg)
-                }
-                else{
-                    Glide.with(this)
-                        .load(newData.data.thumbnail)
-                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                        .apply(RequestOptions().override(800, Integer.MAX_VALUE))
-                        .into(binding.articleImg)
-                }
+                val scale: Float = this.resources.displayMetrics.density
+                val borderWidthdp = (2 * scale + 0.5f).toInt()
+                val whiteColor = 0xFFFFFFFF.toInt()
+                Picasso.get()
+                    .load(newData.data.thumbnail)
+                    .error(R.drawable.default_esopide)
+                    .resize(850, 0)
+                    .centerCrop()
+                    .transform(RoundCornerTransformationPicasso(30f, borderWidthdp.toFloat(), whiteColor))
+                    .into(binding.articleImg)
+//                Glide.with(this)
+//                    .load(newData.data.thumbnail)
+//                    .error(R.drawable.default_esopide)
+//                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+//                    .apply(RequestOptions().override(800, Integer.MAX_VALUE))
+//                    .into(binding.articleImg)
                 //Set content for WebView
                 val webView = binding.blogDetailWebview
-                webView.loadData(newData.data.content,"text/html", "UTF-8")
+                val contentWebView = newData.data.content
+                webView.loadData(contentWebView,"text/html", "UTF-8")
                 //Handle links in webview without open another browser
                 webView.webViewClient = WebViewClient()
+                webView.settings.domStorageEnabled = true
+                //Set CSS for webview
+                val css = "<style type='text/css'>body { color: #ffffff; background-color:#18181B;}</style>"
+                val webViewContent = "<html><head>$css</head><body>$contentWebView</body></html>"
+                webView.loadDataWithBaseURL(null, webViewContent, "text/html", "UTF-8", null)
             }else{
                 BackToBlogFragment()
             }

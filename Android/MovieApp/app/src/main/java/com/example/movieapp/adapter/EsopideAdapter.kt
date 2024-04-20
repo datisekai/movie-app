@@ -2,6 +2,7 @@ package com.example.movieapp.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -19,6 +21,7 @@ import com.example.movieapp.R
 import com.example.movieapp.data.model.EsopideDTO
 import com.example.movieapp.data.model.Film
 import com.example.movieapp.ui.activity.PlayerActivity
+import com.makeramen.roundedimageview.RoundedImageView
 import java.util.zip.Inflater
 
 class EsopideAdapter(private val context: Context, private val data : List<EsopideDTO>)
@@ -35,6 +38,21 @@ class EsopideAdapter(private val context: Context, private val data : List<Esopi
     override fun onBindViewHolder(holder: EsopideAdapter.EsopideViewHolder, position: Int) {
         val urlImage : String? = data.get(position).thumbnail
         holder.txt.text = data.get(position).title
+        //Check Watched Episode
+        val db = DBHelper(context)
+        val userId = Helper.TokenManager.getId(context)
+        Log.e("TestUser",userId.toString())
+        if(userId != null){
+            val listHistory = db.getListId(userId)
+            if(!listHistory.isNullOrEmpty()){
+                for(epId in listHistory){
+                    if(epId == data.get(position).id){
+                        holder.txt.setTextColor(Color.GREEN)
+                        break
+                    }
+                }
+            }
+        }
         var index: Int = position
         if (urlImage.isNullOrBlank()){
             Glide.with(context).load(R.drawable.default_esopide).into(holder.img)
@@ -43,15 +61,20 @@ class EsopideAdapter(private val context: Context, private val data : List<Esopi
         }
         holder.img.setOnClickListener(object :View.OnClickListener{
             override fun onClick(v: View?) {
+                if (data.get(index).url==null){
+                    Toast.makeText(context,"Dữ liệu bị lỗi, vui lòng quay lại sau !", Toast.LENGTH_SHORT).show()
+                }else{
+                    addHistory(data.get(index),context)
 
-                addHistory(data.get(index),context)
-
-                val intent : Intent =  Intent(context,
-                    PlayerActivity::class.java);
-                val bundle = Bundle()
-                bundle.putString("URL",data.get(index).url)
-                intent.putExtra("videoUrl",bundle)
-                context.startActivity(intent);
+                    val intent : Intent =  Intent(context,
+                        PlayerActivity::class.java);
+                    val bundle = Bundle()
+                    bundle.putInt("ID",data.get(index).id)
+                    bundle.putString("URL",data.get(index).url)
+                    bundle.putString("TITLE",data.get(index).title)
+                    intent.putExtra("videoUrl",bundle)
+                    context.startActivity(intent);
+                }
             }
 
         })
@@ -64,7 +87,7 @@ class EsopideAdapter(private val context: Context, private val data : List<Esopi
 
     inner class EsopideViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         val card = itemView.findViewById<CardView>(R.id.cardView)
-        val img = itemView.findViewById<ImageView>(R.id.imageEsopide)
+        val img = itemView.findViewById<RoundedImageView>(R.id.imageEsopide)
         val txt = itemView.findViewById<TextView>(R.id.numberEsopide)
 
     }
