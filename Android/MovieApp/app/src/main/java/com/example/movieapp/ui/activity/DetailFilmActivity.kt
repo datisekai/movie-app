@@ -79,6 +79,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
     private lateinit var adapterComment: CommentAdapter
     private lateinit var buttonWatch : Button
     private lateinit var linearlayout : LinearLayout
+    var isCallFormActivity : Boolean = true
     var check: Boolean = false
     var checkPremium: Boolean = false
     var checkPremiumFilmToWatch = false
@@ -338,6 +339,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
             val bundle : Bundle = intent.getBundleExtra("DataID")!!
             val id = bundle.getInt("ID")
             val check = bundle.getBoolean("IS_PREMIUM")
+            isCallFormActivity = bundle.getBoolean("IS_ACTIVITY")
             if (check!=null){
                 checkPremium = check
                 Log.e("ISPREMIUM",checkPremium.toString())
@@ -405,7 +407,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
     }
 
     public fun clickBack(view: View){
-        finish()
+            finish()
     }
     
 
