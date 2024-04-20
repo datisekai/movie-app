@@ -14,7 +14,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
@@ -34,6 +36,8 @@ import com.auth0.jwt.interfaces.DecodedJWT
 import com.example.movieapp.Helper
 import com.example.movieapp.R
 import com.example.movieapp.config
+import com.example.movieapp.data.LoginDataSource
+import com.example.movieapp.data.LoginRepository
 import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.RequestFcmToken
 import com.example.movieapp.databinding.ActivityLoginBinding
@@ -61,8 +65,16 @@ class LoginActivity : AppCompatActivity(){
     lateinit var gsc: GoogleSignInClient
     private val contextView= this
     lateinit var googleBtn: Button
+    private lateinit var logoutLogin: LoginRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestIdToken(config.WEB_CLIENT_ID)
+            .build()
+
+        gsc = GoogleSignIn.getClient(this, gso)
+
         FirebaseApp.initializeApp(this)
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
@@ -119,6 +131,7 @@ class LoginActivity : AppCompatActivity(){
         } catch (e: TokenExpiredException) {
             Helper.TokenManager.clearToken(this)
             val intent = Intent(this, LoginActivity::class.java)
+            signOut(this)
             startActivity(intent)
             finish()
         }
@@ -134,12 +147,6 @@ class LoginActivity : AppCompatActivity(){
 
         }
 
-        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .requestIdToken(config.WEB_CLIENT_ID)
-            .build()
-
-        gsc = GoogleSignIn.getClient(this, gso)
 
 //        val acct = GoogleSignIn.getLastSignedInAccount(this)
 //        if (acct != null) {
@@ -378,6 +385,14 @@ class LoginActivity : AppCompatActivity(){
     private fun showLoginFailed(errorString: String) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
+
+    fun signOut(context: Context) {
+        gsc.signOut().addOnCompleteListener {
+            val dataSource = LoginDataSource()
+            logoutLogin = LoginRepository(dataSource)
+            logoutLogin.logout(context)
+        }
+    }
 }
 
 /**
@@ -394,3 +409,4 @@ fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
     })
 }
+
