@@ -7,22 +7,16 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
-import android.view.Gravity
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.movieapp.service.NetworkManager
-import com.example.movieapp.ui.activity.CheckConnectActivity
-import com.example.movieapp.ui.login.LoginActivity
 import com.example.movieapp.R
+import com.example.movieapp.ui.login.LoginActivity
+
 
 class firstActivity : AppCompatActivity() {
     private  lateinit var videoView: VideoView
+    var flag = false
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,23 +26,44 @@ class firstActivity : AppCompatActivity() {
         val videoPath = "android.resource://$packageName/raw/my_video"
         videoView.setVideoPath(videoPath)
         videoView.start()
+        Log.e("INTENT", "onCreate: ${intent.extras.toString()}")
         if (intent.extras!=null){
-            videoView.setOnCompletionListener {
-                videoView.stopPlayback();
-                val mainIntent = Intent(this,HomePage_Activity::class.java)
-                mainIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                startActivity(mainIntent)
+           if (intent.extras!!.getString("id")!=null){
+               flag = true
+               videoView.setOnCompletionListener {
+                   videoView.stopPlayback();
+                   val mainIntent = Intent(this,HomePage_Activity::class.java)
+                   mainIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                   startActivity(mainIntent)
 
-                val filmId = intent.extras!!.getString("id")
-                val intent = Intent(this,DetailFilmActivity::class.java)
-                val bundle = Bundle()
-                bundle.putInt("ID", filmId?.toInt() ?: 0)
-                bundle.putBoolean("IS_ACTIVITY",false)
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                intent.putExtra("DataID",bundle)
-                startActivity(intent)
-                finish()
-            }
+                   val filmId = intent.extras!!.getString("id")
+                   
+
+                   val intent = Intent(this,DetailFilmActivity::class.java)
+                   val bundle = Bundle()
+                   bundle.putInt("ID", filmId?.toInt() ?: 0)
+                   bundle.putBoolean("IS_ACTIVITY",false)
+                   intent.putExtra("DataID",bundle)
+                   intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                   startActivity(intent)
+
+                   getIntent().removeExtra("id")
+                   finish()
+               }
+           }else{
+               videoView.setOnCompletionListener {
+                   videoView.stopPlayback();
+                   if (isNetworkConnected(this)){
+                       val intent = Intent(this, LoginActivity::class.java)
+                       startActivity(intent)
+                       finish()
+                   }else{
+                       val intent = Intent(this, CheckConnectActivity::class.java)
+                       startActivity(intent)
+                       finish()
+                   }
+               }
+           }
 
         }
         else{
