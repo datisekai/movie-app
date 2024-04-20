@@ -27,22 +27,47 @@ class firstActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first)
+
         videoView = findViewById(R.id.videoView)
         val videoPath = "android.resource://$packageName/raw/my_video"
         videoView.setVideoPath(videoPath)
         videoView.start()
-        videoView.setOnCompletionListener {
-            videoView.stopPlayback();
-            if (isNetworkConnected(this)){
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finish()
-            }else{
-                val intent = Intent(this, CheckConnectActivity::class.java)
+        if (intent.extras!=null){
+            videoView.setOnCompletionListener {
+                videoView.stopPlayback();
+                val mainIntent = Intent(this,HomePage_Activity::class.java)
+                mainIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                startActivity(mainIntent)
+
+                val filmId = intent.extras!!.getString("id")
+                val intent = Intent(this,DetailFilmActivity::class.java)
+                val bundle = Bundle()
+                bundle.putInt("ID", filmId?.toInt() ?: 0)
+                bundle.putBoolean("IS_ACTIVITY",false)
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.putExtra("DataID",bundle)
                 startActivity(intent)
                 finish()
             }
+
         }
+        else{
+            videoView.setOnCompletionListener {
+                videoView.stopPlayback();
+                if (isNetworkConnected(this)){
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }else{
+                    val intent = Intent(this, CheckConnectActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+            }
+        }
+
+
+
 
     }
 
