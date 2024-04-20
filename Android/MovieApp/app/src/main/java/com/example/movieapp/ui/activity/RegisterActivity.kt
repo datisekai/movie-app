@@ -46,7 +46,6 @@ data class registerFormState(
 class RegisterActivity : AppCompatActivity() {
     private val _registerForm = MutableLiveData<registerFormState>()
     val registerFormState: LiveData<registerFormState> = _registerForm
-    private lateinit var loginViewModel: LoginViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -156,9 +155,9 @@ class RegisterActivity : AppCompatActivity() {
 
             val user = userFuture.get() // Chờ cho đến khi kết quả của future có sẵn
             if (user.id == 0 && user.email.isEmpty() && user.fullname.isEmpty() && !user.is_active) {
-                showMessage("User already registered with email")
+                showMessage("Email đã được đăng ký!")
             }else{
-                showMessage("Successful registered")
+                showMessage("Đăng ký thành công!")
                 Log.e("check3", username)
                 val intent = Intent(this, LoginActivity::class.java)
                 val bundle = Bundle()
@@ -166,11 +165,11 @@ class RegisterActivity : AppCompatActivity() {
                 bundle.putString("password", password)
                 intent.putExtras(bundle)
                 startActivity(intent)
-                loginViewModel.login(username, password, this, "LOGIN", "")
             }
 
         } catch (e: Throwable) {
-            showMessage("Error registered")
+            Log.e("check4", e.toString())
+            showMessage("Đăng ký thất bại!")
         }
     }
     private fun showMessage(message: String) {

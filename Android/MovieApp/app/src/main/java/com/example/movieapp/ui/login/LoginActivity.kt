@@ -59,13 +59,14 @@ class LoginActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
+        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
+            .get(LoginViewModel::class.java)
 
         val bundle = intent.extras
         if (bundle != null) {
             val username = bundle.getString("username")
             val password = bundle.getString("password")
-            loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-                .get(LoginViewModel::class.java)
+
             loginViewModel.login(
                 username.toString(),
                 password.toString(),
