@@ -44,6 +44,7 @@ export class UserDto {
 
   @ApiPropertyOptional()
   @IsString()
+  @IsOptional()
   fcmToken?: string;
 }
 
@@ -80,6 +81,7 @@ export class CreateUserDto {
 
   @ApiPropertyOptional()
   @IsString()
+  @IsOptional()
   fcmToken?: string;
 }
 
