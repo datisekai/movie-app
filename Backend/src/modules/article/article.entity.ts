@@ -31,7 +31,7 @@ export class Article {
   @Column({ nullable: true })
   thumbnail: string;
 
-  @Column()
+  @Column({type:'text'})
   content: string;
 
   @ManyToMany(() => Category)
