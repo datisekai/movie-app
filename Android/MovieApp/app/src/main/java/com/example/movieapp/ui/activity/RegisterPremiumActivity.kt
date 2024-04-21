@@ -146,11 +146,7 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
                                 AlertDialog.Builder(this@RegisterPremiumActivity)
                                     .setTitle("Payment success")
                                     .setMessage(
-                                        String.format(
-                                            "TransactionId: %s - TransToken: %s",
-                                            transactionId,
-                                            transToken
-                                        )
+                                        "Thanh toán thành công"
                                     )
                                     .setPositiveButton("OK",
                                         object : DialogInterface.OnClickListener {
@@ -168,7 +164,7 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
                     override fun onPaymentCanceled(zpTransToken: String, appTransID: String) {
                         AlertDialog.Builder(this@RegisterPremiumActivity)
                             .setTitle("User Cancel Payment")
-                            .setMessage(String.format("zpTransToken: %s \n", zpTransToken))
+                            .setMessage("Bạn đã hủy giao dịch")
                             .setPositiveButton("OK", object : DialogInterface.OnClickListener {
                                 override fun onClick(dialog: DialogInterface?, which: Int) {
                                 }
@@ -184,11 +180,7 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
                         AlertDialog.Builder(this@RegisterPremiumActivity)
                             .setTitle(" Payment Fail")
                             .setMessage(
-                                String.format(
-                                    "ZaloPayErrorCode: %s \nTransToken: %s",
-                                    zaloPayError.toString(),
-                                    zpTransToken
-                                )
+                                    "Thanh toán thất bại"
                             )
                             .setPositiveButton("OK", object : DialogInterface.OnClickListener {
                                 override fun onClick(dialog: DialogInterface?, which: Int) {
