@@ -91,6 +91,7 @@ class DetailFilmActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Fi
 
         intent.extras?.clear()
 
+        Log.e("DETAILFILM", "onCreate: ${Helper.TokenManager.getId(this)}", )
         linearlayout = findViewById(R.id.layoutDetailFilm)
         buttonWatch = findViewById(R.id.buttonWatch)
         progressBarEso = findViewById(R.id.progressBarEsopide)
