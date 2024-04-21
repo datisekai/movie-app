@@ -17,20 +17,32 @@ import com.auth0.jwt.exceptions.TokenExpiredException
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.example.movieapp.Helper
 import com.example.movieapp.R
+import com.example.movieapp.config
 import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.ui.fragment.BlogFragment
 import com.example.movieapp.ui.login.LoginActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import java.util.Date
 
 
 class firstActivity : AppCompatActivity() {
     private  lateinit var videoView: VideoView
+    lateinit var gso: GoogleSignInOptions
+    lateinit var gsc: GoogleSignInClient
     var flag = false
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first)
 
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestIdToken(config.WEB_CLIENT_ID)
+            .build()
+
+        gsc = GoogleSignIn.getClient(this, gso)
         videoView = findViewById(R.id.videoView)
         val videoPath = "android.resource://$packageName/raw/my_video"
         videoView.setVideoPath(videoPath)
@@ -102,13 +114,26 @@ class firstActivity : AppCompatActivity() {
                    startActivity(intent)
                    finish()
                }
+            }else{
+               checkout()
             }
 
         } catch (e: TokenExpiredException) {
+            checkout()
+        }
+    }
+
+    fun checkout(){
+        signOut(this)
+        val intent = Intent(this,LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+
+    fun signOut(context: Context) {
+        gsc.signOut().addOnCompleteListener {
             Helper.TokenManager.clearToken(this)
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
         }
     }
 

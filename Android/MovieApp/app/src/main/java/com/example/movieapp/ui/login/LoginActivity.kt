@@ -100,45 +100,7 @@ class LoginActivity : AppCompatActivity(){
         val login = binding.login
         val loading = binding.loading
 
-        try {
-            val token = Helper.TokenManager.getToken(this)
-            if (token != null && !isTokenExpired(token)) {
-                val id = Helper.TokenManager.getId(this)
-                val email = Helper.TokenManager.getEmail(this)
-                val fullname = Helper.TokenManager.getFullName(this)
-                val isActive = Helper.TokenManager.getIsActive(this)
-                val role = Helper.TokenManager.getRoles(this)
-                var roles : ArrayList<String> = arrayListOf()
-                val tmp = role?.split(",")
-                if (tmp!=null){
-                    for (o in tmp){
-                        roles.add(o)
-                    }
-                }
-                ClassToken.MY_TOKEN= token.toString()
-                ClassToken.ID= id?: 0
-                ClassToken.EMAIL= email.toString()
-                ClassToken.FULLNAME= fullname.toString()
-                ClassToken.IS_ACTIVE = isActive!!
-                ClassToken.ROLES = roles
-//                val checkToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTcxMTI2MTU5MiwiZXhwIjoxNzExMjY4NzkyfQ.ijPEfRK325BP_3ubNSHkoxUWtbxfvPkntaav-zIeL-k"
-//                Helper.TokenManager.saveToken(this, checkToken, ClassToken.ID, ClassToken.EMAIL, ClassToken.FULLNAME, ClassToken.IS_ACTIVE, ArrayList())
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            }else{
-                Helper.TokenManager.clearToken(this)
-                signOut(this)
-            }
 
-
-        } catch (e: TokenExpiredException) {
-            signOut(this)
-            Helper.TokenManager.clearToken(this)
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
 
         googleBtn = findViewById(R.id.loginGoogle)
 
@@ -294,28 +256,7 @@ class LoginActivity : AppCompatActivity(){
         toast.show()
     }
 
-    fun isTokenExpired(jwtToken: String): Boolean {
-        try {
-            val algorithm = Algorithm.HMAC256("datisekai")
-            val jwtVerifier = JWT.require(algorithm).build()
-            val decodedJWT: DecodedJWT = jwtVerifier.verify(jwtToken)
 
-            val expirationTime: Date? = decodedJWT.expiresAt
-            if (expirationTime != null) {
-                val currentTime = Date()
-                return currentTime.after(expirationTime)
-            }
-        } catch (e: SignatureVerificationException) {
-            if (e is TokenExpiredException) {
-                return true
-            }
-            // Xử lý các ngoại lệ khác nếu cần thiết
-        } catch (e: Exception) {
-            return true
-        }
-
-        return true
-    }
     fun signIn() {
         googleBtn.isEnabled = true
         val signInIntent = gsc.signInIntent
@@ -393,11 +334,6 @@ class LoginActivity : AppCompatActivity(){
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 
-    fun signOut(context: Context) {
-        gsc.signOut().addOnCompleteListener {
-            Helper.TokenManager.clearToken(this)
-        }
-    }
 }
 
 /**
