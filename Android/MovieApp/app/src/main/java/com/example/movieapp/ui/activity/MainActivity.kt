@@ -30,19 +30,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         view = findViewById<Button>(R.id.rectangle_2)
-        view.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(v: View?) {
-                if (isNetworkConnected(v!!.context)){
-                    view.setOnClickListener{
-                        startActivity()
-                    }
+        view.setOnClickListener{
+                if (isNetworkConnected(this)){
+                    startActivity()
                 }else{
                     customeToast("Đã xảy ra lỗi! Vui lòng thử lại")
                 }
             }
-
-        })
-
     }
     private fun startActivity(){
         val intent = Intent(this, HomePage_Activity::class.java)
