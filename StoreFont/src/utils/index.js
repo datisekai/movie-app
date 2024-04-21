@@ -12,5 +12,5 @@ export const generateSlug = (title) => {
 };
 
 export const formatDate = (date) => {
-  return dayjs.format(date, "DD/MM/YYYY");
+  return dayjs(date).format("DD/MM/YYYY");
 };

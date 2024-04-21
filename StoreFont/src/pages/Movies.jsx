@@ -5,6 +5,9 @@ import axios from "axios";
 import API_URL from "../url";
 import Swal from "sweetalert2";
 import ClipLoader from "react-spinners/ClipLoader";
+import { FaPencilAlt } from "react-icons/fa";
+import { AiFillDelete } from "react-icons/ai";
+
 export default function Movies() {
   const [loading, setLoading] = useState(false);
   const location = useLocation();
@@ -36,7 +39,7 @@ export default function Movies() {
   //  end boilerplate
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     axios
       .get(`${API_URL}.film?page=${page}`)
       .then((res) => {
@@ -47,11 +50,12 @@ export default function Movies() {
       })
       .catch((err) => {
         console.log(err);
-      }).finally(() => {
-        setLoading(false)
       })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [page]);
-  
+
   function deleteFilm(id) {
     console.log("delete", id);
     Swal.fire({
@@ -80,25 +84,24 @@ export default function Movies() {
   }
   return (
     <div>
-      
       <button
-        onClick={()=>navigate("create")}
+        onClick={() => navigate("create")}
         type="button"
         className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
       >
-        Create new Film
+        Tạo phim mới
       </button>
-      
+
       <div className="relative overflow-x-auto">
         {loading ? (
           <div className="flex items-center justify-center">
-          <ClipLoader
-            color={"f"}
-            size="2rem"
-            loading={loading}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
+            <ClipLoader
+              color={"f"}
+              size="2rem"
+              loading={loading}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
           </div>
         ) : (
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -132,31 +135,41 @@ export default function Movies() {
                 <tr key={movie._id} className="">
                   <th
                     scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                   >
                     {movie.id}
                   </th>
                   <td className="px-6 py-4">{movie.title}</td>
-                  <td className="px-6 py-4">{movie.type}</td>
+                  <td className="px-6 py-4">
+                    {movie.type == "movie" ? "Phim ngắn" : "Dài tập"}
+                  </td>
                   <td className="px-6 py-4">{movie.view}</td>
-                  <td className="px-6 py-4">{movie.status}</td>
-                  <td className="px-6 py-4">{movie.is_active.toString()}</td>
-                  <td className="space-x-2 flex justify-start">
-                    <Link
-                      type="button"
-                      className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
-                      to={`/movies/${movie.id}`}
-                      state={movie}
-                    >
-                      Details
-                    </Link>
-                    <button
-                      type="button"
-                      className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                      onClick={() => deleteFilm(movie.id)}
-                    >
-                      Delete
-                    </button>
+                  <td className="px-6 py-4">
+                    {movie.status == "full"
+                      ? "Đã hoàn thành"
+                      : "Đang tiến hành"}
+                  </td>
+                  <td className="px-6 py-4">
+                    {movie.is_active ? "Hoạt động" : "Ngừng"}
+                  </td>
+                  <td>
+                    <div className="flex items-center gap-2">
+                      <Link
+                        type="button"
+                        className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+                        to={`/movies/${movie.id}`}
+                        state={movie}
+                      >
+                        <FaPencilAlt size={18} />
+                      </Link>
+                      <button
+                        type="button"
+                        className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                        onClick={() => deleteFilm(movie.id)}
+                      >
+                        <AiFillDelete size={18} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

@@ -5,6 +5,7 @@ import { getOrderStatus } from "../lib/helpers";
 import axios from "axios";
 import API_URL from "../url";
 import ClipLoader from "react-spinners/ClipLoader";
+import { formatDate } from "../utils";
 export default function RecentOrders() {
   const [loading, setLoading] = useState(false);
   const [articles, setArticles] = useState([]);
@@ -53,7 +54,7 @@ export default function RecentOrders() {
                   <td>{article.id}</td>
                   <td>{article.title}</td>
                   <td>{article.is_active ? "Hoạt động" : "Ngừng"}</td>
-                  <td>{article.updated_at}</td>
+                  <td>{formatDate(article.updated_at)}</td>
                 </tr>
               ))}
             </tbody>
