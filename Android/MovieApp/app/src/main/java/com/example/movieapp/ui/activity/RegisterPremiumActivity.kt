@@ -42,6 +42,7 @@ import com.example.movieapp.data.model.PayOrder
 import com.example.movieapp.service.ServiceBuilder
 import com.example.movieapp.service.ZaloPay.Api.CreateOrder
 import com.example.movieapp.slideItem
+import com.example.movieapp.ui.fragment.ProfileFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.makeramen.roundedimageview.RoundedImageView
 import org.json.JSONObject
@@ -57,11 +58,13 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
     private lateinit var progressBar: ProgressBar
     private lateinit var list : ArrayList<slideItem>
     private lateinit var recyclerView : RecyclerView
+    private lateinit var btn: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_premium)
         progressBar = findViewById(R.id.progressBar5)
         progressBar.visibility = View.INVISIBLE
+        btn = findViewById(R.id.btnPayInSheet)
         // Payments
         recyclerView = findViewById<RecyclerView>(R.id.recyclerPayment)
         val data : List<Int> = mutableListOf(R.drawable.zaloimg,R.drawable.qr_img,R.drawable.gate_img,R.drawable.momo_img,
@@ -152,9 +155,21 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
                                                 dialog: DialogInterface?,
                                                 which: Int
                                             ) {
+                                                val intent = Intent(this@RegisterPremiumActivity,ProfileFragment::class.java)
+                                                startActivity(intent)
+                                                finish()
                                             }
                                         })
-                                    .setNegativeButton("Cancel", null).show()
+                                    .setNegativeButton("Cancel", object : DialogInterface.OnClickListener {
+                                        override fun onClick(
+                                            dialog: DialogInterface?,
+                                            which: Int
+                                        ) {
+                                            val intent = Intent(this@RegisterPremiumActivity,ProfileFragment::class.java)
+                                            startActivity(intent)
+                                            finish()
+                                        }
+                                    }).show()
                             }
                         })
                     }
@@ -166,9 +181,14 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
                             .setMessage("Bạn đã hủy giao dịch")
                             .setPositiveButton("OK", object : DialogInterface.OnClickListener {
                                 override fun onClick(dialog: DialogInterface?, which: Int) {
+                                    btn.isEnabled = true
                                 }
                             })
-                            .setNegativeButton("Cancel", null).show()
+                            .setNegativeButton("Cancel", object : DialogInterface.OnClickListener {
+                                override fun onClick(dialog: DialogInterface?, which: Int) {
+                                    btn.isEnabled = true
+                                }
+                            }).show()
                     }
 
                     override fun onPaymentError(
@@ -184,9 +204,14 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
                             )
                             .setPositiveButton("OK", object : DialogInterface.OnClickListener {
                                 override fun onClick(dialog: DialogInterface?, which: Int) {
+                                    btn.isEnabled = true
                                 }
                             })
-                            .setNegativeButton("Cancel", null).show()
+                            .setNegativeButton("Cancel", object : DialogInterface.OnClickListener {
+                                override fun onClick(dialog: DialogInterface?, which: Int) {
+                                    btn.isEnabled = true
+                                }
+                            }).show()
                     }
                 })
         }
@@ -236,7 +261,8 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
             }
             R.id.buttonPay -> showBottomSheet()
             R.id.btnPayInSheet ->{
-                progressBar.visibility = View.VISIBLE
+                btn.isEnabled = false
+
                 requestZaloPay()
             }
 
