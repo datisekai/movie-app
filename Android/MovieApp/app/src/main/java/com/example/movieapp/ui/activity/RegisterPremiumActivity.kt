@@ -54,15 +54,14 @@ import java.lang.Math.abs
 class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
     private var Slidehandler : Handler = Handler()
     lateinit var viewpage : ViewPager2
-    private lateinit var layout: ConstraintLayout
+    private lateinit var progressBar: ProgressBar
     private lateinit var list : ArrayList<slideItem>
     private lateinit var recyclerView : RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_premium)
-
-        layout = findViewById(R.id.layoutLoading)
-        layout.visibility = View.INVISIBLE
+        progressBar = findViewById(R.id.progressBar5)
+        progressBar.visibility = View.INVISIBLE
         // Payments
         recyclerView = findViewById<RecyclerView>(R.id.recyclerPayment)
         val data : List<Int> = mutableListOf(R.drawable.zaloimg,R.drawable.qr_img,R.drawable.gate_img,R.drawable.momo_img,
@@ -128,16 +127,15 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
     }
 
     private fun requestZaloPay(){
-        layout.visibility = View.VISIBLE
         val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
         val tmp : LiveData<PayOrder> = viewModel.getTokenCreateOrder()
         var token : String
         tmp.observe(this) { tokens ->
             token = tokens.data.token
             Log.e("TOKEN",token)
-            layout.visibility = View.VISIBLE
             ZaloPaySDK.getInstance().payOrder(this, token, "demozpdk://app", object : PayOrderListener {
                     override fun onPaymentSucceeded(transactionId: String, transToken: String, appTransID: String) {
+                        progressBar.visibility = View.INVISIBLE
                         val viewModel = ViewModelProvider(this@RegisterPremiumActivity).get(MyViewModel::class.java)
                         viewModel.postZaloTransId(appTransID,this@RegisterPremiumActivity)
                         runOnUiThread(object : Runnable {
@@ -162,6 +160,7 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
                     }
 
                     override fun onPaymentCanceled(zpTransToken: String, appTransID: String) {
+                        progressBar.visibility = View.INVISIBLE
                         AlertDialog.Builder(this@RegisterPremiumActivity)
                             .setTitle("User Cancel Payment")
                             .setMessage("Bạn đã hủy giao dịch")
@@ -177,6 +176,7 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
                         zpTransToken: String,
                         appTransID: String
                     ) {
+                        progressBar.visibility = View.INVISIBLE
                         AlertDialog.Builder(this@RegisterPremiumActivity)
                             .setTitle(" Payment Fail")
                             .setMessage(
@@ -230,10 +230,13 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
     override fun onClick(v: View) {
         when(v.id){
             R.id.imgButtonPremium -> {
-                finish()
+                val intent = Intent(this, HomePage_Activity::class.java)
+                intent.putExtra("typeFragment",1)
+                startActivity(intent)
             }
             R.id.buttonPay -> showBottomSheet()
             R.id.btnPayInSheet ->{
+                progressBar.visibility = View.VISIBLE
                 requestZaloPay()
             }
 
