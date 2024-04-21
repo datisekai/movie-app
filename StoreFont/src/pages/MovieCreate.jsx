@@ -7,17 +7,17 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import ClipLoader from "react-spinners/ClipLoader";
 import { MultiSelect } from "react-multi-select-component";
+import { generateSlug } from "../utils";
 function MovieCreate() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit,setValue,getValues } = useForm();
+  const { register, handleSubmit, setValue, getValues } = useForm();
   const [currentGenre, setCurrentGenre] = useState([]);
   const [allGenre, setAllGenres] = useState([]);
   const initialImg =
     "https://image.tmdb.org/t/p/w500//A4j8S6moJS2zNtRR8oWF08gRnL5.jpg"; // Initial image
   const [imgUrl, setImgUrl] = useState(initialImg);
   const handleCreateSlug = () => {
-
     const title = getValues("title");
     // Create a slug using a function (can be customized)
     const slug = createSlug(title);
@@ -28,10 +28,7 @@ function MovieCreate() {
 
   // Function to create a slug (replace with your preferred logic)
   const createSlug = (title) => {
-    const lowercasedTitle = title.toLowerCase();
-    const replacedSpaces = lowercasedTitle.replace(/\s+/g, "-");
-    const removedSpecialChars = replacedSpaces.replace(/[^a-z0-9-]/g, "");
-    return removedSpecialChars.slice(0, 255); // Limit slug length (optional)
+    return generateSlug(title);
   };
   const handleFileChange = (event) => {
     const newImage = event.target.files[0];

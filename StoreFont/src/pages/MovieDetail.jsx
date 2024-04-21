@@ -7,10 +7,11 @@ import API_URL from "../url";
 import Swal from "sweetalert2";
 import ClipLoader from "react-spinners/ClipLoader";
 import { MultiSelect } from "react-multi-select-component";
+import { generateSlug } from "../utils";
 function MovieDetail() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit,getValues,setValue } = useForm();
+  const { register, handleSubmit, getValues, setValue } = useForm();
   const location = useLocation();
   const movie = location.state;
   const [currentGenre, setCurrentGenre] = useState(movie.categories || []);
@@ -29,10 +30,7 @@ function MovieDetail() {
 
   // Function to create a slug (replace with your preferred logic)
   const createSlug = (title) => {
-    const lowercasedTitle = title.toLowerCase();
-    const replacedSpaces = lowercasedTitle.replace(/\s+/g, "-");
-    const removedSpecialChars = replacedSpaces.replace(/[^a-z0-9-]/g, "");
-    return removedSpecialChars.slice(0, 255); // Limit slug length (optional)
+    return generateSlug(title);
   };
   const handleFileChange = (event) => {
     const newImage = event.target.files[0];

@@ -22,7 +22,7 @@ export class Episode {
   @Column({ nullable: true })
   title_search: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'text' })
   description: string;
 
   @Column({ default: 0 })
