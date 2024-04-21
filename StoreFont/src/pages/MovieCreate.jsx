@@ -131,7 +131,7 @@ function MovieCreate() {
   }, []);
   return (
     <div className="w-full">
-      <h1 className="text-2xl font-bold pl-2">Create new Film</h1>
+      <h1 className="text-2xl font-bold pl-2">Tạo phim mới</h1>
       <form
         action=""
         className="flex justify-between"
@@ -192,7 +192,7 @@ function MovieCreate() {
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="director">Director:</label>
+              <label htmlFor="director">Tác giả:</label>
               <input
                 type="text"
                 name="director"
@@ -202,7 +202,7 @@ function MovieCreate() {
               />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="location">Location:</label>
+              <label htmlFor="location">Vị trí:</label>
               <input
                 type="text"
                 placeholder="Enter your location..."
@@ -230,19 +230,19 @@ function MovieCreate() {
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="is_required_premium">Film type:</label>
+              <label htmlFor="is_required_premium">Loại phim:</label>
               <select
                 type="text"
                 name="location"
                 className="rounded p-2 border border-gray-600 max-w-[250px]"
                 {...register("type")}
               >
-                <option value="movie">Movie</option>
-                <option value="series">Series</option>
+                <option value="movie">Phim ngắn</option>
+                <option value="series">Dài tập</option>
               </select>
             </div>
             <div className="flex flex-col">
-              <label htmlFor="is_required_premium">Status:</label>
+              <label htmlFor="is_required_premium">Tiến độ:</label>
               <select
                 type="text"
                 name="status"
@@ -255,7 +255,7 @@ function MovieCreate() {
             </div>
           </div>
           <div className="z-10 ">
-            <label htmlFor="">Genres:</label>
+            <label htmlFor="">Thể loại:</label>
             <MultiSelect
               value={currentGenre}
               onChange={setCurrentGenre}
@@ -267,7 +267,7 @@ function MovieCreate() {
             <textarea
               id="des"
               rows="4"
-              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Write your description here..."
               {...register("description")}
             ></textarea>
@@ -283,7 +283,7 @@ function MovieCreate() {
                 />
                 <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                 <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                  Is Premium
+                  Premium
                 </span>
               </label>
             </div>
@@ -297,7 +297,7 @@ function MovieCreate() {
                 />
                 <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                 <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                  Is Active
+                  Trạng thái
                 </span>
               </label>
             </div>
@@ -319,7 +319,7 @@ function MovieCreate() {
                     data-testid="loader"
                   />
                 ) : (
-                  "Save"
+                  "Lưu"
                 )}
               </span>
             </button>

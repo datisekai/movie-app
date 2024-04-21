@@ -27,23 +27,22 @@ function Popularmovies() {
   }, []);
   return (
     <div className="w-[20rem] bg-white p-4 rounded-sm border border-gray-200">
-      <strong className="text-gray-700 font-medium">Popular Movies</strong>
+      <strong className="text-gray-700 font-medium">Phim mới nhất</strong>
       {loading ? (
-		<div className="flex justify-center items-center">
-        <ClipLoader
-          color={"f"}
-          size="2rem"
-          loading={loading}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
-		</div>
+        <div className="flex justify-center items-center">
+          <ClipLoader
+            color={"f"}
+            size="2rem"
+            loading={loading}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
       ) : (
         <div className="mt-4 flex flex-col gap-3">
           {movies.map((movie) => (
-            <Link
+            <div
               key={movies.id}
-              to={`/movies/${movie.id}`}
               className="flex items-start hover:no-underline"
             >
               <div className="w-10 h-10 min-w-[2.5rem] bg-gray-200 rounded-sm">
@@ -71,7 +70,7 @@ function Popularmovies() {
               <div className="text-xs text-gray-400 pl-1.5">
                 {movie.movie_price}
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       )}
