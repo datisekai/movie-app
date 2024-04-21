@@ -30,18 +30,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         view = findViewById<Button>(R.id.rectangle_2)
-        view.setOnClickListener{
-           if (isNetworkConnected(this)){
-               view.setOnClickListener{
-                   val intent = Intent(this, HomePage_Activity::class.java)
-                   startActivity(intent)
-               }
-           }else{
-               customeToast("Đã xảy ra lỗi! Vui lòng thử lại")
-           }
-        }
+        view.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                if (isNetworkConnected(v!!.context)){
+                    view.setOnClickListener{
+                        startActivity()
+                    }
+                }else{
+                    customeToast("Đã xảy ra lỗi! Vui lòng thử lại")
+                }
+            }
+
+        })
 
     }
+    private fun startActivity(){
+        val intent = Intent(this, HomePage_Activity::class.java)
+        startActivity(intent)
+    }
+
 
     private lateinit var cld : NetworkManager
     private fun checkConnect(){

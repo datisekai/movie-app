@@ -44,10 +44,8 @@ class firstActivity : AppCompatActivity() {
                    bundle.putInt("ID", filmId?.toInt() ?: 0)
                    bundle.putBoolean("IS_ACTIVITY",false)
                    intent.putExtra("DataID",bundle)
-                   intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
                    startActivity(intent)
-
-                   getIntent().removeExtra("id")
+                   
                    finish()
                }
            }else{
