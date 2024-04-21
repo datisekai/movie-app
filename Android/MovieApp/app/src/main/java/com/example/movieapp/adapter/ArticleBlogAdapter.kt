@@ -34,7 +34,7 @@ class ArticleBlogAdapter (var ds:List<Article>, private val listener: BlogItemCl
                 listener.onItemClicked(i)
             }
             //Set image Blog
-            val desiredWidth = (screenWidth * 0.7).toInt()
+            val desiredWidth = (screenWidth * 0.8).toInt()
             //layoutParams.width = desiredWidth
             //article_img.layoutParams = layoutParams
             //Get dp from 2 px by Scale screen
