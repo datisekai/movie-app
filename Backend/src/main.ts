@@ -15,6 +15,7 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '../src/', 'views'));
   app.setViewEngine('ejs');
+  app.useBodyParser('json', { limit: '50mb' });
 
   app.enableCors();
   const config = new DocumentBuilder()

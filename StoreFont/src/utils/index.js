@@ -1,4 +1,5 @@
 import slugify from "slugify";
+import dayjs from "dayjs";
 export const generateSlug = (title) => {
   return slugify(title, {
     replacement: "-", // replace spaces with replacement character, defaults to `-`
@@ -8,4 +9,8 @@ export const generateSlug = (title) => {
     locale: "vi", // language code of the locale to use
     trim: true,
   });
+};
+
+export const formatDate = (date) => {
+  return dayjs.format(date, "DD/MM/YYYY");
 };
