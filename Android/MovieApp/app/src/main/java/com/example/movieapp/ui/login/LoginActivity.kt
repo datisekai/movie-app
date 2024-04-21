@@ -14,7 +14,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
@@ -34,6 +36,8 @@ import com.auth0.jwt.interfaces.DecodedJWT
 import com.example.movieapp.Helper
 import com.example.movieapp.R
 import com.example.movieapp.config
+import com.example.movieapp.data.LoginDataSource
+import com.example.movieapp.data.LoginRepository
 import com.example.movieapp.data.model.ClassToken
 import com.example.movieapp.data.model.RequestFcmToken
 import com.example.movieapp.databinding.ActivityLoginBinding
@@ -61,8 +65,16 @@ class LoginActivity : AppCompatActivity(){
     lateinit var gsc: GoogleSignInClient
     private val contextView= this
     lateinit var googleBtn: Button
+    private lateinit var logoutLogin: LoginRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestIdToken(config.WEB_CLIENT_ID)
+            .build()
+
+        gsc = GoogleSignIn.getClient(this, gso)
+
         FirebaseApp.initializeApp(this)
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
@@ -114,9 +126,14 @@ class LoginActivity : AppCompatActivity(){
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
+            }else{
+                Helper.TokenManager.clearToken(this)
+                signOut(this)
             }
 
+
         } catch (e: TokenExpiredException) {
+            signOut(this)
             Helper.TokenManager.clearToken(this)
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -134,12 +151,6 @@ class LoginActivity : AppCompatActivity(){
 
         }
 
-        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .requestIdToken(config.WEB_CLIENT_ID)
-            .build()
-
-        gsc = GoogleSignIn.getClient(this, gso)
 
 //        val acct = GoogleSignIn.getLastSignedInAccount(this)
 //        if (acct != null) {
@@ -314,25 +325,28 @@ class LoginActivity : AppCompatActivity(){
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1000) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val account = task.getResult(ApiException::class.java)
-                if (account != null) {
-                    val idToken =account.idToken
-                    loginViewModel.login(
-                        "",
-                        "",
-                        contextView,
-                        "GOOGLE",
-                        idToken.toString()
+            if (resultCode == Activity.RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                try {
+                    val account = task.getResult(ApiException::class.java)
+                    if (account != null) {
+                        val idToken = account.idToken
+                        loginViewModel.login(
+                            "",
+                            "",
+                            contextView,
+                            "GOOGLE",
+                            idToken.toString()
                         )
+                    }
+                    googleBtn.isEnabled = false
+                } catch (e: ApiException) {
+                    Log.e("ERROR", e.toString())
+                    e.printStackTrace()
+                    Toast.makeText(applicationContext, "Đã có lỗi xảy ra", Toast.LENGTH_SHORT).show()
                 }
-                googleBtn.isEnabled = false
-            } catch (e: ApiException) {
-                Log.e("ERROR",e.toString())
-                e.printStackTrace()
-
-                Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(applicationContext, "Hãy chọn tài khoản Google", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -378,6 +392,12 @@ class LoginActivity : AppCompatActivity(){
     private fun showLoginFailed(errorString: String) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
+
+    fun signOut(context: Context) {
+        gsc.signOut().addOnCompleteListener {
+            Helper.TokenManager.clearToken(this)
+        }
+    }
 }
 
 /**
@@ -394,3 +414,4 @@ fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
     })
 }
+

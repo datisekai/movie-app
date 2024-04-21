@@ -34,7 +34,7 @@ class ArticleBlogAdapter (var ds:List<Article>, private val listener: BlogItemCl
                 listener.onItemClicked(i)
             }
             //Set image Blog
-            val desiredWidth = (screenWidth * 0.8).toInt()
+            val desiredWidth = (screenWidth * 0.7).toInt()
             //layoutParams.width = desiredWidth
             //article_img.layoutParams = layoutParams
             //Get dp from 2 px by Scale screen
@@ -63,7 +63,7 @@ class ArticleBlogAdapter (var ds:List<Article>, private val listener: BlogItemCl
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         holder.itemView.apply {
-            holder.article_description.text = ds[position].desciption
+            holder.article_description.text = ds[position].description
             holder.article_title.text = ds[position].title
 
             //Set Create Date

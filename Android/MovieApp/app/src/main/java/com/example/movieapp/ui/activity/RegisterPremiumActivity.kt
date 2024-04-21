@@ -230,7 +230,9 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
     override fun onClick(v: View) {
         when(v.id){
             R.id.imgButtonPremium -> {
-                finish()
+                val intent = Intent(this, HomePage_Activity::class.java)
+                intent.putExtra("typeFragment",1)
+                startActivity(intent)
             }
             R.id.buttonPay -> showBottomSheet()
             R.id.btnPayInSheet ->{

@@ -5,6 +5,7 @@ import { getOrderStatus } from "../lib/helpers";
 import axios from "axios";
 import API_URL from "../url";
 import ClipLoader from "react-spinners/ClipLoader";
+import { formatDate } from "../utils";
 export default function RecentOrders() {
   const [loading, setLoading] = useState(false);
   const [articles, setArticles] = useState([]);
@@ -25,7 +26,7 @@ export default function RecentOrders() {
   }, []);
   return (
     <div className="bg-white px-4 pt-3 pb-4 rounded-sm border border-gray-200 flex-1">
-      <strong className="text-gray-700 font-medium">Recent Orders</strong>
+      <strong className="text-gray-700 font-medium">Bài viết gần đây</strong>
       {loading ? (
         <div className="flex justify-center items-center">
           <ClipLoader
@@ -42,9 +43,9 @@ export default function RecentOrders() {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Title</th>
-                <th>Is Active</th>
-                <th>Updated at</th>
+                <th>Tiêu đề</th>
+                <th>Trạng thái</th>
+                <th>Ngày cập nhật</th>
               </tr>
             </thead>
             <tbody>
@@ -52,8 +53,8 @@ export default function RecentOrders() {
                 <tr key={article.id} className="text-center">
                   <td>{article.id}</td>
                   <td>{article.title}</td>
-                  <td>{article.is_active.toString()}</td>
-                  <td>{article.updated_at}</td>
+                  <td>{article.is_active ? "Hoạt động" : "Ngừng"}</td>
+                  <td>{formatDate(article.updated_at)}</td>
                 </tr>
               ))}
             </tbody>

@@ -20,7 +20,7 @@ export class Category {
   @Column({ unique: true, nullable: true })
   slug: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'text' })
   description: string;
 
   @Column({ nullable: true })

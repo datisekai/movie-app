@@ -103,11 +103,7 @@ function CategoryDetail() {
       <div className="w-1/3">
         <div className="flex items-center justify-center w-full ">
           <label className="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-            <img
-              src={imgUrl}
-              alt="Preview"
-              className="w-full object-contain"
-            />
+            <img src={imgUrl} alt="Preview" className="w-full object-contain" />
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
               <svg
                 className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
@@ -144,7 +140,7 @@ function CategoryDetail() {
       {/* right side */}
       <div className="flex flex-col gap-y-2 w-2/3">
         <div className="flex flex-col">
-          <label htmlFor="title">Title:</label>
+          <label htmlFor="title">Tiêu đề:</label>
           <input
             type="text"
             name="title"
@@ -156,11 +152,11 @@ function CategoryDetail() {
         </div>
 
         <div className="flex flex-col md:col-span-3 w-full">
-          <label htmlFor="description">Description:</label>
+          <label htmlFor="description">Mô tả:</label>
           <textarea
             placeholder="Enter description..."
             rows={6}
-            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500  dark:focus:ring-blue-500 dark:focus:border-blue-500"
             defaultValue={category.description}
             {...register("description")}
           />
@@ -176,8 +172,8 @@ function CategoryDetail() {
               defaultValue={category.is_active}
             />
             <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-              Is Active
+            <span className="ms-3 text-sm font-medium text-gray-900 ">
+              Trạng thái
             </span>
           </label>
         </div>
@@ -197,7 +193,7 @@ function CategoryDetail() {
                   data-testid="loader"
                 />
               ) : (
-                "Save"
+                "Lưu"
               )}
             </span>
           </button>
