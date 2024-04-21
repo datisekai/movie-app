@@ -11,7 +11,6 @@
         android:value="@integer/google_play_services_version" />
 
     <application
-        android:screenOrientation="portrait"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,9 +21,11 @@
         android:theme="@style/Theme.MovieApp"
         tools:targetApi="31">
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.CheckConnectActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.firstActivity"
             android:exported="true"
             android:label="@string/title_activity_first">
@@ -40,30 +41,39 @@
             android:value="ca-app-pub-3940256099942544~3347511713" />
 
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.ReplyActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.TermOfUseActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.PrivacyActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.BlogDetailActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.ProfileDetailsActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.ProfilePasswordActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.ProfileFullNameActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.ProfileEmailActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.RegisterPremiumActivity"
             android:exported="true"
             android:launchMode="singleTask">
@@ -86,12 +96,15 @@
             android:supportsPictureInPicture="true"
             android:theme="@style/Theme.AppCompat.FullScreen" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.ResultGenreActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.SearchActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.RegisterActivity"
             android:exported="false">
 
@@ -103,6 +116,7 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.login.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login">
@@ -115,12 +129,15 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.DetailFilmActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.HomePage_Activity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.MainActivity"
             android:exported="false" />
         <service android:name=".service.FCMNotificationService" android:exported="false">
