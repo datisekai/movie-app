@@ -126,12 +126,16 @@ class LoginActivity : AppCompatActivity(){
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
+            }else{
+                Helper.TokenManager.clearToken(this)
+                signOut(this)
             }
 
+
         } catch (e: TokenExpiredException) {
+            signOut(this)
             Helper.TokenManager.clearToken(this)
             val intent = Intent(this, LoginActivity::class.java)
-            signOut(this)
             startActivity(intent)
             finish()
         }
@@ -321,25 +325,28 @@ class LoginActivity : AppCompatActivity(){
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1000) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val account = task.getResult(ApiException::class.java)
-                if (account != null) {
-                    val idToken =account.idToken
-                    loginViewModel.login(
-                        "",
-                        "",
-                        contextView,
-                        "GOOGLE",
-                        idToken.toString()
+            if (resultCode == Activity.RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                try {
+                    val account = task.getResult(ApiException::class.java)
+                    if (account != null) {
+                        val idToken = account.idToken
+                        loginViewModel.login(
+                            "",
+                            "",
+                            contextView,
+                            "GOOGLE",
+                            idToken.toString()
                         )
+                    }
+                    googleBtn.isEnabled = false
+                } catch (e: ApiException) {
+                    Log.e("ERROR", e.toString())
+                    e.printStackTrace()
+                    Toast.makeText(applicationContext, "Đã có lỗi xảy ra", Toast.LENGTH_SHORT).show()
                 }
-                googleBtn.isEnabled = false
-            } catch (e: ApiException) {
-                Log.e("ERROR",e.toString())
-                e.printStackTrace()
-
-                Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(applicationContext, "Hãy chọn tài khoản Google", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -388,9 +395,7 @@ class LoginActivity : AppCompatActivity(){
 
     fun signOut(context: Context) {
         gsc.signOut().addOnCompleteListener {
-            val dataSource = LoginDataSource()
-            logoutLogin = LoginRepository(dataSource)
-            logoutLogin.logout(context)
+            Helper.TokenManager.clearToken(this)
         }
     }
 }
