@@ -155,9 +155,9 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
                                                 dialog: DialogInterface?,
                                                 which: Int
                                             ) {
-                                                val intent = Intent(this@RegisterPremiumActivity,ProfileFragment::class.java)
+                                                val intent = Intent(this@RegisterPremiumActivity, HomePage_Activity::class.java)
+                                                intent.putExtra("typeFragment",1)
                                                 startActivity(intent)
-                                                finish()
                                             }
                                         })
                                     .setNegativeButton("Cancel", object : DialogInterface.OnClickListener {
@@ -165,9 +165,9 @@ class RegisterPremiumActivity : AppCompatActivity() , View.OnClickListener{
                                             dialog: DialogInterface?,
                                             which: Int
                                         ) {
-                                            val intent = Intent(this@RegisterPremiumActivity,ProfileFragment::class.java)
+                                            val intent = Intent(this@RegisterPremiumActivity, HomePage_Activity::class.java)
+                                            intent.putExtra("typeFragment",1)
                                             startActivity(intent)
-                                            finish()
                                         }
                                     }).show()
                             }
